@@ -62,6 +62,7 @@
 | 11 | [pos-advanced-employee-ids-forced-readd.md](orm/pos-advanced-employee-ids-forced-readd.md) | 🟡 Medium | 18, 19 | `pos`, `pos_hr`, `advanced_employee_ids`, `many2many`, `write-override`, `sql` | POS administrators forcefully re-added to advanced_employee_ids on every save, bypassed via SQL on M2M join table |
 | 12 | [avoid-translation-in-field-definitions.md](orm/avoid-translation-in-field-definitions.md) | 🔴 Critical | All | `translation`, `i18n`, `fields`, `_()`, `class-body`, `bug` | Do NOT use `_()` inside field `string=`/`help=` definitions — evaluated at import time, translations silently ignored |
 | 13 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All | `write`, `override`, `atomicity`, `state-machine`, `transaction` | State changes on related records must happen AFTER `super().write()` to guarantee atomicity |
+| 14 | [link-employee-fleet-to-partner-for-invoicing.md](orm/link-employee-fleet-to-partner-for-invoicing.md) | 🟢 Low | All | `orm`, `partner`, `invoice`, `vendor-bill` | Explicitly linking HR Employee and Fleet Vehicle to a Partner for Vendor Bill creation to avoid UserErrors |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
@@ -135,8 +136,8 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 32
-- **Last Updated:** 2026-05-31
+- **Total Entries:** 33
+- **Last Updated:** 2026-06-03
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
