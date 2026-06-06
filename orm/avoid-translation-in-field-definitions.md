@@ -5,7 +5,7 @@
 | Category      | orm                            |
 | Odoo Versions | All (14, 15, 16, 17, 18, 19)  |
 | Severity      | 🔴 Critical                    |
-| Last Verified | 2026-05-30                     |
+| Last Verified | 2026-06-06                     |
 | Author        | ENG/Gamal Mansour              |
 
 **Tags:** `translation`, `i18n`, `fields`, `_()`, `class-body`, `bug`
@@ -74,3 +74,9 @@ After removing `_()` from field definitions, switch the UI language to Arabic (o
 - Fixed in: `custom/customer_level_chart/models/res_partner.py`
 - Fixed in: `custom/stock_valuation_report/models/stock_move_valuation.py`
 - Fixed in: `custom/delivery_vehicle/models/delivery_vehicle.py`
+- Fixed in: `custom/product_secondary_uom/models/product_template.py`
+- Fixed in: `custom/product_secondary_uom/models/stock_quant.py`
+- Fixed in: `custom/product_secondary_uom/models/stock_move.py`
+- Fixed in: `custom/product_secondary_uom/models/stock_picking_batch.py`
+
+> **Note (2026-06-06):** Confirmed this WARNING appears in Odoo 19 (SH) even when using `_()` inside class body at field `string=` or `help=`. The warning stack trace clearly shows `_get_translation_source` failing because no lang context exists at import time. The fix is identical — plain English strings in field defs.
