@@ -44,6 +44,7 @@
 | 11 | [postgresql-port-conflict-and-db-version-mismatch.md](setup/postgresql-port-conflict-and-db-version-mismatch.md) | 🔴 Critical | 17, 18, 19 | `postgresql`, `port-conflict`, `startup`, `database`, `version-mismatch`, `short_time_format`, `brew`, `macos` | PostgreSQL port 5432 conflict between multiple installed versions on macOS, and DB version mismatch causing missing column errors on startup |
 | 12 | [csrf-session-conflict-multi-instance.md](setup/csrf-session-conflict-multi-instance.md) | 🔴 Critical | All | `csrf`, `session`, `multi-instance`, `localhost`, `cookie`, `bad-request`, `400` | CSRF token / session conflict when running multiple Odoo instances simultaneously on the same machine |
 | 13 | [data-addons-write-permissions.md](setup/data-addons-write-permissions.md) | 🔴 Critical | All | `setup`, `permissions`, `data_dir`, `assets`, `AssetsLoadingError` | Data Addons directory write permission issues causing AssetsLoadingError |
+| 14 | [pgvector-postgresql-extension-required-for-ai-module.md](setup/pgvector-postgresql-extension-required-for-ai-module.md) | 🔴 Critical | 17, 18, 19 | `pgvector`, `postgresql`, `ai`, `enterprise`, `vector`, `embedding`, `extension` | pgvector PostgreSQL extension required for Odoo Enterprise AI module (RAG/embeddings) — setup for macOS, Linux, Odoo.sh |
 
 ### ORM
 
@@ -137,8 +138,8 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 33
-- **Last Updated:** 2026-06-03
+- **Total Entries:** 34
+- **Last Updated:** 2026-06-06
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
