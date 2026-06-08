@@ -65,6 +65,7 @@
 | 12 | [avoid-translation-in-field-definitions.md](orm/avoid-translation-in-field-definitions.md) | 🔴 Critical | All | `translation`, `i18n`, `fields`, `_()`, `class-body`, `bug` | Do NOT use `_()` inside field `string=`/`help=` definitions — evaluated at import time, translations silently ignored |
 | 13 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All | `write`, `override`, `atomicity`, `state-machine`, `transaction` | State changes on related records must happen AFTER `super().write()` to guarantee atomicity |
 | 14 | [link-employee-fleet-to-partner-for-invoicing.md](orm/link-employee-fleet-to-partner-for-invoicing.md) | 🟢 Low | All | `orm`, `partner`, `invoice`, `vendor-bill` | Explicitly linking HR Employee and Fleet Vehicle to a Partner for Vendor Bill creation to avoid UserErrors |
+| 15 | [related-field-keyerror-reference.md](orm/related-field-keyerror-reference.md) | 🔴 Critical | All | `orm`, `related`, `fields`, `keyerror` | KeyError when a related field traverses through a target field that does not exist or has a typo |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
@@ -107,6 +108,7 @@ _No entries yet._
 | 1 | [analytic-distribution-migration-odoo18.md](upgrade/analytic-distribution-migration-odoo18.md) | 🔴 Critical | 18, 19 | `upgrade`, `migration`, `account.move.line`, `analytic_distribution` | account.move.line analytic_account_id field removal and migration to analytic_distribution in Odoo 18 |
 | 2 | [qweb-report-invoice-reconciled-payments-odoo18.md](upgrade/qweb-report-invoice-reconciled-payments-odoo18.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `account.move`, `qweb`, `report` | account.move _get_reconciled_info_JSON_values removal and migration to invoice_payments_widget in Odoo 18 |
 | 3 | [crm-lead-mobile-field-removal.md](upgrade/crm-lead-mobile-field-removal.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `crm.lead`, `mobile`, `field` | crm.lead mobile field removal in Odoo 19 causes AttributeError on access |
+| 4 | [ir-sequence-company-dependent-deprecation.md](upgrade/ir-sequence-company-dependent-deprecation.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `ir.sequence`, `company_dependent` | Invalid field 'company_dependent' on model 'ir.sequence' during module upgrade from Odoo 16 |
 
 ### Misc
 
