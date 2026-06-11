@@ -66,6 +66,7 @@
 | 13 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All | `write`, `override`, `atomicity`, `state-machine`, `transaction` | State changes on related records must happen AFTER `super().write()` to guarantee atomicity |
 | 14 | [link-employee-fleet-to-partner-for-invoicing.md](orm/link-employee-fleet-to-partner-for-invoicing.md) | 🟢 Low | All | `orm`, `partner`, `invoice`, `vendor-bill` | Explicitly linking HR Employee and Fleet Vehicle to a Partner for Vendor Bill creation to avoid UserErrors |
 | 15 | [related-field-keyerror-reference.md](orm/related-field-keyerror-reference.md) | 🔴 Critical | All | `orm`, `related`, `fields`, `keyerror` | KeyError when a related field traverses through a target field that does not exist or has a typo |
+| 16 | [constrains-inherited-models-conditional.md](orm/constrains-inherited-models-conditional.md) | 🔴 Critical | All | `orm`, `constrains`, `inheritance`, `validation` | api.constrains on inherited models blocking normal operations unless scoped conditionally |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
