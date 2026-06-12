@@ -51,6 +51,7 @@ def _sync_representative_type_groups(self):
 - **Group Caching:** `has_group()` uses the ORM cache. When modifying groups dynamically during portal operations (which shouldn't happen often, usually it's backend admins), the portal user might need to log out and log back in or the cache needs to clear. But usually, admins change it, so it's fine.
 - **`implied_ids` vs `Command.link`:** Never mix `implied_ids` with manual toggle buttons in `res_users_views.xml`. If a group is implied, the backend UI checkbox will refuse to un-tick.
 - **Access Error on `res.groups`:** Always use `.sudo()` or `Command.link` properly when modifying user groups from the backend if the modifying user has limited access.
+- **Validation Conflicts:** Ensure that backend validations (like requiring minimum photos or checking stock zeroes) do not trigger if the user's section toggle for that feature is disabled. Wrap validation checks in `if section_enabled:` to prevent blocking users from submitting records when they lack access to the required fields.
 
 ## Verification
 
