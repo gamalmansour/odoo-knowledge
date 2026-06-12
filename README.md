@@ -93,6 +93,7 @@
 |---|------|----------|----------|------|-------------|
 | 1 | [public-user-inactive-res-currency-accesserror.md](security/public-user-inactive-res-currency-accesserror.md) | 🔴 Critical | All | `security`, `access-rights`, `public-user`, `res.currency` | Public User deactivation or group loss causes AccessError during frontend QWeb rendering of res.currency |
 | 2 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode` | Adding Security Group Access Rights to Stock Barcode OWL Buttons by extending StockBarcodeController |
+| 3 | [dynamic-portal-section-visibility.md](security/dynamic-portal-section-visibility.md) | 🟡 Medium | 16, 17, 18, 19 | `portal`, `security`, `dynamic-visibility`, `groups` | Dynamic portal section visibility via security groups instead of hardcoded strings or implied_ids |
 
 
 ### Performance
