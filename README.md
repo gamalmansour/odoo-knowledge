@@ -67,6 +67,7 @@
 | 14 | [link-employee-fleet-to-partner-for-invoicing.md](orm/link-employee-fleet-to-partner-for-invoicing.md) | 🟢 Low | All | `orm`, `partner`, `invoice`, `vendor-bill` | Explicitly linking HR Employee and Fleet Vehicle to a Partner for Vendor Bill creation to avoid UserErrors |
 | 15 | [related-field-keyerror-reference.md](orm/related-field-keyerror-reference.md) | 🔴 Critical | All | `orm`, `related`, `fields`, `keyerror` | KeyError when a related field traverses through a target field that does not exist or has a typo |
 | 16 | [constrains-inherited-models-conditional.md](orm/constrains-inherited-models-conditional.md) | 🔴 Critical | All | `orm`, `constrains`, `inheritance`, `validation` | api.constrains on inherited models blocking normal operations unless scoped conditionally |
+| 17 | [partner-level-visit-constraints.md](orm/partner-level-visit-constraints.md) | 🟡 Medium | All | `orm`, `visit`, `constraints`, `partner` | Move business constraints tightly coupled with product counts to res.partner level to avoid loopholes |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
