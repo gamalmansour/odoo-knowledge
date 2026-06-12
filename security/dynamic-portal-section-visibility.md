@@ -29,6 +29,7 @@
 > 3. Add `fields.Boolean` toggles for each section directly on the `res.users` model using `compute` and `inverse` to read/write from `group_ids`. This makes it simple to manage from the backend user form.
 > 4. In `controllers/portal.py`, write helper methods (`_can_see_shelf_stock`, etc.) that check if the user has the group via `user.has_group()`.
 > 5. Pass these booleans to the portal template rendering context, and replace static `t-if="is_merch"` with dynamic `t-if="can_see_shelf_stock"`.
+> 6. **Backend Mirroring:** To enforce the same visibility on backend form views (e.g., hiding a notebook tab for a manager if the representative doesn't have access to it), add `related` boolean fields to the operational model (e.g., `sale.visit` pointing to `salesperson_id.section_shelf_stock`), include them as `invisible="1"` in the XML form, and use `invisible="not section_shelf_stock"` on the `<page>` instead of `groups="..."`. This guarantees backend admins won't see useless empty tabs.
 
 ```python
 # Example of dynamic linking without implied_ids
