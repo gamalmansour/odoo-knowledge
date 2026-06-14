@@ -68,6 +68,7 @@
 | 15 | [related-field-keyerror-reference.md](orm/related-field-keyerror-reference.md) | 🔴 Critical | All | `orm`, `related`, `fields`, `keyerror` | KeyError when a related field traverses through a target field that does not exist or has a typo |
 | 16 | [constrains-inherited-models-conditional.md](orm/constrains-inherited-models-conditional.md) | 🔴 Critical | All | `orm`, `constrains`, `inheritance`, `validation` | api.constrains on inherited models blocking normal operations unless scoped conditionally |
 | 17 | [partner-level-visit-constraints.md](orm/partner-level-visit-constraints.md) | 🟡 Medium | All | `orm`, `visit`, `constraints`, `partner` | Move business constraints tightly coupled with product counts to res.partner level to avoid loopholes |
+| 18 | [architecture-circular-dependency-mixin.md](orm/architecture-circular-dependency-mixin.md) | 🔴 Critical | 15+ | `orm`, `architecture`, `dependencies`, `mixin` | Resolves TypeError inherits from non-existing model caused by circular dependencies when adding context to base mixins |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
