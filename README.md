@@ -71,6 +71,7 @@
 | 17 | [partner-level-visit-constraints.md](orm/partner-level-visit-constraints.md) | 🟡 Medium | All | `orm`, `visit`, `constraints`, `partner` | Move business constraints tightly coupled with product counts to res.partner level to avoid loopholes |
 | 18 | [architecture-circular-dependency-mixin.md](orm/architecture-circular-dependency-mixin.md) | 🔴 Critical | 15+ | `orm`, `architecture`, `dependencies`, `mixin` | Resolves TypeError inherits from non-existing model caused by circular dependencies when adding context to base mixins |
 | 19 | [testing-compute-fields.md](orm/testing_compute_fields.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `orm`, `compute_fields`, `dates` | Resolves test assertions failing when manually updating date fields for testing compute behaviors due to state staleness |
+| 20 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🔴 Critical | 17+ | `testing`, `orm`, `constraints` | Successfully mock `construction.project` and satisfy its raw SQL NOT NULL constraints for testing |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
