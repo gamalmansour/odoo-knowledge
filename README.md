@@ -122,6 +122,7 @@ _No entries yet._
 | 2 | [qweb-report-invoice-reconciled-payments-odoo18.md](upgrade/qweb-report-invoice-reconciled-payments-odoo18.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `account.move`, `qweb`, `report` | account.move _get_reconciled_info_JSON_values removal and migration to invoice_payments_widget in Odoo 18 |
 | 3 | [crm-lead-mobile-field-removal.md](upgrade/crm-lead-mobile-field-removal.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `crm.lead`, `mobile`, `field` | crm.lead mobile field removal in Odoo 19 causes AttributeError on access |
 | 4 | [ir-sequence-company-dependent-deprecation.md](upgrade/ir-sequence-company-dependent-deprecation.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `ir.sequence`, `company_dependent` | Invalid field 'company_dependent' on model 'ir.sequence' during module upgrade from Odoo 16 |
+| 5 | [hr-employee-address-home-id-deprecation-odoo17.md](upgrade/hr-employee-address-home-id-deprecation-odoo17.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `hr.employee`, `address_home_id`, `work_contact_id` | ValueError for address_home_id on hr.employee because field was replaced by work_contact_id |
 
 ### Misc
 
