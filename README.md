@@ -73,6 +73,7 @@
 | 19 | [testing-compute-fields.md](orm/testing_compute_fields.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `orm`, `compute_fields`, `dates` | Resolves test assertions failing when manually updating date fields for testing compute behaviors due to state staleness |
 | 20 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🔴 Critical | 17+ | `testing`, `orm`, `constraints` | Successfully mock `construction.project` and satisfy its raw SQL NOT NULL constraints for testing |
 | 21 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `testing`, `security`, `groups` | Access errors during tests because mock users were overwritten without `base.group_user` |
+| 22 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🔴 Critical | 17 | `demo`, `constraints`, `valueerror` | Python demo generation constraints and incorrect field names causing ValueError |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
