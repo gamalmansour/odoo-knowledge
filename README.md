@@ -93,6 +93,7 @@
 | 13 | [portal-dynamic-ui-mixed-data-odoo19.md](views/portal-dynamic-ui-mixed-data-odoo19.md) | 🟢 Low | 17, 18, 19 | `qweb`, `portal`, `ui`, `caching`, `mixed-targets` | Dynamic QWeb portal UI layout switching for mixed target models and bypassing browser cache |
 | 14 | [portal-workflow-rule-viewer-bypass.md](views/portal-workflow-rule-viewer-bypass.md) | 🟡 Medium | 17, 18, 19 | `portal`, `controller`, `workflow`, `redirect`, `supervisor` | Prevent sequence enforcement rules from blocking supervisors reviewing visits |
 | 15 | [owl-client-action-scrolling.md](frontend/owl-client-action-scrolling.md) | 🔴 Critical | 16, 17, 18, 19 | `owl`, `client-action`, `scrolling`, `o_content` | Vertical scrolling broken/clipped in custom OWL client actions due to missing o_content wrapper inside o_action |
+| 16 | [portal-supervisor-subordinates-domain.md](views/portal-supervisor-subordinates-domain.md) | 🟡 Medium | All | `portal`, `domain`, `subordinates`, `supervisor` | Supervisor's portal doesn't show visits for their subordinates because the domain only checked the plan's supervisor ID |
 
 
 ### Security
