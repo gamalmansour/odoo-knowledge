@@ -175,3 +175,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 4. Commit and push
 | Frontend | [OWL Form View Crash on Kanban Navigation](frontend/owl-kanban-form-crash-invisible-fields.md) | V16, V17, V18, V19 |
 | [Dynamic Phases (CRM Spirit)](orm/dynamic-phases-crm-spirit.md) | ORM | How to migrate from Selection to a dynamic phase model |
+| Views | [Domain Date Restriction Pitfall](views/domain-date-restriction-pitfall.md) | Domain too strict for future scheduling |
