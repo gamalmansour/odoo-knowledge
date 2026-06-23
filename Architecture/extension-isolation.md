@@ -15,6 +15,20 @@ Wrap the extension logic call in a generic `try...except Exception:` block and `
             except Exception:
                 pass  # Degrade to no-op
         return res
+
+### KPI Computed Metrics Isolation
+When feeding new computed metrics into a KPI engine from an extension module, wrap the calculation in a `try...except` and return a safe default (like `0.0`). This prevents the entire KPI evaluation loop from failing if one metric's dependencies are broken.
+
+```python
+    def _kpi_compute_source(self, source_code):
+        self.ensure_one()
+        if source_code == 'tm_compliance_pct':
+            try:
+                return max(0.0, min(100.0, self._kpi_src_tm_compliance()))
+            except Exception as e:
+                _logger.warning("tm_compliance_pct failed on eval %s: %s", self.id, e)
+                return 0.0
+        return super()._kpi_compute_source(source_code)
 ```
 
 ## ⚠️ Pitfalls
