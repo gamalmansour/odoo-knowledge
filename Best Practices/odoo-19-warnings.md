@@ -69,3 +69,26 @@ Always add a `title` or `aria-label` attribute to empty `<i>` tags in XML views.
 ```xml
 <i class="fa fa-calendar me-1" title="Date" aria-label="Date"/>
 ```
+
+## 6. Invalid view type: 'tree'
+**Warning:** `odoo.tools.convert.ParseError: while parsing ... ParseError: Invalid view type: 'tree'`
+
+### ⚠️ Pitfall
+In Odoo 19, the `<tree>` tag for list views has been completely removed. Using `<tree>` will cause a hard parse error preventing the module from loading.
+
+### Solution ✅
+Change all `<tree>` tags in your XML views to `<list>`. Also update `view_mode="tree,form"` to `view_mode="list,form"` in your window actions.
+
+**Old (Odoo 18-):**
+```xml
+<tree>
+    <field name="name"/>
+</tree>
+```
+
+**New (Odoo 19+):**
+```xml
+<list>
+    <field name="name"/>
+</list>
+```
