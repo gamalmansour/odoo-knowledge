@@ -95,6 +95,7 @@
 | 15 | [owl-client-action-scrolling.md](frontend/owl-client-action-scrolling.md) | 🔴 Critical | 16, 17, 18, 19 | `owl`, `client-action`, `scrolling`, `o_content` | Vertical scrolling broken/clipped in custom OWL client actions due to missing o_content wrapper inside o_action |
 | 16 | [portal-supervisor-subordinates-domain.md](views/portal-supervisor-subordinates-domain.md) | 🟡 Medium | All | `portal`, `domain`, `subordinates`, `supervisor` | Supervisor's portal doesn't show visits for their subordinates because the domain only checked the plan's supervisor ID |
 | 17 | [owl-many2many-list-sum-crash.md](views/owl-many2many-list-sum-crash.md) | 🔴 Critical | 17, 18, 19 | `owl`, `views`, `many2many`, `sum`, `crash` | OWL ListRenderer crashes when using sum attribute on fields inside a Many2many list view |
+| 18 | [scss-import-compilation-error.md](views/scss-import-compilation-error.md) | 🔴 Critical | All | `css`, `scss`, `import`, `assets` | Adding external CSS `@import` inside SCSS/CSS files breaks Odoo asset compilation |
 
 
 ### Security
