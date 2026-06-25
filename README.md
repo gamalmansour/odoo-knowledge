@@ -74,6 +74,7 @@
 | 20 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🔴 Critical | 17+ | `testing`, `orm`, `constraints` | Successfully mock `construction.project` and satisfy its raw SQL NOT NULL constraints for testing |
 | 21 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `testing`, `security`, `groups` | Access errors during tests because mock users were overwritten without `base.group_user` |
 | 22 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🔴 Critical | 17 | `demo`, `constraints`, `valueerror` | Python demo generation constraints and incorrect field names causing ValueError |
+| 23 | [product-costing-multi-warehouse-avco-fifo.md](orm/product-costing-multi-warehouse-avco-fifo.md) | 🟡 Medium | All | `orm`, `stock`, `costing`, `avco`, `fifo` | Under AVCO, landed costs on internal transfers distort global product valuation; change to FIFO or use custom modules |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
