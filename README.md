@@ -123,6 +123,7 @@
 | 1 | [n-plus-one-queries-computed-fields.md](performance/n-plus-one-queries-computed-fields.md) | 🔴 Critical | All | `performance`, `N+1`, `computed-fields`, `read_group`, `search` | Using `search()` inside computed field loops causes N+1 SQL queries — use `read_group()` instead |
 | 2 | [sales-target-crm-won-customers-cartons.md](sale/sales-target-crm-won-customers-cartons.md) | 🟡 Medium | 16, 17, 18, 19 | `sale.target`, `crm.lead`, `uom`, `performance`, `n+1`, `read_group` | Efficiently compute product cartons and won crm customers in sales targets without N+1 query bottlenecks |
 | 3 | [non-stored-compute-fields-in-list-and-search-views.md](performance/non-stored-compute-fields-in-list-and-search-views.md) | 🔴 Critical | All | `performance`, `computed-fields`, `store`, `list-view`, `search`, `scaling` | `store=False` computed fields placed in tree/search/group-by re-run the compute (often full table scans) on every render — instant in demo, multi-second after a year of data |
+| 4 | [avoid-in-memory-record-filtering-in-wizards.md](performance/avoid-in-memory-record-filtering-in-wizards.md) | 🔴 Critical | All | `performance`, `memory-leak`, `filtered`, `orm`, `wizard` | Avoid loading entire database tables in memory when filtering by using native Odoo domains instead of Python's filtered(). |
 
 ### Deployment
 
