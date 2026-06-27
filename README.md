@@ -76,6 +76,8 @@
 | 22 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🔴 Critical | 17 | `demo`, `constraints`, `valueerror` | Python demo generation constraints and incorrect field names causing ValueError |
 | 23 | [create-invoice-from-stock-picking.md](orm/create-invoice-from-stock-picking.md) | 🟢 Low | 17, 18, 19 | `orm`, `stock.picking`, `sale.order`, `account.move` | Trigger invoice creation for the related Sale Order directly from Stock Picking (Delivery Order) |
 | 24 | [auto-validate-returns-transit-location.md](models/auto-validate-returns-transit-location.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `orm`, `stock.picking`, `returns`, `transit-location` | Auto-create and validate return stock.picking to vehicle transit location for sales returns |
+| 25 | [stored-compute-incomplete-depends-silent-staleness.md](orm/stored-compute-incomplete-depends-silent-staleness.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `staleness`, `kpi`, `roi` | Stored compute whose `@api.depends` omits the real upstream data freezes at first value — KPI/ROI/money figures go silently stale, "Refresh" button does nothing |
+| 26 | [money-flow-reversal-on-refund-cancel-reset-draft.md](orm/money-flow-reversal-on-refund-cancel-reset-draft.md) | 🔴 Critical | All | `orm`, `account`, `commission`, `out_refund`, `reversal`, `idempotency` | Commission/settlement records must reverse on refund, cancel, and reset-to-draft; ignoring `out_refund` and skipping `button_draft`/`button_cancel` causes directional, ever-growing over-payment |
 
 ### Views
 
@@ -109,6 +111,7 @@
 | 1 | [public-user-inactive-res-currency-accesserror.md](security/public-user-inactive-res-currency-accesserror.md) | 🔴 Critical | All | `security`, `access-rights`, `public-user`, `res.currency` | Public User deactivation or group loss causes AccessError during frontend QWeb rendering of res.currency |
 | 2 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode` | Adding Security Group Access Rights to Stock Barcode OWL Buttons by extending StockBarcodeController |
 | 3 | [dynamic-portal-section-visibility.md](security/dynamic-portal-section-visibility.md) | 🟡 Medium | 16, 17, 18, 19 | `portal`, `security`, `dynamic-visibility`, `groups` | Dynamic portal section visibility via security groups instead of hardcoded strings or implied_ids |
+| 4 | [portal-controller-sudo-browse-bypasses-record-rules-idor.md](security/portal-controller-sudo-browse-bypasses-record-rules-idor.md) | 🔴 Critical | All | `security`, `portal`, `controller`, `sudo`, `ir.rule`, `idor` | Portal controller `.sudo().browse(id)` disables record rules; a weak manual ownership check lets any user reach others' records by URL id enumeration (IDOR) |
 
 
 ### Performance
@@ -117,6 +120,7 @@
 |---|------|----------|----------|------|--------------|
 | 1 | [n-plus-one-queries-computed-fields.md](performance/n-plus-one-queries-computed-fields.md) | 🔴 Critical | All | `performance`, `N+1`, `computed-fields`, `read_group`, `search` | Using `search()` inside computed field loops causes N+1 SQL queries — use `read_group()` instead |
 | 2 | [sales-target-crm-won-customers-cartons.md](sale/sales-target-crm-won-customers-cartons.md) | 🟡 Medium | 16, 17, 18, 19 | `sale.target`, `crm.lead`, `uom`, `performance`, `n+1`, `read_group` | Efficiently compute product cartons and won crm customers in sales targets without N+1 query bottlenecks |
+| 3 | [non-stored-compute-fields-in-list-and-search-views.md](performance/non-stored-compute-fields-in-list-and-search-views.md) | 🔴 Critical | All | `performance`, `computed-fields`, `store`, `list-view`, `search`, `scaling` | `store=False` computed fields placed in tree/search/group-by re-run the compute (often full table scans) on every render — instant in demo, multi-second after a year of data |
 
 ### Deployment
 
