@@ -75,6 +75,7 @@
 | 21 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `testing`, `security`, `groups` | Access errors during tests because mock users were overwritten without `base.group_user` |
 | 22 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🔴 Critical | 17 | `demo`, `constraints`, `valueerror` | Python demo generation constraints and incorrect field names causing ValueError |
 | 23 | [create-invoice-from-stock-picking.md](orm/create-invoice-from-stock-picking.md) | 🟢 Low | 17, 18, 19 | `orm`, `stock.picking`, `sale.order`, `account.move` | Trigger invoice creation for the related Sale Order directly from Stock Picking (Delivery Order) |
+| 24 | [auto-validate-returns-transit-location.md](models/auto-validate-returns-transit-location.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `orm`, `stock.picking`, `returns`, `transit-location` | Auto-create and validate return stock.picking to vehicle transit location for sales returns |
 
 ### Views
 
