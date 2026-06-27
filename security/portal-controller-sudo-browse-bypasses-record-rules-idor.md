@@ -54,12 +54,64 @@ if not (owns or supervises):
 
 Audit **every** place a "is this user a manager/supervisor" helper is used as an authorization gate — the bug repeats across every route that copy-pasted the pattern (here ~21 routes).
 
+### Centralize it (Option A, done once)
+
+Instead of editing 21 sites by hand, route them all through one helper that
+reads via the user's own rights (so the rule decides) and hands back a `sudo`
+recordset for the privileged writes the routes already do:
+
+```python
+def _get_portal_visit(self, visit_id):
+    # search() applies ir.rules; a record the rule filters out → empty set.
+    visit = request.env['sale.visit'].search([('id', '=', visit_id)])
+    return visit.sudo()   # privileged writes downstream keep working
+```
+
+```python
+visit = self._get_portal_visit(visit_id)
+if not visit:
+    return request.redirect('/my/visits')
+```
+
+> ⚠️ **The rule must cover every *legitimate* access path before you switch to Option A.**
+> Here the app granted supervisors access two ways — the salesperson is their
+> subordinate **and** they own the visit's plan — but `rule_sale_visit_portal`
+> only encoded the first. Relying on the rule without adding
+> `('plan_line_id.plan_id.supervisor_id', '=', user.id)` would have silently
+> revoked plan-based access. Read the controller's *intended* access (its list
+> domains, its counters) and make the rule match it, then delete the manual check.
+
+### Two flavors of the same bug to grep for
+
+1. **Weak check:** `salesperson_id == user OR _is_supervisor_user(user)` — supervisor over-reach.
+2. **No record check at all:** routes that only gate `if not _is_supervisor_user(user): redirect` and then `sudo().browse(id)` — *any* supervisor mutates *any* record (here: approve-end, mark successful/unsuccessful, write supervisor notes). This is strictly worse and easy to miss because it "looks" gated.
+
+### Don't forget child / sub-objects
+
+A route can authorize the parent correctly and still IDOR a child. Example:
+reorder approve/reject verified `plan.supervisor_id == user` but then
+`browse(ro_id).action_approve()` without checking the reorder belonged to that
+plan — so a supervisor approves reorders on *other* plans via their own plan id
+in the URL. Always tie the sub-object back to the authorized parent:
+`reorder.plan_line_id.plan_id == plan`.
+
 ## ⚠️ Pitfalls
 
 - A `sudo()` on the `browse` is invisible in single-user/admin testing — admin passes every check, so the hole only shows with a real low-privilege portal account.
 - Role-membership checks (`user in group`) are **not** record-level authorization. "Is a supervisor" ≠ "supervises THIS record".
 - Don't forget multi-company: even Option B leaks across companies unless the model also has a multi-company `ir.rule`.
-- `browse()` of a rule-filtered id returns an empty recordset on access, so test with `.exists()` rather than catching exceptions.
+- `browse()` of a rule-filtered id returns an empty recordset on access, so test with `.exists()` rather than catching exceptions. For Option A prefer `search([('id','=',id)])`, which **applies the rules** and returns empty cleanly — plain `browse().exists()` does **not** re-apply record rules.
+- Adding the multi-company `ir.rule` only helps the routes that actually drop `sudo()`. A route that keeps `sudo()` bypasses the company rule too — Option A (read as the user) is what makes the company rule bite.
+- Child line models often have **no `company_id`** of their own. Scope their multi-company rule through the parent: `[('visit_id.company_id','in',company_ids)]`, else they stay cross-company readable even after the parent is locked down.
+- A `search`-based fetch needs the portal group to hold a model-level **read ACL** (`ir.model.access.csv`); without it you get `AccessError` instead of an empty set. Verify the ACL exists before switching off `sudo`.
+
+## Test it
+
+A `post_install` `HttpCase` is the cheapest proof. Authenticate as a low-priv
+portal user (and, critically, as a *supervisor who supervises nobody relevant*)
+and assert `GET /my/visits/<foreign-id>` returns a 3xx to the list, while the
+owner gets 200. Back it with an ORM-layer check that
+`Visit.with_user(attacker).search([('id','=',id)])` is empty.
 
 ## Verification
 
