@@ -5,7 +5,7 @@
 | Category      | orm                            |
 | Odoo Versions | All (14, 15, 16, 17, 18, 19)  |
 | Severity      | 🔴 Critical                    |
-| Last Verified | 2026-05-30                     |
+| Last Verified | 2026-06-27                     |
 | Author        | ENG/Gamal Mansour              |
 
 **Tags:** `write`, `override`, `atomicity`, `state-machine`, `transaction`
@@ -73,6 +73,36 @@ def write(self, vals: dict) -> bool:
 
 Write a test that triggers a `_sql_constraints` violation in `super().write()` and verify that no side-effect state changes occurred on related records.
 
+## Extended Pattern — Action Methods (not just write())
+
+The same rule applies to **any action method** that triggers financial or stock operations. A common anti-pattern in wizard/button actions:
+
+```python
+# ❌ WRONG — state set before risky operations
+def action_end_visit(self):
+    for visit in self:
+        visit.state = 'done'          # ← set first
+        visit.check_out = now
+        visit._validate_delivery_picking()   # ← if this raises silently...
+        visit._create_return_credit_note()   # ← ...or this fails quietly
+        visit._create_collection_payments()  # ← visit is already 'done' with no records!
+```
+
+```python
+# ✅ CORRECT — state set last, exceptions propagate
+def action_end_visit(self):
+    for visit in self:
+        visit._validate_delivery_picking()   # raises UserError on failure
+        visit._create_return_credit_note()   # raises on failure
+        visit._create_collection_payments()  # raises on failure
+        # Only reached if ALL above succeeded
+        visit.state = 'done'
+        visit.check_out = fields.Datetime.now()
+```
+
+Also ensure helper methods do NOT swallow exceptions with `except Exception: _logger.error(...)`. They must let exceptions propagate so the transaction rolls back and the user sees a clear error message.
+
 ## References
 
 - Fixed in: `custom/delivery_vehicle/models/stock_picking_batch.py`
+- Fixed in: `custom/sale_visit/models/sale_visit.py` — `action_end_visit` + `_validate_delivery_picking` + `_create_return_credit_note` + `_create_collection_payments` (2026-06-27)
