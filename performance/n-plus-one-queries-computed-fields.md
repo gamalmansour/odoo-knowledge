@@ -5,7 +5,7 @@
 | Category      | performance                    |
 | Odoo Versions | All (14, 15, 16, 17, 18, 19)  |
 | Severity      | 🔴 Critical                    |
-| Last Verified | 2026-05-30                     |
+| Last Verified | 2026-06-27                     |
 | Author        | ENG/Gamal Mansour              |
 
 **Tags:** `performance`, `N+1`, `computed-fields`, `read_group`, `search`, `sql`
@@ -96,7 +96,31 @@ import logging
 logging.getLogger('odoo.sql_db').setLevel(logging.DEBUG)
 ```
 
+## Alternative Pattern — Nested Loop over Related Lines
+
+A subtler N+1 variant: looping over a recordset and accessing a One2many on each record:
+
+```python
+# ❌ WRONG — N queries (one per delivery_visit)
+for dv in delivery_visits:
+    for line in dv.delivered_product_line_ids:   # ← separate SQL per dv
+        delivered[line.product_id.id] += line.done_qty or 0.0
+```
+
+```python
+# ✅ CORRECT — 1 query total
+if delivery_visits:
+    delivered_lines = self.env['sale.visit.delivered.product.line'].search([
+        ('visit_id', 'in', delivery_visits.ids),
+    ])
+    for line in delivered_lines:
+        delivered[line.product_id.id] = delivered.get(line.product_id.id, 0.0) + (line.done_qty or 0.0)
+```
+
+The key insight: instead of navigating the relation from parent → children N times, query the child model directly with `visit_id IN (...)` — one round-trip regardless of how many parents exist.
+
 ## References
 
 - [Odoo read_group docs](https://www.odoo.com/documentation/19.0/developer/reference/backend/orm.html#odoo.models.Model.read_group)
 - Fixed in: `custom/sale_target/models/sale_target.py`
+- Fixed in: `custom/sale_visit/models/sale_visit.py` — `_compute_shortages` (2026-06-27)
