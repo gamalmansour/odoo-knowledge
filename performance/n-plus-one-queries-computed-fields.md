@@ -84,8 +84,58 @@ def _compute_achievement(self) -> None:
 ## ⚠️ Pitfalls
 
 - `read_group` with `:month` groupby returns keys like `'2025-05'` (YYYY-MM) — not a date object.
-- **Many2many computed fields** cannot be populated from `read_group` — still need `search()` for those. Try to minimize their use in list views.
+- **Many2many computed fields** cannot be populated from `read_group` — still need `search()` for those, but use ONE wide-range search and distribute with `browse()` in Python (see pattern below).
 - If date ranges differ per record (like monthly targets), use `min_date`/`max_date` as the outer boundary and filter in Python — still O(1) queries.
+
+## Pattern — Batch-fetching Many2many IDs across variable date ranges
+
+When a computed M2many field must be populated per-record with different date ranges, a single wide-range `search()` + Python distribution is still O(1) queries:
+
+```python
+# BEFORE the distribute loop
+all_invoices = self.env['account.move'].search([
+    ('invoice_user_id', 'in', all_user_ids),
+    ('invoice_date', '>=', min_date),   # union of all target date ranges
+    ('invoice_date', '<=', max_date),
+])
+inv_id_map = defaultdict(list)
+for inv in all_invoices:
+    # key = the smallest granularity that allows per-target distribution
+    inv_id_map[(inv.invoice_user_id.id, inv.company_id.id, inv.invoice_date)].append(inv.id)
+
+# INSIDE the distribute loop
+target_inv_ids = []
+current_date = target.date_from
+while current_date <= target.date_to:
+    target_inv_ids.extend(inv_id_map.get((user_id, company_id, current_date), []))
+    current_date += timedelta(days=1)
+target.invoice_ids = self.env['account.move'].browse(target_inv_ids)
+```
+
+Use `browse()` to assign the recordset — it is O(1) (no DB query).
+
+## Pattern — Batch inner lookup (nested N+1)
+
+A subtler N+1: calling `search()` inside a loop over another model's records (double N+1):
+
+```python
+# ❌ WRONG — 1 query per invoice
+for rec in reconciliations:
+    invoice = ...
+    commission = self.env['salesperson.commission'].search([
+        ('invoice_id', '=', invoice.id)
+    ], limit=1)
+```
+
+```python
+# ✅ CORRECT — 1 query for all commissions
+invoice_ids = {invoice.id for _, invoice in rec_invoice_pairs}
+all_commissions = self.env['salesperson.commission'].search([
+    ('invoice_id', 'in', list(invoice_ids))
+])
+commission_map = {c.invoice_id.id: c for c in all_commissions}
+# Then: commission_map.get(invoice.id)
+```
 - `lazy=False` is required to get all groupby levels resolved.
 
 ## Verification
@@ -122,5 +172,5 @@ The key insight: instead of navigating the relation from parent → children N t
 ## References
 
 - [Odoo read_group docs](https://www.odoo.com/documentation/19.0/developer/reference/backend/orm.html#odoo.models.Model.read_group)
-- Fixed in: `custom/sale_target/models/sale_target.py`
+- Fixed in: `custom/sale_target/models/sale_target.py` — `_compute_achievement` + `get_portal_collection_data` (2026-06-27)
 - Fixed in: `custom/sale_visit/models/sale_visit.py` — `_compute_shortages` (2026-06-27)
