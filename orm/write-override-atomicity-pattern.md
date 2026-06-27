@@ -104,5 +104,5 @@ Also ensure helper methods do NOT swallow exceptions with `except Exception: _lo
 
 ## References
 
-- Fixed in: `custom/delivery_vehicle/models/stock_picking_batch.py`
+- Fixed in: `custom/delivery_vehicle/models/stock_picking_batch.py` — `action_generate_load_transfer` button_validate silent failure (2026-06-27)
 - Fixed in: `custom/sale_visit/models/sale_visit.py` — `action_end_visit` + `_validate_delivery_picking` + `_create_return_credit_note` + `_create_collection_payments` (2026-06-27)
