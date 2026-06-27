@@ -74,6 +74,8 @@
 | 20 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🔴 Critical | 17+ | `testing`, `orm`, `constraints` | Successfully mock `construction.project` and satisfy its raw SQL NOT NULL constraints for testing |
 | 21 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `testing`, `security`, `groups` | Access errors during tests because mock users were overwritten without `base.group_user` |
 | 22 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🔴 Critical | 17 | `demo`, `constraints`, `valueerror` | Python demo generation constraints and incorrect field names causing ValueError |
+| 23 | [create-invoice-from-stock-picking.md](orm/create-invoice-from-stock-picking.md) | 🟢 Low | 17, 18, 19 | `orm`, `stock.picking`, `sale.order`, `account.move` | Trigger invoice creation for the related Sale Order directly from Stock Picking (Delivery Order) |
+
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
