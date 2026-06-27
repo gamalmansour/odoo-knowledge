@@ -116,6 +116,7 @@
 | # | File | Severity | Versions | Tags | Description |
 |---|------|----------|----------|------|--------------|
 | 1 | [n-plus-one-queries-computed-fields.md](performance/n-plus-one-queries-computed-fields.md) | 🔴 Critical | All | `performance`, `N+1`, `computed-fields`, `read_group`, `search` | Using `search()` inside computed field loops causes N+1 SQL queries — use `read_group()` instead |
+| 2 | [sales-target-crm-won-customers-cartons.md](sale/sales-target-crm-won-customers-cartons.md) | 🟡 Medium | 16, 17, 18, 19 | `sale.target`, `crm.lead`, `uom`, `performance`, `n+1`, `read_group` | Efficiently compute product cartons and won crm customers in sales targets without N+1 query bottlenecks |
 
 ### Deployment
 
@@ -164,7 +165,7 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 34
+- **Total Entries:** 35
 - **Last Updated:** 2026-06-06
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
