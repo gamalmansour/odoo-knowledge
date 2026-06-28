@@ -106,6 +106,8 @@
 | 18 | [scss-import-compilation-error.md](views/scss-import-compilation-error.md) | 🔴 Critical | All | `css`, `scss`, `import`, `assets` | Adding external CSS `@import` inside SCSS/CSS files breaks Odoo asset compilation |
 | 19 | [invalid-action-window-target-inline.md](views/invalid-action-window-target-inline.md) | 🔴 Critical | 18, 19 | `views`, `res.config.settings`, `ir.actions.act_window`, `target`, `inline` | Invalid target='inline' value in act_window causing installation crash |
 | 20 | [portal-cards-url-visibility-odoo19.md](views/portal-cards-url-visibility-odoo19.md) | 🟡 Medium | 19 | `portal`, `url`, `odoo19` | Hiding portal cards fails because Odoo 19 appends ?filterby query parameters to URLs |
+| 21 | [xml_syntax_error_javascript_ampersand.md](views/xml_syntax_error_javascript_ampersand.md) | 🔴 Critical | All | `qweb`, `xml`, `javascript`, `syntax error` | XML ParseEntityRef error caused by using && or < in QWeb inline JavaScript |
+| 22 | [odoo19_portal_card_xpath_class_change.md](views/odoo19_portal_card_xpath_class_change.md) | 🟡 Medium | 19 | `xpath`, `qweb`, `portal`, `hasclass`, `odoo19` | XPath hasclass() fails in Odoo 19 because class attributes in portal templates were changed to dynamic t-att-class |
 
 
 ### Security
