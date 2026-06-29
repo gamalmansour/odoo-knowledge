@@ -45,6 +45,7 @@
 | 12 | [csrf-session-conflict-multi-instance.md](setup/csrf-session-conflict-multi-instance.md) | 🔴 Critical | All | `csrf`, `session`, `multi-instance`, `localhost`, `cookie`, `bad-request`, `400` | CSRF token / session conflict when running multiple Odoo instances simultaneously on the same machine |
 | 13 | [data-addons-write-permissions.md](setup/data-addons-write-permissions.md) | 🔴 Critical | All | `setup`, `permissions`, `data_dir`, `assets`, `AssetsLoadingError` | Data Addons directory write permission issues causing AssetsLoadingError |
 | 14 | [pgvector-postgresql-extension-required-for-ai-module.md](setup/pgvector-postgresql-extension-required-for-ai-module.md) | 🔴 Critical | 17, 18, 19 | `pgvector`, `postgresql`, `ai`, `enterprise`, `vector`, `embedding`, `extension` | pgvector PostgreSQL extension required for Odoo Enterprise AI module (RAG/embeddings) — setup for macOS, Linux, Odoo.sh |
+| 15 | [clean-db-install-verification-demo-as-data-and-missing-rule-fields.md](setup/clean-db-install-verification-demo-as-data-and-missing-rule-fields.md) | 🔴 Critical | All | `install`, `verification`, `demo`, `ir.rule`, `clean-db`, `ci` | A clean-DB `-i --without-demo` install (+ a with-demo pass) catches install-blockers static review misses: demo records scattered under the `data` key (pollute prod + break cross-module refs) and `ir.rule` domains traversing to a non-existent model field |
 
 ### ORM
 
