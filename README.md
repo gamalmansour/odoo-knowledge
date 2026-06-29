@@ -146,6 +146,7 @@ _No entries yet._
 | 3 | [crm-lead-mobile-field-removal.md](upgrade/crm-lead-mobile-field-removal.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `crm.lead`, `mobile`, `field` | crm.lead mobile field removal in Odoo 19 causes AttributeError on access |
 | 4 | [ir-sequence-company-dependent-deprecation.md](upgrade/ir-sequence-company-dependent-deprecation.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `ir.sequence`, `company_dependent` | Invalid field 'company_dependent' on model 'ir.sequence' during module upgrade from Odoo 16 |
 | 5 | [hr-employee-address-home-id-deprecation-odoo17.md](upgrade/hr-employee-address-home-id-deprecation-odoo17.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `hr.employee`, `address_home_id`, `work_contact_id` | ValueError for address_home_id on hr.employee because field was replaced by work_contact_id |
+| 6 | [foreign-key-violation-ondelete-restrict.md](upgrade/foreign-key-violation-ondelete-restrict.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `upgrade`, `foreign-key`, `ondelete`, `psycopg2` | Foreign Key Violation During Module Upgrade due to ondelete=x27restrictx27 |
 
 ### Misc
 
