@@ -201,3 +201,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | Views | [Domain Date Restriction Pitfall](views/domain-date-restriction-pitfall.md) | Domain too strict for future scheduling |
 | Models | [Delivery Order Destination Pitfall](models/delivery-order-destination-pitfall.md) | Prevent delivery orders from getting stuck in vehicle locations |
 | Changing Search Fields in Target Models | changing_search_fields.md |
+| `name_get_deprecation_odoo17.md` | upgrade | Deprecation of name_get in Odoo 17+ (Use _compute_display_name) |
