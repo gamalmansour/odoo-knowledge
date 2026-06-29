@@ -121,6 +121,7 @@
 | 3 | [dynamic-portal-section-visibility.md](security/dynamic-portal-section-visibility.md) | 🟡 Medium | 16, 17, 18, 19 | `portal`, `security`, `dynamic-visibility`, `groups` | Dynamic portal section visibility via security groups instead of hardcoded strings or implied_ids |
 | 4 | [portal-controller-sudo-browse-bypasses-record-rules-idor.md](security/portal-controller-sudo-browse-bypasses-record-rules-idor.md) | 🔴 Critical | All | `security`, `portal`, `controller`, `sudo`, `ir.rule`, `idor` | Portal controller `.sudo().browse(id)` disables record rules; a weak manual ownership check lets any user reach others' records by URL id enumeration (IDOR) |
 | 5 | [sod-approval-checks.md](security/sod-approval-checks.md) | 🔴 Critical | All | `security`, `sod`, `approvals`, `workflow` | Implement Segregation of Duties (SoD) in custom approval engines to prevent users from approving their own records or multiple stages |
+| 6 | [multi-company-record-rules.md](security/multi-company-record-rules.md) | 🔴 Critical | All | `security`, `multi-company`, `ir.rule`, `access-rights` | Custom models in a multi-company environment leak data across companies by default without explicit ir.rule |
 
 
 ### Performance
@@ -170,7 +171,7 @@ odoo-knowledge/
 ├── setup/                  ← 13 entries
 ├── orm/                    ← 13 entries
 ├── views/                  ← 10 entries
-├── security/               ← 2 entries
+├── security/               ← 6 entries
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
@@ -179,8 +180,8 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 35
-- **Last Updated:** 2026-06-06
+- **Total Entries:** 36
+- **Last Updated:** 2026-06-29
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
