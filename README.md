@@ -110,6 +110,7 @@
 | 20 | [portal-cards-url-visibility-odoo19.md](views/portal-cards-url-visibility-odoo19.md) | 🟡 Medium | 19 | `portal`, `url`, `odoo19` | Hiding portal cards fails because Odoo 19 appends ?filterby query parameters to URLs |
 | 21 | [xml_syntax_error_javascript_ampersand.md](views/xml_syntax_error_javascript_ampersand.md) | 🔴 Critical | All | `qweb`, `xml`, `javascript`, `syntax error` | XML ParseEntityRef error caused by using && or < in QWeb inline JavaScript |
 | 22 | [odoo19_portal_card_xpath_class_change.md](views/odoo19_portal_card_xpath_class_change.md) | 🟡 Medium | 19 | `xpath`, `qweb`, `portal`, `hasclass`, `odoo19` | XPath hasclass() fails in Odoo 19 because class attributes in portal templates were changed to dynamic t-att-class |
+| 23 | [external_id_not_found_parse_error.md](views/external_id_not_found_parse_error.md) | 🔴 Critical | All | `xml`, `parseerror`, `manifest`, `data-order`, `external-id` | External ID not found ValueError caused by incorrect XML file load order in __manifest__.py |
 
 
 ### Security
