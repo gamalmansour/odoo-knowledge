@@ -85,6 +85,7 @@
 | 30 | [override-compute-narrowed-depends-freezes-parent-stored-fields.md](orm/override-compute-narrowed-depends-freezes-parent-stored-fields.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `inheritance`, `override`, `cross-module` | Overriding a stored compute in an inheriting module with a narrowed `@api.depends` replaces the parent's dependency list and silently freezes ALL the parent's stored fields once the second module is installed |
 | 31 | [counting-fields-regex-digit-gotcha-and-safe-bulk-help.md](orm/counting-fields-regex-digit-gotcha-and-safe-bulk-help.md) | 🟡 Medium | All | `orm`, `fields`, `regex`, `audit`, `help`, `documentation`, `many2one`, `coverage` | Field-counting regex `fields\.[A-Z][a-zA-Z]*(` silently misses Many2one/One2many/Many2many (the digit 2 breaks `[a-zA-Z]*`) → ~33% undercount; plus a deterministically-verified workflow to bulk-add `help=` to every field |
 | 32 | [translated_many2one_search.md](orm/translated_many2one_search.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `name`, `translated`, `_rec_names_search`, `postgres`, `psycopg2` | Adding translate=True to core name fields breaks postgres schemas in search logic. Use _rec_names_search for alternate language names. |
+| 33 | [one2many_import_boq.md](orm/one2many_import_boq.md) | 🟢 Low | 16, 17, 18, 19 | `orm`, `one2many`, `hierarchy`, `boq`, `import` | Pattern for importing hierarchical one2many data (like BOQ) via button instead of complex onchange |
 
 ### Views
 
