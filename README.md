@@ -86,7 +86,7 @@
 | 31 | [counting-fields-regex-digit-gotcha-and-safe-bulk-help.md](orm/counting-fields-regex-digit-gotcha-and-safe-bulk-help.md) | 🟡 Medium | All | `orm`, `fields`, `regex`, `audit`, `help`, `documentation`, `many2one`, `coverage` | Field-counting regex `fields\.[A-Z][a-zA-Z]*(` silently misses Many2one/One2many/Many2many (the digit 2 breaks `[a-zA-Z]*`) → ~33% undercount; plus a deterministically-verified workflow to bulk-add `help=` to every field |
 | 32 | [translated_many2one_search.md](orm/translated_many2one_search.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `name`, `translated`, `_rec_names_search`, `postgres`, `psycopg2` | Adding translate=True to core name fields breaks postgres schemas in search logic. Use _rec_names_search for alternate language names. |
 | 33 | [one2many_import_boq.md](orm/one2many_import_boq.md) | 🟢 Low | 16, 17, 18, 19 | `orm`, `one2many`, `hierarchy`, `boq`, `import` | Pattern for importing hierarchical one2many data (like BOQ) via button instead of complex onchange |
-| 34 | [onchange_policy_warnings.md](orm/onchange_policy_warnings.md) | 🟢 Low | 16, 17, 18, 19 | `orm`, `onchange`, `ux`, `policy`, `warning` | Implementing Policy-Based UI Warnings in Odoo via @api.onchange |
+| 34 | [side-register-must-move-stock-and-dedup-kpi.md](orm/side-register-must-move-stock-and-dedup-kpi.md) | 🔴 Critical | All | `orm`, `stock`, `stock.scrap`, `kpi`, `double-counting`, `anti-tamper` | Waste/loss/damage side-registers must physically scrap stock, take cost from valuation layers, lock after confirm, and dedup against wastage-classified issues to prevent phantom stock and KPI double counting |
 
 ### Views
 
