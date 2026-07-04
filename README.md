@@ -87,6 +87,7 @@
 | 32 | [translated_many2one_search.md](orm/translated_many2one_search.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `name`, `translated`, `_rec_names_search`, `postgres`, `psycopg2` | Adding translate=True to core name fields breaks postgres schemas in search logic. Use _rec_names_search for alternate language names. |
 | 33 | [one2many_import_boq.md](orm/one2many_import_boq.md) | 🟢 Low | 16, 17, 18, 19 | `orm`, `one2many`, `hierarchy`, `boq`, `import` | Pattern for importing hierarchical one2many data (like BOQ) via button instead of complex onchange |
 | 34 | [side-register-must-move-stock-and-dedup-kpi.md](orm/side-register-must-move-stock-and-dedup-kpi.md) | 🔴 Critical | All | `orm`, `stock`, `stock.scrap`, `kpi`, `double-counting`, `anti-tamper` | Waste/loss/damage side-registers must physically scrap stock, take cost from valuation layers, lock after confirm, and dedup against wastage-classified issues to prevent phantom stock and KPI double counting |
+| 35 | [receivable-payable-account-move-line-due-date-constraint.md](orm/receivable-payable-account-move-line-due-date-constraint.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `account`, `constraint` | Missing display_type='payment_term' on receivable/payable account.move.line creation throws due date UserError |
 
 ### Views
 
@@ -175,7 +176,7 @@ odoo-knowledge/
 ├── CONTRIBUTING.md         ← How to add/update entries
 ├── TEMPLATE.md             ← Template for new entries
 ├── setup/                  ← 13 entries
-├── orm/                    ← 13 entries
+├── orm/                    ← 14 entries
 ├── views/                  ← 10 entries
 ├── security/               ← 6 entries
 ├── performance/            ← (empty)
@@ -186,8 +187,8 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 36
-- **Last Updated:** 2026-06-29
+- **Total Entries:** 37
+- **Last Updated:** 2026-07-04
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
