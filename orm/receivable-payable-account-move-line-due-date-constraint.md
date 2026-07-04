@@ -47,7 +47,9 @@ credit_line_vals = pos_session._credit_amounts({
 
 ## ⚠️ Pitfalls
 
-- Forgetting to apply this when creating intermediate POS accounts like `account_default_pos_receivable_account_id` which might be configured as a receivable account.
+- **Configuration Root Cause:** If this happens natively in POS without any custom code changes, it is almost certainly a configuration issue. An accountant may have accidentally changed the "Account Type" of the POS Receivable Account or a Payment Method's outstanding account from `Current Assets` (أصول متداولة) or `Bank and Cash` to `Receivable` (حسابات عملاء).
+- **Frontend Masking Error:** In Odoo 18.0 POS, this backend `UserError` might be masked on the frontend by a JavaScript `ReferenceError: RPCError is not defined` during `_finalizeValidation`. This happens because the frontend tries to catch the backend error but fails if `RPCError` isn't resolved properly in the minified bundle. Always check the server logs for the real `UserError`.
+- Forgetting to apply `display_type` when creating custom intermediate POS accounts in code.
 - Trying to add `date_maturity` field manually without adding `display_type`. The constraint strictly checks `display_type == 'payment_term'`, not just the presence of a date.
 
 ## Verification
