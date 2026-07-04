@@ -208,3 +208,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | Changing Search Fields in Target Models | changing_search_fields.md |
 | `name_get_deprecation_odoo17.md` | upgrade | Deprecation of name_get in Odoo 17+ (Use _compute_display_name) |
 | Data Migration | Complex Hierarchical Excel Import | [Link](data_migration/complex-hierarchical-excel-import.md) |
+| Frontend | [POS JS Missing RPCError Import](frontend/pos_js_missing_rpcerror_import.md) | V18 |
