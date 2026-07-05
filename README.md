@@ -118,6 +118,7 @@
 | 22 | [odoo19_portal_card_xpath_class_change.md](views/odoo19_portal_card_xpath_class_change.md) | 🟡 Medium | 19 | `xpath`, `qweb`, `portal`, `hasclass`, `odoo19` | XPath hasclass() fails in Odoo 19 because class attributes in portal templates were changed to dynamic t-att-class |
 | 23 | [external_id_not_found_parse_error.md](views/external_id_not_found_parse_error.md) | 🔴 Critical | All | `xml`, `parseerror`, `manifest`, `data-order`, `external-id` | External ID not found ValueError caused by incorrect XML file load order in __manifest__.py |
 | 24 | [odoo_19_list_view_for_one2many.md](views/odoo_19_list_view_for_one2many.md) | 🔴 Critical | 17, 18, 19 | `views`, `xml`, `one2many`, `list`, `tree` | Using list instead of tree for One2many inline views in Odoo 19+ to avoid XML ParseError |
+| 25 | [hide-cost-margin-standard-price-value-odoo19.md](views/hide-cost-margin-standard-price-value-odoo19.md) | 🟢 Low | 17, 18, 19 | `views`, `security`, `hide_cost` | Safe view inheritance patterns for restricting visibility of cost, margin, and stock valuation fields via custom security groups |
 
 ### Security
 
@@ -178,7 +179,7 @@ odoo-knowledge/
 ├── TEMPLATE.md             ← Template for new entries
 ├── setup/                  ← 13 entries
 ├── orm/                    ← 14 entries
-├── views/                  ← 10 entries
+├── views/                  ← 11 entries
 ├── security/               ← 6 entries
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
@@ -188,7 +189,7 @@ odoo-knowledge/
 
 ### Stats
 
-- **Total Entries:** 37
+- **Total Entries:** 38
 - **Last Updated:** 2026-07-04
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
