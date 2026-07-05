@@ -88,6 +88,7 @@
 | 33 | [one2many_import_boq.md](orm/one2many_import_boq.md) | 🟢 Low | 16, 17, 18, 19 | `orm`, `one2many`, `hierarchy`, `boq`, `import` | Pattern for importing hierarchical one2many data (like BOQ) via button instead of complex onchange |
 | 34 | [side-register-must-move-stock-and-dedup-kpi.md](orm/side-register-must-move-stock-and-dedup-kpi.md) | 🔴 Critical | All | `orm`, `stock`, `stock.scrap`, `kpi`, `double-counting`, `anti-tamper` | Waste/loss/damage side-registers must physically scrap stock, take cost from valuation layers, lock after confirm, and dedup against wastage-classified issues to prevent phantom stock and KPI double counting |
 | 35 | [receivable-payable-account-move-line-due-date-constraint.md](orm/receivable-payable-account-move-line-due-date-constraint.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `account`, `constraint` | Missing display_type='payment_term' on receivable/payable account.move.line creation throws due date UserError |
+| 36 | [geolocation-precision-digits.md](orm/geolocation-precision-digits.md) | 🟡 Medium | All | `orm`, `fields`, `float`, `geolocation` | Float fields used for geolocation coordinates need at least `digits=(18, 15)` to avoid losing map accuracy |
 
 ### Views
 
