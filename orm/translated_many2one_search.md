@@ -4,6 +4,8 @@
 In Odoo, standard text fields like `name` on core models like `res.partner` are used heavily in search logic across the entire ORM. Setting `translate=True` on an existing core `name` field via `_inherit` converts the underlying database column from `VARCHAR` to `JSONB` in newer Odoo versions. This will often cause the ORM to generate mismatched SQL queries where it tries to use the JSONB `->>` operator on a column that Postgres still perceives as `character varying`, leading to:
 `psycopg2.errors.UndefinedFunction: operator does not exist: character varying ->> unknown`
 
+Additionally, core mail functions like `_notify_get_recipients` use raw SQL to fetch `partner.name`. When `fetchall()` evaluates the column under the ORM's `translate=True` context, it can return a dictionary (e.g., `{'en_US': 'Name'}`) instead of a string, crashing email dispatches with:
+`AttributeError: 'dict' object has no attribute 'encode'` inside `formataddr`.
 ## Solution ✅
 Instead of making the core `name` field translated, create a new specific field for the alternative language (e.g., `arabic_name = fields.Char(string='Arabic Name')`). Then, to make this field searchable in all `Many2one` widgets globally without breaking core search queries, add the new field to the model's `_rec_names_search` list:
 
