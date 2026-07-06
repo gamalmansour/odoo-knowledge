@@ -23,10 +23,22 @@ We must define strict record rules to ensure a portal user can only read/write t
 </record>
 ```
 
-### 3. Model Access Rights (`ir.model.access.csv`)
-Grant `read` and `write` access to `base.group_portal` for the HR models you wish to expose.
+### 4. Odoo 19 Specific: `hr.version` Dependency
+In Odoo 19, `hr.employee` relies heavily on `hr.version` via `_inherits`. A portal user attempting to read their `hr.employee` record will encounter a `403: Forbidden` AccessError on `version_id` unless they also have explicit access to `hr.version`.
 
-### 4. Portal Controllers
+**Fix:** Add `hr.version` to `ir.model.access.csv` for `base.group_portal` and an `ir.rule`:
+```xml
+<record id="hr_version_portal_rule" model="ir.rule">
+    <field name="name">Employee Portal: Read/Write own version</field>
+    <field name="model_id" ref="hr.model_hr_version"/>
+    <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+</record>
+```
+
+### 5. Portal Controllers
 Create a custom portal controller inheriting `CustomerPortal` from `odoo.addons.portal.controllers.portal`. Ensure all data fetched uses the standard ORM, which will automatically respect the strict record rules we defined.
 
 ```python
