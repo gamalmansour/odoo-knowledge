@@ -123,6 +123,7 @@
 | 24 | [odoo_19_list_view_for_one2many.md](views/odoo_19_list_view_for_one2many.md) | 🔴 Critical | 17, 18, 19 | `views`, `xml`, `one2many`, `list`, `tree` | Using list instead of tree for One2many inline views in Odoo 19+ to avoid XML ParseError |
 | 25 | [hide-cost-margin-standard-price-value-odoo19.md](views/hide-cost-margin-standard-price-value-odoo19.md) | 🟢 Low | 17, 18, 19 | `views`, `security`, `hide_cost` | Safe view inheritance patterns for restricting visibility of cost, margin, and stock valuation fields via custom security groups |
 | 26 | [portal-record-layout-deprecated-odoo19.md](views/portal-record-layout-deprecated-odoo19.md) | 🔴 Critical | 19 | `views`, `portal`, `qweb`, `deprecated` | portal.portal_record_layout template removed in Odoo 19, causing 500 Template Not Found. Use standard bootstrap cards instead. |
+| 27 | [percentage-widget-ratio-behavior.md](views/percentage-widget-ratio-behavior.md) | 🟡 Medium | All | `views`, `widget`, `percentage`, `ui` | The percentage widget multiplies the backend value by 100; backend must return a ratio (0.0 to 1.0) to avoid displaying 5000% |
 
 ### Security
 
