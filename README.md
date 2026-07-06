@@ -120,6 +120,7 @@
 | 23 | [external_id_not_found_parse_error.md](views/external_id_not_found_parse_error.md) | 🔴 Critical | All | `xml`, `parseerror`, `manifest`, `data-order`, `external-id` | External ID not found ValueError caused by incorrect XML file load order in __manifest__.py |
 | 24 | [odoo_19_list_view_for_one2many.md](views/odoo_19_list_view_for_one2many.md) | 🔴 Critical | 17, 18, 19 | `views`, `xml`, `one2many`, `list`, `tree` | Using list instead of tree for One2many inline views in Odoo 19+ to avoid XML ParseError |
 | 25 | [hide-cost-margin-standard-price-value-odoo19.md](views/hide-cost-margin-standard-price-value-odoo19.md) | 🟢 Low | 17, 18, 19 | `views`, `security`, `hide_cost` | Safe view inheritance patterns for restricting visibility of cost, margin, and stock valuation fields via custom security groups |
+| 26 | [portal-record-layout-deprecated-odoo19.md](views/portal-record-layout-deprecated-odoo19.md) | 🔴 Critical | 19 | `views`, `portal`, `qweb`, `deprecated` | portal.portal_record_layout template removed in Odoo 19, causing 500 Template Not Found. Use standard bootstrap cards instead. |
 
 ### Security
 
