@@ -177,6 +177,7 @@ _No entries yet._
 | 4 | [po-file-syntax-fatal-errors.md](misc/po-file-syntax-fatal-errors.md) | 🔴 Critical | All | `translation`, `i18n`, `po`, `syntax`, `msgfmt`, `quotes` | Unescaped quotes or duplicate msgids in PO files crash the parser, preventing translations from loading |
 | 5 | [translation-wiped-out-by-export.md](misc/translation-wiped-out-by-export.md) | 🔴 Critical | All | `translation`, `i18n`, `po`, `export`, `polib` | Odoo i18n export wipes out existing PO translations if they are missing in DB; securely restore via polib |
 | 6 | [timeoff-counts-weekend-check-resource-calendar.md](misc/timeoff-counts-weekend-check-resource-calendar.md) | 🟡 Medium | All | `hr_holidays`, `resource.calendar`, `weekend`, `number_of_days`, `configuration` | Time off counting weekend days is a working-schedule configuration issue (weekend rows in resource.calendar.attendance) — never override hr.leave duration code |
+| 7 | [payroll-30-day-month-invert-basic-not-7day-calendar.md](misc/payroll-30-day-month-invert-basic-not-7day-calendar.md) | 🔴 Critical | 16, 17, 18, 19 | `hr_payroll`, `salary-rule`, `BASIC`, `30-day-month`, `work-entries`, `egypt` | 30-day-month payroll: make BASIC subtractive (wage − wage/30 × unpaid days) instead of faking a 7-day calendar — includes the full clean-up checklist for undoing the hack |
 
 ---
 
