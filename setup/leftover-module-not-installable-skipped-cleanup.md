@@ -32,8 +32,27 @@ metadata and tables forever, and complains on every registry load.
 
 ## Solution ✅
 
-Purge the remnants with SQL (safe for pure test modules — verify the module holds no
-business data first). Adapt model/table names to the module:
+**Escalation ladder — try in this order:**
+
+### 1. Standard UI uninstall (first choice — no source files needed)
+
+`button_uninstall` and the removal phase work purely on DB records via the ORM; the
+module's source files are NOT required (verified in `ir_module.py`: it only checks
+`state in ('installed', 'to upgrade')` and server-wide modules, then marks `to remove`).
+
+Apps → remove the "Apps" filter → search the module (e.g. `test_performance`) →
+**Uninstall**. On Odoo.sh do this on the branch UI, then restart.
+
+### 2. OCA `database_cleanup` (if the button errors)
+
+Install [OCA/server-tools `database_cleanup`](https://github.com/OCA/server-tools) →
+Settings → Technical → Database cleanup → *Purge obsolete modules* → pick the module →
+purge. ORM-driven and reference-safe. Uninstall `database_cleanup` afterwards.
+
+### 3. Raw SQL purge (last resort — dev DBs / when 1 and 2 fail)
+
+Safe for pure test modules only — verify the module holds no business data first.
+Adapt model/table names to the module:
 
 ```sql
 BEGIN;
@@ -54,9 +73,9 @@ SELECT model FROM ir_model WHERE id IN (SELECT res_id FROM ir_model_data
   WHERE module='test_performance' AND model='ir.model');
 ```
 
-On **Odoo.sh**: branch → Shell tab → `psql` → paste the block → `\q` → `odoosh-restart`.
-If staging rebuilds from production, clean production too or the warning returns on
-every rebuild.
+For the SQL route on **Odoo.sh**: branch → Shell tab → `psql` → paste the block → `\q`
+→ `odoosh-restart`. Whatever route you use: if staging rebuilds from production, clean
+production too or the warning returns on every rebuild.
 
 ## ⚠️ Pitfalls
 
