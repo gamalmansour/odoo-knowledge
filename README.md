@@ -181,6 +181,7 @@ _No entries yet._
 | 6 | [timeoff-counts-weekend-check-resource-calendar.md](misc/timeoff-counts-weekend-check-resource-calendar.md) | 🟡 Medium | All | `hr_holidays`, `resource.calendar`, `weekend`, `number_of_days`, `configuration` | Time off counting weekend days is a working-schedule configuration issue (weekend rows in resource.calendar.attendance) — never override hr.leave duration code |
 | 7 | [payroll-30-day-month-invert-basic-not-7day-calendar.md](misc/payroll-30-day-month-invert-basic-not-7day-calendar.md) | 🔴 Critical | 16, 17, 18, 19 | `hr_payroll`, `salary-rule`, `BASIC`, `30-day-month`, `work-entries`, `egypt` | 30-day-month payroll: make BASIC subtractive (wage − wage/30 × unpaid days) instead of faking a 7-day calendar — includes the full clean-up checklist for undoing the hack |
 | 8 | [contract-expiry-alert-window-vs-exact-date.md](misc/contract-expiry-alert-window-vs-exact-date.md) | 🟢 Low | 19 | `hr`, `contract`, `expiry`, `cron`, `notification` | Contract expiry alerts: use a date window + notified-end-date marker (self-healing, renewal re-arms) instead of the core's fragile exact-date match; contract dates live on hr.version in 19 |
+| 9 | [gps-geofence-false-rejections.md](misc/gps-geofence-false-rejections.md) | 🔴 Critical | All | `geolocation`, `gps`, `geofence`, `portal`, `javascript`, `field-sales` | GPS geofence falsely rejects reps at the customer: use watchPosition best-fix + accuracy-aware margin (allowed + min(accuracy, cap)), log evidence in chatter, and guard against single-coordinate partners |
 
 ---
 
