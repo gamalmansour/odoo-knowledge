@@ -95,6 +95,7 @@
 | 36 | [geolocation-precision-digits.md](orm/geolocation-precision-digits.md) | 🟡 Medium | All | `orm`, `fields`, `float`, `geolocation` | Float fields used for geolocation coordinates need at least `digits=(18, 15)` to avoid losing map accuracy |
 | 37 | [hr-leave-allocation-bulk-double-action-error.md](orm/hr-leave-allocation-bulk-double-action-error.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `hr_holidays`, `allocation`, `validation` | Fix 'You can't do the same action twice' UserError and smart button evaluation when bulk approving hr.leave.allocation |
 | 38 | [stored-compute-parent-stale-sequential-child-create.md](orm/stored-compute-parent-stale-sequential-child-create.md) | 🔴 Critical | 17 | `orm`, `computed-fields`, `store`, `one2many`, `import`, `hierarchy` | Recursive compute pair (unit_cost ↔ child total_cost) without recursive=True truncates the trigger tree — child edits never cascade to ancestors (stale L1 costs in UI and imports); declare recursive=True on BOTH fields + domain the one2many to roots |
+| 39 | [polymorphic-billing-method-per-contract-type.md](orm/polymorphic-billing-method-per-contract-type.md) | 🔴 Critical | 17 | `orm`, `billing`, `progress-invoice`, `ipc`, `computed-fields`, `money` | One IPC line model billing differently per contract type (lump sum % / unit price / cost plus / mixed) via a `billing_method` resolver + method-aware cumulative seeding across periods; cell-level invisible for mixed rows |
 
 ### Views
 
