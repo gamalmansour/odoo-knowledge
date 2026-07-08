@@ -183,7 +183,7 @@ _No entries yet._
 | 8 | [contract-expiry-alert-window-vs-exact-date.md](misc/contract-expiry-alert-window-vs-exact-date.md) | 🟢 Low | 19 | `hr`, `contract`, `expiry`, `cron`, `notification` | Contract expiry alerts: use a date window + notified-end-date marker (self-healing, renewal re-arms) instead of the core's fragile exact-date match; contract dates live on hr.version in 19 |
 | 9 | [gps-geofence-false-rejections.md](misc/gps-geofence-false-rejections.md) | 🔴 Critical | All | `geolocation`, `gps`, `geofence`, `portal`, `javascript`, `field-sales` | GPS geofence falsely rejects reps at the customer: use watchPosition best-fix + accuracy-aware margin (allowed + min(accuracy, cap)), log evidence in chatter, and guard against single-coordinate partners |
 | 10 | [wht_progress_invoices.md](backend/wht_progress_invoices.md) | 🟢 Low | 15, 16, 17 | `backend`, `WHT`, `Taxes`, `progress-invoices` | Calculate WHT using cumulative delta (Current WHT = To-Date - Prior) on progress invoices to prevent rounding errors across project lifespan. |
-
+| 11 | [construction_financial_enhancements.md](misc/construction_financial_enhancements.md) | 🟢 Low | 17 | `construction`, `finance`, `taxes`, `wip`, `cashflow` | Architectural improvements for construction finances (variable taxes, equipment depreciation based on hours, actual-cost WIP, consolidated cash flow). |
 ---
 
 ## 🔧 Quick Reference
