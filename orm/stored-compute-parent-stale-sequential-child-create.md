@@ -102,9 +102,14 @@ copy L3 twice: once as child, once as root).
   rely on the children to fix it later.
 - Verify with **distinct** numbers per child; identical sums (2×50 vs manual
   100) masked the bug in the first repro attempt.
-- Other modules in the same suite still warn (`contract.boq.breakdown.total_cost`,
-  `contract.amendment.breakdown.new_price`, `project.boq.item.full_code`) —
-  same fix applies.
+- The same bug existed in three sibling modules and was fixed the same way
+  (verified with live child-edit cascade tests, 2026-07-08):
+  `contract.boq.breakdown.total_cost` (depends `child_ids.total_cost`),
+  `contract.amendment.breakdown.new_price` (depends `child_ids.new_price`),
+  and `project.boq.item.full_code` (depends `parent_id.full_code` — the
+  DOWNWARD direction: renaming a parent's code silently never updated the
+  children's stored full codes). `recursive=True` applies to both directions
+  of self-reference (via `child_ids.*` AND via `parent_id.*`).
 
 ## Related
 - `one2many_import_boq.md` (button-driven hierarchical import pattern)
