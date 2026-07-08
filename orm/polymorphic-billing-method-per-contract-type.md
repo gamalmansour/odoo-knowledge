@@ -58,6 +58,19 @@ the line's method needs. The header `gross = sum(current_amount)` and all the
 downstream deductions stay untouched because each line already resolves its own
 amount.
 
+**3b. Cost Plus auto-seeds actual cost from the execution project.** Rather than
+manual entry, seed `current_cost` as the delta of the linked project's real
+incurred cost: `max(cumulative_actual_cost - previous_cost, 0)`. The actual cost
+already lives on `project.boq.item.actual_cost` (completed work orders at real
+stock-valuation cost + approved subcontract invoices) and links back via
+`contract_boq_line_id`. Key safety point: `contract_boq_line_id` is set ONLY on
+the top-level project item (its `actual_cost` already rolls up breakdown
+children), so summing the search result does NOT double count. Keep the field
+editable (auto + manual override) and it naturally falls back to 0 → manual when
+no project is linked. Verified end-to-end: WO cost 1600 → IPC1 current_cost 1600,
+amount 1760 (×1.10); period 2 cumulative 2400 → IPC2 delta 800, amount 880;
+manual override and no-project fallback both hold.
+
 **4. Views:** cell-level `invisible="billing_method != 'unit_price'"` (NOT
 `column_invisible`) so a Mixed contract can show qty inputs on one row and %
 inputs on the next in the same tree. Show `cost_plus_fee_percentage` only when
