@@ -72,3 +72,29 @@ module (project/BOQ awareness) layered on a base module that doesn't know about 
   excluded when restriction is active.
 - `column_invisible="1"` (not `invisible="1"`) for a helper field injected into a
   `<tree>` via xpath, or it still reserves a column.
+
+## Update — explicit mode toggle instead of a silent always-on filter (2026-07-09)
+The user later asked for the restriction to be **opt-in per record**, not always
+applied: a header `Selection` field (`request_type`: `internal` / `project`) where
+`internal` shows every product unrestricted and `project` applies the BOQ filter.
+This is a better UX than a silent automatic restriction — the user explicitly
+declares intent instead of the system inferring it from whether a project happens
+to be set.
+
+- Gate the domain on the parent selection too:
+  `domain="[('id','in',boq_product_ids)] if parent.request_type == 'project' and boq_product_ids else []"`.
+  `parent.<field>` works for a HEADER selection field the same way it works for
+  `parent.project_id` — no extra plumbing needed on the line.
+- `required="expr"` is a VIEW-only conditional (XML attribute on the field tag).
+  It is **not** a valid kwarg value for the Python `fields.Many2one(required=...)`
+  constructor — that only accepts a static bool. Conditionally-required fields
+  need BOTH: the view attribute (`required="request_type == 'project'"`) for UX,
+  AND an `@api.constrains` raising `ValidationError` for the same condition, since
+  the view-level required is bypassed entirely by API/import/script-created
+  records that never render the form.
+- Verify the constraint directly (not just the view attribute) — it is the actual
+  enforcement; the view attribute is only a client-side convenience.
+- After adding a view-level `domain="... if parent.<field> ..."` expression, sanity
+  check it actually reaches the rendered arch via `record.get_view(view_id, 'form')`
+  — a typo in the parent field name fails silently in the domain (evaluates to an
+  eval error swallowed by the client, not a load-time XML error).
