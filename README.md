@@ -100,6 +100,7 @@
 | 41 | [independent-control-policies-not-one-guard.md](orm/independent-control-policies-not-one-guard.md) | 🟡 Medium | 17 | `orm`, `validation`, `policy`, `guard`, `business-logic` | Two independent control policies (qty vs budget) gated by one guard reading only one → setting that one to 'off' silently disables the other; resolve and gate each policy separately, audit all enforcement points |
 | 42 | [stock-availability-by-location-computed-summary.md](orm/stock-availability-by-location-computed-summary.md) | 🟢 Low | 17 | `orm`, `stock`, `stock.quant`, `compute`, `inventory` | System-wide "where is this product available" summary via a computed Text field querying stock.quant directly (free qty = quantity - reserved_quantity, internal locations only) instead of product.qty_available (single-context aggregate); distinct messaging for consumable (never quant-tracked) vs zero-stock storable |
 | 43 | [constrains-not-firing-on-create-when-field-absent-from-vals.md](orm/constrains-not-firing-on-create-when-field-absent-from-vals.md) | 🔴 Critical | 17 | `orm`, `constrains`, `create`, `validation`, `gotcha` | `@api.constrains('field_x')` does NOT reliably fire on create() when field_x is absent from vals (stays at default) — contrary to common assumption that create validates everything; fix by also listing a required field (e.g. the parent Many2one) that's guaranteed present in vals |
+| 44 | [many2one-searches-by-code-only-missing-rec-names-search.md](orm/many2one-searches-by-code-only-missing-rec-names-search.md) | 🟡 Medium | 16, 17, 18, 19 | `orm`, `many2one`, `name_search`, `_rec_names_search`, `_rec_name`, `autocomplete` | Many2one autocomplete matches by code but never by name because `_rec_name` is a code field and `_rec_names_search` is missing → `_name_search` falls back to `[_rec_name]` only; list `name` in `_rec_names_search` and restart the worker (Python attr, baked at import) |
 
 ### Views
 
@@ -203,7 +204,7 @@ odoo-knowledge/
 ├── CONTRIBUTING.md         ← How to add/update entries
 ├── TEMPLATE.md             ← Template for new entries
 ├── setup/                  ← 13 entries
-├── orm/                    ← 14 entries
+├── orm/                    ← 15 entries
 ├── views/                  ← 11 entries
 ├── security/               ← 6 entries
 ├── performance/            ← (empty)
