@@ -98,3 +98,36 @@ to be set.
   check it actually reaches the rendered arch via `record.get_view(view_id, 'form')`
   — a typo in the parent field name fails silently in the domain (evaluates to an
   eval error swallowed by the client, not a load-time XML error).
+
+## Update — view-level domain REPLACES, never merges with, the field's Python domain (2026-07-09)
+Added a second, unrelated restriction on the same field: a static base-module
+domain `[('detailed_type', 'in', ('product', 'consu'))]` on `product_id` itself
+(exclude Service-type products from a stock-moving Material Requisition — they
+have no valuation layer/stock move and are silently skipped by the material-issue
+flow anyway, so offering them in the picker is pure UX debt).
+
+**The trap:** a `<field>` element's `domain="..."` XML attribute in an inheriting
+view **completely replaces** the field's Python-level `domain=` kwarg for that
+rendering — Odoo does not intersect/AND the two. Since `construction_project`'s
+inherited view already overrode `product_id`'s domain (for the project/BOQ
+scoping), simply adding the type filter to the base field definition silently
+did nothing in that view — the override string had no idea the base domain
+existed and clobbered it.
+
+**Fix:** whenever a view-level domain override coexists with a field-level
+domain you still want enforced, repeat the field-level condition explicitly
+inside the override and combine with list concatenation:
+```xml
+<attribute name="domain">[('detailed_type', 'in', ('product', 'consu'))] + ([('id', 'in', boq_product_ids)] if parent.request_type == 'project' and boq_product_ids else [])</attribute>
+```
+`+` concatenates two domain lists into an implicit AND — valid in both Python
+field domains and the client's domain mini-language. Verified via
+`get_view(view_id, 'form')` that the merged string (not just the base or just
+the override) reaches the final arch, plus confirmed the `detailed_type`
+filtering logic in isolation via `Product.search([...])`.
+
+**Rule of thumb:** any time you inherit-override a field's `domain` attribute in
+XML, first check whether that field already has a Python-level `domain=` kwarg
+elsewhere (base module or another inheriting module) — if so, the override must
+re-state it or that base restriction silently vanishes in the overridden view
+only (it still applies wherever the field renders WITHOUT the override).
