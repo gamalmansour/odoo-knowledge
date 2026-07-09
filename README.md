@@ -134,6 +134,7 @@
 | 26 | [portal-record-layout-deprecated-odoo19.md](views/portal-record-layout-deprecated-odoo19.md) | 🔴 Critical | 19 | `views`, `portal`, `qweb`, `deprecated` | portal.portal_record_layout template removed in Odoo 19, causing 500 Template Not Found. Use standard bootstrap cards instead. |
 | 27 | [percentage-widget-ratio-behavior.md](views/percentage-widget-ratio-behavior.md) | 🟡 Medium | All | `views`, `widget`, `percentage`, `ui` | The percentage widget multiplies the backend value by 100; backend must return a ratio (0.0 to 1.0) to avoid displaying 5000% |
 | 28 | [access-rights-inconsistency-warning-module-load-order.md](views/access-rights-inconsistency-warning-module-load-order.md) | 🟡 Medium | 19 | `views`, `validation`, `access-rights`, `groups`, `portal`, `load-order`, `odoo-sh` | "Access Rights Inconsistency" warning caused by portal ACLs widening the view audience — the field-groups fix must live in (or before) the validated module; later-loading modules are invisible during -u. Verify by upgrading twice. |
+| 29 | [scope-many2one-to-cross-model-set-with-computed-m2m-domain.md](views/scope-many2one-to-cross-model-set-with-computed-m2m-domain.md) | 🟢 Low | 17 | `views`, `domain`, `many2one`, `many2many`, `compute`, `one2many` | Restrict a Many2one (product on a requisition line) to a cross-model set (products used in the project's BOQ) via a computed Many2many + a ternary domain that falls back to unrestricted when empty — avoids trapping users when the BOQ has no product-linked breakdown yet |
 
 ### Security
 
