@@ -98,6 +98,14 @@ extra search.
   `work_order_id` is unset (distributed data-entry lines), so the default compute preserves
   the directly-set `boq_target_id` (`... or rec.boq_target_id`) instead of clobbering it.
   Confirm the distributed/source-capture tests still pass.
+- **A new completion gate silently changes which error later-gate tests hit.** Inserting the
+  sub-item `UserError` near the TOP of a multi-check `action_complete` means a pre-existing
+  test for a LATER gate (e.g. the work-package budget block) now hits the sub-item gate
+  first — and if its assertion is loose (`assertIn('Strict cost control', ...)`, which
+  matches BOTH messages) it keeps passing green while testing nothing real. When you add an
+  early gate, grep the tests that call the method and either satisfy the new gate in their
+  setup (here: pass a valid `boq_subitem_id`) or tighten their assertion to a string unique
+  to the gate they actually target (`assertIn('over budget by', ...)`).
 
 ## Related
 - `views/scope-many2one-to-cross-model-set-with-computed-m2m-domain.md` — the base pattern
