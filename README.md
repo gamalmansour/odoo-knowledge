@@ -159,6 +159,7 @@
 | 31 | [field-domain-dotted-path-crashes-when-intermediate-unset.md](views/field-domain-dotted-path-crashes-when-intermediate-unset.md) | 🔴 Critical | 16, 17, 18, 19 | `views`, `domain`, `many2one`, `uom`, `client-crash`, `evalerror`, `gotcha` | A client-evaluated `domain="[('category_id','=',product_id.uom_id.category_id)]"` throws `EvalError: Cannot read properties of undefined` the instant the dropdown opens before the intermediate (product_id) is set; fix with a related helper field (`product_uom_category_id = product_id.uom_id.category_id`) + `domain` referencing only that top-level field, and add the helper invisible to every view that renders the field |
 | 32 | [owl-tesc-renders-false-and-per-component-helper-scope.md](frontend/owl-tesc-renders-false-and-per-component-helper-scope.md) | 🟡 Medium | 16, 17, 18, 19 | `owl`, `qweb`, `t-esc`, `many2one`, `client-action`, `false`, `helper-scope` | OWL `t-esc` of an empty Odoo field (`False`) renders the literal "false"; guard scalars with `\|\| ''` and m2o with an `m2o()` helper — but that helper is per-component, so calling one not defined on the current component throws `ctx.X is not a function` at live render (invisible to `-u`/preview) |
 | 33 | [per-user-menu-hiding-leaks-through-group-keyed-visible-menu-cache.md](views/per-user-menu-hiding-leaks-through-group-keyed-visible-menu-cache.md) | 🔴 Critical | 19 | `views`, `ir.ui.menu`, `ormcache`, `record-rule`, `menu`, `visibility`, `per-user`, `cache-leak`, `third-party` | Per-user menu hiding via a record rule (e.g. SerpentCS `scs_hide_menu_user_wise`) LEAKS on Odoo 19 between users sharing groups, because `ir.ui.menu._visible_menu_ids` is `@ormcache`-keyed by `frozenset(group_ids)` — the rule filters the search inside that group-cached method, so the first same-group user freezes their restriction for everyone; fix in an overlay module: deactivate the rule and subtract per-user in the non-cached `_filter_visible_menus` (result cached per uid) |
+| 34 | [act-window-with-no-menuitem-or-button-is-dead-ui.md](views/act-window-with-no-menuitem-or-button-is-dead-ui.md) | 🟡 Medium | All | `views`, `act_window`, `menuitem`, `dead-code`, `audit`, `feature-list`, `qa` | A model can be fully built — fields, business logic, `ir.model.access.csv` rows, even a cron — and still be unreachable, because UI routing (`menuitem`/button → `act_window` → `res_model` → views) is declared in independent files and NOTHING validates the chain end-to-end; the module installs green and tests pass since they bypass the UI. An ACL row is not reachability. Audit by diffing defined action ids against referenced ones (incl. `%(...)d` buttons and Python-returned act_window dicts), and note `ir.actions.server`/`client` are not `act_window`. Found 6 dead features in the 31-module construction suite |
 
 ### Security
 
@@ -228,7 +229,7 @@ odoo-knowledge/
 ├── TEMPLATE.md             ← Template for new entries
 ├── setup/                  ← 13 entries
 ├── orm/                    ← 15 entries
-├── views/                  ← 11 entries
+├── views/                  ← 12 entries
 ├── security/               ← 6 entries
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
