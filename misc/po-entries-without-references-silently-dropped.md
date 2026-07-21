@@ -5,7 +5,7 @@
 | Category      | misc |
 | Odoo Versions | 16, 17, 18, 19 |
 | Severity      | 🔴 Critical |
-| Last Verified | 2026-07-15 |
+| Last Verified | 2026-07-20 |
 | Author        | ENG/Gamal Mansour |
 
 **Tags:** `translation`, `i18n`, `po`, `references`, `occurrences`, `PoFileReader`, `qweb`, `polib`
@@ -115,6 +115,34 @@ FROM ir_model_fields WHERE model='sale.visit.skip.reason';
   `base_geolocalize`), the module is skipped during load and its model/view terms
   vanish from the POT — only the `.py` code strings survive.
 - Don't `text.replace()` PO files — use `polib` (handles line-wrapping & escaping).
+- 🔴 **A `code:` reference with NO line number CRASHES the whole module upgrade.**
+  Worse than the silent drop above: `PoFileReader` runs `int(line_number)`
+  unconditionally on `code:` occurrences, so a reference written as
+  `#: code:addons/mod/models/x.py` (no `:N`) raises and the upgrade dies:
+
+  ```
+  File "odoo/tools/translate.py", line 879, in __iter__
+      'res_id': int(line_number),
+  ValueError: invalid literal for int() with base 10: ''
+  ```
+
+  The trap is **polib**: it writes `filename:line` only `if line` — and the
+  integer `0` is falsy, so `occurrences=[("code:addons/mod/models/x.py", 0)]`
+  silently serialises **without** the `:0`. Odoo's own POT export writes the
+  line number as the *string* `'0'`, which survives. So when you build
+  occurrences by hand, pass the line as a **string**: `("code:...py", '0')`.
+  Model/`model_terms` references are unaffected (their line number is never
+  `int()`-ed) — only `code:` refs bite.
+
+  Guard before shipping any hand-edited po:
+
+  ```python
+  import polib, re
+  po = polib.pofile('mod/i18n/ar.po')
+  bad = [(e.msgid[:40], o) for e in po for o, l in e.occurrences
+         if re.match(r'code:', o) and not str(l).isdigit()]
+  print("would crash:", bad)   # must be []
+  ```
 
 ## Verification
 
