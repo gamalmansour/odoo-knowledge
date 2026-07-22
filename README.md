@@ -180,6 +180,7 @@
 | 6 | [multi-company-record-rules.md](security/multi-company-record-rules.md) | 🔴 Critical | All | `security`, `multi-company`, `ir.rule`, `access-rights` | Custom models in a multi-company environment leak data across companies by default without explicit ir.rule |
 | 7 | [portal-hr-module-architecture.md](security/portal-hr-module-architecture.md) | 🟡 Medium | 17, 18, 19 | `security`, `portal`, `hr`, `architecture` | Exposing internal HR models to portal users without paid licenses using strict record rules and controller routing |
 | 9 | [per-stage-transition-acl-on-kanban-pipelines.md](security/per-stage-transition-acl-on-kanban-pipelines.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `security`, `stage`, `kanban`, `workflow`, `access-rights`, `write-override`, `lockout` | Restricting which users may move a record INTO a kanban stage — `ir.model.access`/`ir.rule` can't express value-level permission; enforce in `write()` with fail-open default, admin bypass and an `env.su`/context escape hatch |
+| 10 | [public-binary-image-route-must-whitelist-model-and-gate-record.md](security/public-binary-image-route-must-whitelist-model-and-gate-record.md) | 🟡 Medium | 16, 17, 18, 19 | `ir.binary`, `image`, `web/image`, `public`, `auth=public`, `idor` | Reusing `/web/image/<model>/<id>/<field>` for a headless API 401s for non-`res.users` callers; serve images via your own `auth='public'` route with a literal model whitelist, your own business gate, and `sudo()` only on the `ir.binary` stream call |
 
 
 ### Performance
