@@ -176,6 +176,7 @@
 | 8 | [controller-catching-create-error-without-savepoint-commits-partial-record.md](security/controller-catching-create-error-without-savepoint-commits-partial-record.md) | 🔴 Critical | All | `controller`, `create`, `savepoint`, `data-integrity` | A controller that catches a create()/write() error and returns a response WITHOUT a savepoint commits the partial record — a rejected request still saves the row |
 | 6 | [multi-company-record-rules.md](security/multi-company-record-rules.md) | 🔴 Critical | All | `security`, `multi-company`, `ir.rule`, `access-rights` | Custom models in a multi-company environment leak data across companies by default without explicit ir.rule |
 | 7 | [portal-hr-module-architecture.md](security/portal-hr-module-architecture.md) | 🟡 Medium | 17, 18, 19 | `security`, `portal`, `hr`, `architecture` | Exposing internal HR models to portal users without paid licenses using strict record rules and controller routing |
+| 9 | [per-stage-transition-acl-on-kanban-pipelines.md](security/per-stage-transition-acl-on-kanban-pipelines.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `security`, `stage`, `kanban`, `workflow`, `access-rights`, `write-override`, `lockout` | Restricting which users may move a record INTO a kanban stage — `ir.model.access`/`ir.rule` can't express value-level permission; enforce in `write()` with fail-open default, admin bypass and an `env.su`/context escape hatch |
 
 
 ### Performance
