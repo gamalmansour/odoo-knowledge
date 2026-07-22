@@ -124,5 +124,6 @@ class TenderOpportunity(models.Model):
 ## References
 
 - Implemented in `construction_tender` v17.0.1.3.0 — `models/tender_stage.py`, `models/tender_opportunity.py`, `views/tender_stage_views.xml`
+- Implemented in `construction_contract` v17.0.1.6.0 — `models/contract_stage.py`, `models/contract_owner.py`, `views/contract_stage_views.xml`, `tests/test_contract_stage_access.py` (10 test cases: fail-open, user grant, group grant, admin bypass, context + superuser bypass, guarded `create()`, guarded state button, clearing the stage). **Note on `contract.owner`:** `state` is a stored *related* on `stage_id.contract_state`, and every state button (`action_sign`, `action_activate`, `action_close` …) routes through `_set_stage_by_state()` which assigns `stage_id` — so a single `write()` guard gates the whole lifecycle for free. Use the module-namespaced context key (`contract_skip_stage_guard`, not a shared one) so two modules' guards never disable each other.
 - Related file: `security/sod-approval-checks.md` — the same fail-open + explicit-bypass reasoning applied to approval chains
 - Related file: `orm/dynamic-phases-crm-spirit.md`
