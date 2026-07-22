@@ -5,7 +5,7 @@
 | Category      | performance                                |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-06-27                                 |
+| Last Verified | 2026-07-22                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `performance`, `computed-fields`, `store`, `list-view`, `search`, `read_group`, `scaling`
@@ -56,6 +56,30 @@ Always prefer a single `read_group()` over a `search()`-per-row inside the compu
 - You cannot sort, filter, or group by a `store=False` field efficiently — the DB has nothing to order. If users need to sort/filter it, it must be stored.
 - Stored computed fields used in domains/group-by usually also want `index=True`.
 - Team/manager rollup computes that `search()` per record cascade recompute into every child — batch them with one `read_group` over the whole recordset.
+
+
+## ⚠️ It is not only slow in a search filter — it is a hard install blocker
+
+A non-stored compute placed in a **search view `<filter domain=...>`** does not degrade gracefully. Odoo validates search-filter domains against real columns at install time and aborts the whole module load:
+
+```
+odoo.tools.convert.ParseError: while parsing .../equipment_rental_views.xml:156
+Error while validating view near:
+    <filter name="filter_on_hire" string="Has Units On Hire" domain="[('on_hire_count', '&gt;', 0)]"/>
+```
+
+The field existed, the compute was correct, and the form view rendered it fine — but there is no column to put in the `WHERE` clause, so the view cannot be validated. Same for `group_by` on a non-stored field.
+
+Practical rule when adding a computed counter or total:
+
+| Where it appears | Non-stored is… |
+|------------------|----------------|
+| Form view / stat button | fine — one record at a time |
+| List column | slow — recomputed per rendered row |
+| Search `filter domain` | **impossible** — ParseError at install |
+| `group_by` | **impossible** |
+
+So decide by placement, not by taste: the moment a computed field is destined for a filter or a group-by, `store=True` with a narrow `@api.depends` is the only option. Verified again 2026-07-22 on `construction.equipment.rental.on_hire_count` (Odoo 17).
 
 ## Verification
 
