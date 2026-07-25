@@ -25,7 +25,14 @@ vs `find <data_dir>/filestore/<db> -type f | wc -l`, and compare
 the ORIGINAL server (`~/.local/share/Odoo/filestore/<dbname>`) or inside a
 full backup zip (its `filestore/` folder).
 
-Recovery order:
+Recovery order (0 first — it solved 100% of the Solargy case):
+0. **The PRE-upgrade database's local filestore**: macOS
+   `~/Library/Application Support/Odoo/filestore/<old_db_name>` (Linux
+   `~/.local/share/Odoo/filestore/<old_db_name>`). Content-addressing means
+   the sha1 names still match the upgraded DB's checksums verbatim.
+   ⚠️ When comparing name lists, strip `\r` — a CSV written by Python's
+   csv module has CRLF endings and makes every `comm`/`grep` match fail
+   silently (we read 0 matches when the truth was 881/881).
 1. Files are content-addressed by sha1 (`store_fname = ab/<sha1>`), so check
    OTHER local filestores for the same checksums — real recoveries happen
    (433 files recovered from the target DB's own filestore in our case).
