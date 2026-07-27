@@ -5,7 +5,7 @@
 | Category      | setup                                      |
 | Odoo Versions | All (verified 19)                          |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-07-26                                 |
+| Last Verified | 2026-07-27                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `setup`, `neutralize`, `ir.cron`, `backup`, `odoo-sh`, `production`, `mail-server`, `payment`, `webhook`, `migration`
@@ -83,6 +83,17 @@ Run it on Odoo.sh: production branch → Shell → `psql < reactivate_crons.sql`
   apply → compare counts → drop.
 - Prevention: production must only ever be restored from a **production**
   backup; the testing checkbox bakes neutralization into the dump itself.
+- **Domain params survive the migration pointing at the OLD host** (separate
+  from neutralization, verified on the same migration): `mail.catchall.domain`
+  and the `mail.alias.domain` record keep the old Odoo Online domain
+  (`*.odoo.com`), so customer replies route to the dead SaaS instance — fix via
+  Settings → Technical → Email → **Alias Domains**; and set
+  `web.base.url` + `web.base.url.freeze=True` or the first admin login rewrites
+  it (a local restore shows up as `http://localhost:8020`).
+- **A production copy restored locally has LIVE crons** — mail fails safely
+  (`Connection refused`, no local SMTP) but IAP-backed crons (SMS queue,
+  snailmail) go over plain HTTPS and can spend real credits from a dev machine.
+  Neutralize local restores: `python odoo-bin neutralize -d <db>`.
 
 ## Verification
 
