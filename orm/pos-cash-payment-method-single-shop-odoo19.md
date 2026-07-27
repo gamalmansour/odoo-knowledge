@@ -72,6 +72,27 @@ for i, branch in enumerate(branches, start=1):
 `pos.config.create()` handles the rest (picking type, sequences, default sale journal) — no need to
 pass them.
 
+## Bonus Recipe: One Warehouse per POS Branch ✅
+
+`point_of_sale` extends `stock.warehouse` with `pos_type_id` and hooks
+`_get_picking_type_create_values()` — so **every newly created warehouse automatically gets its
+own 'PoS Orders' picking type** sourcing from that warehouse's `lot_stock_id`. Per-branch stock
+therefore needs NO manual picking-type surgery:
+
+```python
+wh = env['stock.warehouse'].create({'name': 'مخزن %s' % branch, 'code': 'B%02d' % i})
+config.picking_type_id = wh.pos_type_id        # done — POS now consumes branch stock
+```
+
+Notes:
+- `stock.warehouse.code` is max 5 chars (`B01`..`B22` fits).
+- If `pos_type_id` is empty (legacy warehouse), call
+  `wh.write(wh._create_or_update_sequences_and_picking_types())` — same helper
+  `_create_missing_pos_picking_types()` uses.
+- For bulk stocking N branches × M products, batch `action_apply_inventory()` per warehouse
+  recordset and `env.cr.commit()` per branch as a checkpoint — each quant apply generates a
+  stock move, so 22×59 singles is painfully slow.
+
 ## ⚠️ Pitfalls
 
 - `account.journal.code` is limited to 5 characters — use compact codes like `CSH01`…`CSH22`.
