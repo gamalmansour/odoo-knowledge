@@ -37,8 +37,16 @@ whole UI, reports and `display_name` render `name`, so you **must** keep
 - **Still add `arabic_name` + `_rec_names_search` alongside** — that is the search
   fix and it does not conflict with the translated `name`.
 - **Keep watching the two crash modes below** (JSONB search SQL, email `formataddr`).
-  They did **not** reproduce in normal Odoo 19 use with a translated `name` here,
-  but if a search or an email dispatch breaks, this field is suspect #1.
+  ⚠️ **UPDATE 2026-07-28: the `formataddr` crash DOES reproduce on Odoo 19.**
+  `mail.followers._get_recipient_data` fetches `res_partner.name` via raw SQL, so
+  any notification that goes through it (e.g. the "you have been assigned"
+  notify fired INSIDE `account.move` creation for `invoice_user_id`) receives a
+  raw jsonb dict and dies with `AttributeError: 'dict' object has no attribute
+  'encode'`. When that create was wrapped in a bare `except Exception` without a
+  savepoint, the half-created invoice survived and posted as **"Paid" with no
+  payment** — full post-mortem in
+  [invoice-paid-on-post-zombie-from-swallowed-create-error](invoice-paid-on-post-zombie-from-swallowed-create-error.md).
+  If email dispatch or assignment notifications break, this field is suspect #1.
 
 **Decision rule:** need to *find* a partner by its Arabic name → `arabic_name`
 only, leave `name` untranslated. Need the same partner to *display* differently
@@ -54,4 +62,4 @@ warnings as the price.
 ## Odoo Versions
 Odoo 16, 17, 18, 19
 
-_Last verified: 2026-07-26 (Odoo 19) — confirmed translated `name` display works with only the harmless load warnings; documented the SEARCH-vs-DISPLAY distinction._
+_Last verified: 2026-07-28 (Odoo 19) — the `formataddr` crash mode is now CONFIRMED reproducible via `mail.followers._get_recipient_data` raw SQL (assignment notifications); see the zombie-invoice entry for the money-integrity blast radius._
