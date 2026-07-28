@@ -115,6 +115,15 @@ FROM ir_model_fields WHERE model='sale.visit.skip.reason';
   `base_geolocalize`), the module is skipped during load and its model/view terms
   vanish from the POT — only the `.py` code strings survive.
 - Don't `text.replace()` PO files — use `polib` (handles line-wrapping & escaping).
+- 🔴 **An entry with NO `#. module:` comment CRASHES the whole module upgrade (verified Odoo 19).**
+  `PoFileReader.__iter__` does `re.match(r"(module[s]?): (\w+)", entry.comment).groups()`
+  with no None-check (`odoo/tools/translate.py`), so ANY entry missing the
+  `#. module: <name>` comment dies with `AttributeError: 'NoneType' object has
+  no attribute 'groups'` at `-u` time — the registry fails to load. Odoo's own
+  export always writes this comment, but **polib-appended entries don't**: after
+  adding entries programmatically, always set
+  `entry.comment = 'module: <module_name>'`. Entries filled via `msgmerge`
+  against an Odoo-exported POT inherit the comment and are safe.
 - 🔴 **A `code:` reference with NO line number CRASHES the whole module upgrade.**
   Worse than the silent drop above: `PoFileReader` runs `int(line_number)`
   unconditionally on `code:` occurrences, so a reference written as
