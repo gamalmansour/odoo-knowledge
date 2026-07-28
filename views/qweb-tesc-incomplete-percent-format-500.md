@@ -74,6 +74,7 @@ Finally, sweep the codebase for other landmines: `grep -rn "%%" custom/*/views/*
 - **`dev=all` masks it**: with `dev=xml` views render straight from the (correct) file, so the developer sees a working page locally while every non-dev server 500s from the mangled DB arch.
 - **`-u` on the wrong cluster**: machines with two PostgreSQL clusters (psql default 5432 vs conf 5433) — always check the startup log line `database: user@host:port` (see [odoo-silent-db-autocreate-masks-wrong-cluster](../setup/odoo-silent-db-autocreate-masks-wrong-cluster.md)).
 - **Shell reproduction recipe (Odoo 19):** `MockRequest` moved to `odoo.addons.http_routing.tests.common`, and in `odoo shell` (no HTTP server) `HttpCase.http_port()` raises `AttributeError` — patch first: `HttpCase.http_port = classmethod(lambda cls: None)`, then `with MockRequest(env(user=rep.id)): env['ir.qweb']._render('module.template', values)` gives the real portal traceback without portal credentials.
+- **Preview EDITED templates before any `-u` (same recipe, one more line):** load the modified XML into the current transaction first — `from odoo.tools.convert import convert_file; convert_file(env, 'module', 'views/portal_templates.xml', None, mode='update', noupdate=False)` — then render via `MockRequest` and finish with `env.cr.rollback()`. Verifies new/changed QWeb end-to-end (including what the loader does to it, e.g. the `%%` collapse) without touching the DB.
 
 ## Verification
 
