@@ -230,7 +230,8 @@ _No entries yet._
 | 5 | [hr-employee-address-home-id-deprecation-odoo17.md](upgrade/hr-employee-address-home-id-deprecation-odoo17.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `hr.employee`, `address_home_id`, `work_contact_id` | ValueError for address_home_id on hr.employee because field was replaced by work_contact_id |
 | 6 | [foreign-key-violation-ondelete-restrict.md](upgrade/foreign-key-violation-ondelete-restrict.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `upgrade`, `foreign-key`, `ondelete`, `psycopg2` | Foreign Key Violation During Module Upgrade due to ondelete=x27restrictx27 |
 | 7 | [odoo19_python_signature_changes.md](upgrade/odoo19_python_signature_changes.md) | 🔴 Critical | 19 | `upgrade`, `python`, `signature`, `prepare_procurement_values` | Python method signature changes in Odoo 19 (e.g. `_prepare_procurement_values`) |
-| 8 | [hr-leave-number-of-days-display-removed-odoo19.md](upgrade/hr-leave-number-of-days-display-removed-odoo19.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `hr_holidays`, `hr.leave`, `number_of_days_display`, `duration_display`, `qweb`, `portal` | `hr.leave.number_of_days_display` removed in Odoo 19 → 500 AttributeError in QWeb; use unit-aware `duration_display` (or `number_of_days`) |
+| 8 | [sale-order-line-tax-id-renamed-tax-ids-odoo19.md](upgrade/sale-order-line-tax-id-renamed-tax-ids-odoo19.md) | 🟡 Medium | 19 | `upgrade`, `sale.order.line`, `tax_id`, `tax_ids` | `sale.order.line.tax_id` renamed to `tax_ids` in Odoo 19 — AttributeError at runtime only (installs fine); grep `.tax_id` before upgrading |
+| 9 | [hr-leave-number-of-days-display-removed-odoo19.md](upgrade/hr-leave-number-of-days-display-removed-odoo19.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `hr_holidays`, `hr.leave`, `number_of_days_display`, `duration_display`, `qweb`, `portal` | `hr.leave.number_of_days_display` removed in Odoo 19 → 500 AttributeError in QWeb; use unit-aware `duration_display` (or `number_of_days`) |
 
 ### Misc
 
