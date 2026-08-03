@@ -32,7 +32,7 @@
 | # | File | Severity | Versions | Tags | Description |
 |---|------|----------|----------|------|-------------|
 | 1 | [lxml-build-failure-python313-plus.md](setup/lxml-build-failure-python313-plus.md) | 🔴 Critical | 17, 18, 19 | `lxml`, `python`, `build`, `gcc` | lxml fails to compile on Python 3.13+ due to incompatible pointer types with newer libxml2 headers |
-| 2 | [wkhtmltopdf-not-in-ubuntu-repos.md](setup/wkhtmltopdf-not-in-ubuntu-repos.md) | 🔴 Critical | All | `wkhtmltopdf`, `pdf`, `ubuntu`, `apt` | wkhtmltopdf removed from Ubuntu 24.04+ repos, must install from GitHub .deb |
+| 2 | [wkhtmltopdf-not-in-ubuntu-repos.md](setup/wkhtmltopdf-not-in-ubuntu-repos.md) | 🔴 Critical | All | `wkhtmltopdf`, `pdf`, `ubuntu`, `apt` | wkhtmltopdf gone from Ubuntu 24.04+ repos AND Homebrew (macOS); install the official GitHub build (.deb / macos-cocoa.pkg via Rosetta on Apple Silicon) |
 | 3 | [python-version-compatibility.md](setup/python-version-compatibility.md) | 🔴 Critical | All | `python`, `version`, `venv` | Each Odoo version supports specific Python versions — full compatibility matrix |
 | 4 | [system-dependencies-ubuntu.md](setup/system-dependencies-ubuntu.md) | 🔴 Critical | All | `apt`, `dependencies`, `libpq`, `libldap` | Required apt packages before pip install (libpq-dev, libldap2-dev, etc.) |
 | 5 | [multi-version-odoo-setup.md](setup/multi-version-odoo-setup.md) | 🟡 Medium | All | `venv`, `database`, `ports`, `multi-version` | Strategy for running 5 Odoo versions on one machine (folder structure, ports, databases) |
