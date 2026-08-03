@@ -65,6 +65,16 @@ View: replace both `product_uom_category_id` (invisible) occurrences with
 `//notebook/page[@name='order_lines']` position="after" on
 `sale.view_order_form`. ACLs: salesman rwcu, account readonly/invoice r.
 
+**Report section** (the v18 "Options" table on the printed quotation) ports
+verbatim: v18 `sale_management/report/sale_report_templates.xml` inherits
+`sale.report_saleorder_document` at `//div[@name='signature']`
+position="after" — that anchor still exists in 19. Prints only when
+`doc.sale_order_option_ids and doc.state in ['draft', 'sent']`; discounted
+options show the original unit price struck through with the net price under
+it. Verify by rendering (`_render_qweb_html('sale.report_saleorder', ids)`)
+and asserting `table_optional_products` present on a draft with options,
+absent after `action_confirm()` and on option-less orders.
+
 ## ⚠️ Pitfalls
 
 - **Don't port `sale.order.template.option`** unless the client really uses
