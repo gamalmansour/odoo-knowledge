@@ -71,6 +71,36 @@ wkhtmltopdf --version   # -> wkhtmltopdf 0.12.6 (with patched qt)
 - **Odoo.sh / Odoo Online are never affected** — the platform preinstalls it;
   this is a local-dev problem only.
 
+### If the installer fails with "An error occurred while extracting files"
+
+Seen live (2026-08-03): the download can be **corrupted in transit while still
+matching the published byte size exactly** — only the sha256 differs. The
+Installer then fails mid-extraction. Diagnose without reinstalling:
+
+```bash
+mkdir /tmp/wk && cd /tmp/wk && tar -xf ~/Downloads/wkhtmltox.pkg   # bsdtar reads pkg/xar
+gzip -t Payload && echo OK || echo "corrupt download — redownload"
+```
+
+`gzip: data stream error` ⇒ redownload the pkg (fresh copy had a different
+sha256 and a clean Payload).
+
+### Sudo-less install (verified alternative, Apple Silicon)
+
+The macOS binary is **self-contained** (static Qt; `otool -L` shows only
+system frameworks — the bundled `libwkhtmltox` dylib is NOT needed at
+runtime). So you can skip the Installer entirely:
+
+```bash
+cd /tmp/wk && tar -xf Payload
+tar -xzf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz -C /tmp/wk
+cp /tmp/wk/bin/wkhtmltopdf /tmp/wk/bin/wkhtmltoimage /opt/homebrew/bin/  # user-writable, on PATH
+wkhtmltopdf --version   # wkhtmltopdf 0.12.6 (with patched qt)
+```
+
+Verify end-to-end: `wkhtmltopdf test.html test.pdf` produces a real PDF
+(~11KB for a one-liner page) through Rosetta.
+
 ## ⚠️ Pitfalls
 
 - **Use the `jammy` (22.04) build** — it works on Noble (24.04), Resolute (25.10), and newer. Don't look for version-specific builds.
