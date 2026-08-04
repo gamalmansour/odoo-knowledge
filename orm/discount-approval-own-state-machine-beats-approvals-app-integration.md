@@ -93,6 +93,13 @@ DISCOUNT_TIERS = [  # (state, approver group xmlid, company limit field, label)
 - The hard ceiling is checked in BOTH `action_confirm` and the request
   action, and defensively in approve.
 
+**Multi-team scoping (v3.2):** with several sales teams, notifying the whole
+first-tier group spams the other teams' supervisors. Scope tier 0 to the
+order's `team_id`: candidates = `(team.user_id | team.member_ids) & group.user_ids`
+for both the activities AND the decide-permission check; users holding a
+higher tier may step into any team (chain of command); empty team-scope falls
+back to the whole group with a chatter note so requests never sit unseen.
+
 ## ⚠️ Pitfalls
 
 - Whenever an approval must be **bound to a figure**, the state and the
