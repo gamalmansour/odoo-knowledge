@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | All (verified 19)                          |
 | Severity      | 🟡 Medium                                  |
-| Last Verified | 2026-08-04                                 |
+| Last Verified | 2026-08-04 (v3: generalized to an N-tier ladder) |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `architecture`, `workflow`, `approval`, `state-machine`, `sale`, `discount`, `approvals-app`, `escalation`
@@ -64,6 +64,34 @@ depends `sale_management, hr` — no `approvals`):
 - Dashboard = a filtered `Discount Approvals` menu (list + badges + filters
   Waiting Manager / Waiting Director) for `group_sale_manager` — approvers see
   the actual quotations, not proxy records.
+
+## v3 — N-tier ladder generalization (same module, verified)
+
+The client's real org needed 4 levels (salesman / supervisor / sales manager /
+company director), each with its own limit, sequential, **and a hard ceiling**
+(above the top limit nothing is confirmable by anyone). The 2-tier code
+generalizes cleanly by making the ladder data, not branches:
+
+```python
+DISCOUNT_TIERS = [  # (state, approver group xmlid, company limit field, label)
+    ('supervisor', '...group_discount_supervisor', 'discount_supervisor_limit', 'Supervisor'),
+    ('manager', '...group_discount_manager', 'discount_manager_limit', 'Sales Manager'),
+    ('director', '...group_commercial_director', 'discount_director_limit', 'Company Director'),
+]
+# approve(): idx = states.index(current); check has_group(tiers[idx]);
+#   max <= limit[idx] -> grant ; else escalate(idx+1)
+# confirm(): max <= salesman_limit -> free ; max > tiers[-1] limit -> hard UserError
+```
+
+- Groups form an implied chain (director ⟹ manager ⟹ supervisor ⟹
+  `sales_team.group_sale_salesman_all_leads`) so every approver can OPEN the
+  quotations — an approval group without sale read access renders the buttons
+  useless (record rules hide the order itself).
+- One generic approve/refuse method + per-tier buttons in the view
+  (`groups=` + state `invisible`), so adding a level = one tuple + one limit
+  field + one button pair.
+- The hard ceiling is checked in BOTH `action_confirm` and the request
+  action, and defensively in approve.
 
 ## ⚠️ Pitfalls
 
