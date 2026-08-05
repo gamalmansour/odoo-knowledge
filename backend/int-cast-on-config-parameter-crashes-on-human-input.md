@@ -48,26 +48,53 @@ takes down an entire business feature — and the traceback names Python, not th
 
 ## Solution ✅
 
-Wrap every config-parameter cast in a tolerant helper that degrades to the default instead
-of raising:
+Do **not** patch the one file that crashed — the pattern is always copy-pasted. Extend
+`ir.config_parameter` once, in the lowest common dependency of the suite, so every module
+gets the guarded readers with no new dependency:
 
 ```python
+# construction_approvals/models/ir_config_parameter.py
 from itertools import takewhile
 
-def _collection_lag_months(self):
-    """Collection lag in whole months, read defensively from system parameters.
+from odoo import models
 
-    ir.config_parameter values are free text a human types in Settings, so a
-    perfectly natural entry like "1 month" (or a blank, or "two") used to reach a
-    bare int() and abort the WHOLE cash-flow forecast with a raw Python ValueError.
-    Pull the leading integer out, and fall back to 1 month rather than break the
-    forecast over a configuration typo.
-    """
-    raw = self.env['ir.config_parameter'].sudo().get_param(
-        'construction_cashflow.collection_lag_months', '1')
-    digits = ''.join(takewhile(str.isdigit, (str(raw) or '').strip()))
-    return int(digits) if digits else 1
+
+class IrConfigParameter(models.Model):
+    _inherit = 'ir.config_parameter'
+
+    def get_param_int(self, key, default=0):
+        """Read `key` as a whole number, degrading to `default` instead of raising."""
+        text = str(self.sudo().get_param(key, '') or '').strip()
+        negative = text.startswith('-')
+        digits = ''.join(takewhile(str.isdigit, text.lstrip('+-')))
+        if not digits:
+            return default
+        return -int(digits) if negative else int(digits)
+
+    def get_param_float(self, key, default=0.0):
+        """Read `key` as a float, degrading to `default` instead of raising."""
+        text = str(self.sudo().get_param(key, '') or '').strip()
+        head = ''.join(takewhile(lambda c: c.isdigit() or c in '.-+', text))
+        try:
+            return float(head)
+        except ValueError:
+            return default
 ```
+
+Then migrate every call site — mechanical, and it reads better too:
+
+```python
+# before
+days = int(self.env['ir.config_parameter'].sudo().get_param('mod.alert_days', 30))
+# after
+days = self.env['ir.config_parameter'].get_param_int('mod.alert_days', 30)
+```
+
+**Picking the host module:** walk the dependency graph to the lowest common ancestor of
+every module that reads a numeric parameter. Here `construction_approvals` was reached by
+all of them (four directly, `construction_cashflow` via `construction_project`), so nothing
+needed a new `depends` entry. Putting the helper in a leaf module and adding dependencies
+upward is how you create a dependency cycle.
 
 Pin the behaviour with tests that feed it what users actually type:
 
@@ -85,8 +112,11 @@ def test_04_garbage_falls_back_to_one(self):
 - `get_param(key, default)` only returns `default` when the key is **absent**. An existing
   key with an empty or malformed value still comes back as-is — guard the cast, not the read.
 - Same trap applies to `float()`, `json.loads()`, and `int()` on `safe_eval` output.
-- Grep the whole codebase, not just the file that crashed: the pattern is usually copy-pasted.
-  `grep -rn "int(self.env\['ir.config_parameter'\]" .`
+- Grep the whole codebase, not just the file that crashed: the pattern is always copy-pasted.
+  In this suite one crash led to **ten** identical latent crashers across five modules:
+  `grep -rn "config_parameter" --include="*.py" . | grep -E "int\(|float\("`
+- `get_param(key, default=12)` with a **numeric** default is a second smell: the fallback is
+  an int but the stored value is always a string, so the two branches return different types.
 - Do not "fix" this by correcting the row in the database — the next user retypes it. Harden
   the code; correcting the data is optional cleanup afterwards.
 - If a bad value must be surfaced rather than silently defaulted, raise a `UserError` naming
