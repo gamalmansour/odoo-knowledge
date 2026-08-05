@@ -81,6 +81,15 @@ UoM), and note why the cost is no longer set there.
 
 ## ⚠️ Pitfalls
 
+- **Redefining the field in an `_inherit` module does NOT reset its attributes.** Field
+  redefinition *merges* with the base definition: unspecified attributes survive. Adding
+  `compute=...` in an extension while the base says `required=True` quietly recreates the
+  NOT NULL trap — the override must say `required=False` explicitly:
+  ```python
+  # construction_equipment extension over construction_project's required rate field
+  rate = fields.Float(compute='_compute_rate', store=True, readonly=False, required=False)
+  ```
+
 - The "mandatory" star on the form can be kept without the SQL constraint via
   `required="1"` in the **view**, which is UI-level only.
 - `readonly=False` computes are recomputed when dependencies change but respect manual
