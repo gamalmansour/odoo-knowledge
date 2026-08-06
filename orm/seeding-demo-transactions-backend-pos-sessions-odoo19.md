@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 17, 18, 19 (verified on 19)                |
 | Severity      | 🟢 Low                                     |
-| Last Verified | 2026-07-27                                 |
+| Last Verified | 2026-08-06                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `demo-data`, `pos.order`, `pos.session`, `sale.order`, `purchase.order`, `backdating`, `seeding`, `reports`
@@ -69,3 +69,45 @@ Other essentials:
 - Cash vs bank methods: filter `config.payment_method_ids` by `is_cash_count` — do not hardcode.
 - Backend-created POS orders do NOT apply loyalty/promotion programs (those are UI-side) — fine
   for seeding, but don't expect promo lines in the seeded history.
+
+## 🏭 MRP addendum (verified 2026-08-06 on Odoo 18, anwar_factory demo)
+
+Manufacturing orders CANNOT be backdated through the ORM after completion —
+`mrp.production.write()` raises *"You cannot move a manufacturing order once it is
+cancelled or done"* for `date_start`/`date_finished`. Backdate with SQL after
+`button_mark_done()`:
+
+```python
+env.cr.execute("UPDATE mrp_production SET date_start=%s, date_finished=%s WHERE id=%s",
+               (d_start, d_done, mo.id))
+env.cr.execute("UPDATE stock_move SET date=%s WHERE id IN %s AND state='done'",
+               (d_done, tuple((mo.move_raw_ids | mo.move_finished_ids).ids)))
+# same UPDATE for stock_move_line (move_id IN ...)
+```
+
+MO completion recipe that works with mrp_workorder (enterprise) installed:
+`action_confirm()` → `action_assign()` → loop `workorder_ids`: `button_start()` +
+`button_finish()` (wrap in try/except) → `qty_producing = qty` → per raw move
+`quantity = product_uom_qty; picked = True` → `button_mark_done()` (handle a returned
+wizard dict via `env[res['res_model']].with_context(**res['context']).create({}).process()`).
+
+Opening stock: `env['stock.quant'].with_context(inventory_mode=True).create({...,
+'inventory_quantity': q}).action_apply_inventory()` — quants in child locations are
+found by parent-location reservations, so seed sub-locations freely. Negative quants
+at *Virtual Locations/Inventory adjustment*, */Production* and *Partners/Vendors* are
+NORMAL counterparts, not data corruption — only `usage='internal'` negatives are bugs.
+
+Two more pitfalls found on a live seed:
+- **Pricelist keeps the old currency after switching localization.** Loading a chart
+  template (`account.chart.template.try_loading('sa', company)`) flips the company to
+  SAR but the default `product.pricelist` (created at DB creation in USD) is NOT
+  updated → every SO and its invoices come out in USD while vendor bills are SAR. Fix
+  the pricelist currency BEFORE seeding; if documents already exist and no
+  `res.currency.rate` rows exist (1:1), relabeling `currency_id` via SQL on
+  `sale_order(_line)`, `account_move(_line)`, `account_payment`,
+  `account_partial_reconcile.debit/credit_currency_id` is safe.
+- **Raw-SQL writes are invisible to a running server.** `UPDATE res_partner SET
+  lang=...` via psql does not invalidate the ormcache of an already-running Odoo
+  process (user context, assets). Do user/lang/currency changes through the ORM in
+  `odoo-bin shell` (signaling invalidates other processes), and remember the web
+  session keeps its login-time lang until the user re-logs or changes Preferences.
