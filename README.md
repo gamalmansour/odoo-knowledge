@@ -21,6 +21,7 @@
 | `performance/` | Query optimization, caching, indexing, profiling |
 | `deployment/` | Server config, Nginx, SSL, Docker, production |
 | `upgrade/` | Version migration, data migration, breaking changes |
+| `Best Practices/` | Process, methodology, and project-level practice — not a single technical fix |
 | `misc/` | Anything that doesn't fit above |
 
 ---
@@ -249,6 +250,14 @@ _No entries yet._
 | 9 | [hr-leave-number-of-days-display-removed-odoo19.md](upgrade/hr-leave-number-of-days-display-removed-odoo19.md) | 🔴 Critical | 19 | `upgrade`, `migration`, `hr_holidays`, `hr.leave`, `number_of_days_display`, `duration_display`, `qweb`, `portal` | `hr.leave.number_of_days_display` removed in Odoo 19 → 500 AttributeError in QWeb; use unit-aware `duration_display` (or `number_of_days`) |
 | 10 | [odoo-19-removed-optional-products-and-uom-categories-port-recipe.md](upgrade/odoo-19-removed-optional-products-and-uom-categories-port-recipe.md) | 🔴 Critical | 19 | `upgrade`, `sale_management`, `sale.order.option`, `optional-products`, `uom`, `category_id`, `product_uom_id`, `port` | Odoo 19 deleted the whole Optional Products feature (`sale.order.option`) AND UoM categories; porting the v18 tab needs a custom-owned model with three deltas: `allowed_uom_ids` M2M instead of `product_uom_category_id` related (KeyError at registry setup otherwise), `product_uom` → `product_uom_id` in the SOL create vals, and digits `Product Unit of Measure` → `Product Unit` — full recipe + pitfalls |
 
+### Best Practices
+
+| # | File | Severity | Versions | Tags | Description |
+|---|------|----------|----------|------|-------------|
+| 1 | [inheriting-an-existing-odoo-system-audit-sequence.md](Best%20Practices/inheriting-an-existing-odoo-system-audit-sequence.md) | 🔴 Critical | All | `implementation`, `audit`, `handover`, `takeover`, `brownfield`, `discovery` | Auditing an inherited system: get the business model and the data status (real/test/imported) BEFORE reading code — otherwise correct design gets filed as defects and volume-based conclusions turn out void. Includes the 6-step takeover sequence and the broken/unexplained/hygiene split |
+| 2 | [module-name-collision.md](Best%20Practices/module-name-collision.md) | 🟡 Medium | All | `modules`, `naming`, `collision` | Module technical-name collisions between custom addons paths |
+| 3 | [odoo-19-warnings.md](Best%20Practices/odoo-19-warnings.md) | 🟡 Medium | 19 | `odoo19`, `warnings`, `deprecation` | Deprecation warnings surfaced by Odoo 19 |
+
 ### Misc
 
 | # | File | Severity | Versions | Tags | Description |
@@ -286,13 +295,14 @@ odoo-knowledge/
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
-└── misc/                   ← (empty)
+├── Best Practices/         ← 3 entries
+└── misc/                   ← 15 entries
 ```
 
 ### Stats
 
-- **Total Entries:** 38
-- **Last Updated:** 2026-07-04
+- **Total Entries:** 39
+- **Last Updated:** 2026-08-10
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
