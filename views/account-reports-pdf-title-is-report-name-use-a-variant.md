@@ -105,7 +105,68 @@ print(len(new.with_company(company)._get_lines(new.with_company(company).get_opt
 env.cr.rollback()          # nothing persisted
 ```
 
+## Shipping it — the variant belongs in a module, not in the database
+
+A variant created from the UI or a shell session lives only in that database. It
+does **not** reach production, and nothing records that it exists. Declare it as
+data instead, mirroring `account_reports/data/customer_statement.xml`:
+
+```xml
+<odoo auto_sequence="1" noupdate="1">
+    <record id="vendor_statement_report" model="account.report">
+        <field name="name">Vendor Statement</field>
+        <field name="root_report_id" ref="account_reports.partner_ledger_report"/>
+        <field name="custom_handler_model_id"
+               ref="account_reports.model_account_customer_statement_report_handler"/>
+        <field name="filter_account_type">payable</field>
+        <field name="filter_journals" eval="True"/>
+        <field name="column_ids">
+            <record id="vendor_statement_report_invoice_date" model="account.report.column">
+                <field name="name">Invoice Date</field>
+                <field name="expression_label">invoice_date</field>
+                <field name="figure_type">date</field>
+            </record>
+            <!-- date_maturity / amount / amount_currency / balance -->
+        </field>
+    </record>
+</odoo>
+```
+
+Three attributes carry weight:
+
+- **`auto_sequence="1"`** assigns each nested column its declaration order as
+  `sequence`. Without it the printed column order is not guaranteed.
+- **`noupdate="1"`** — `name` is the printed heading of a document sent to third
+  parties, and clients edit that wording in the UI. Under the default
+  `noupdate="0"` the next `-u` silently reverts their edit, and nobody connects
+  the change back to a module update. The trade-off: later corrections in the
+  module will not propagate to databases where it is already installed.
+- **`custom_handler_model_id`** decides the PDF layout. Point it at
+  `model_account_customer_statement_report_handler` and the new report prints
+  with the same centred header; point it at the plain partner-ledger handler and
+  it does not. Reusing a "customer" handler for a vendor report is fine — but say
+  so in a comment, because it reads like a copy-paste error otherwise.
+
+Translate the name through `i18n/<lang>.po`, not a second data record:
+
+```po
+#: model:account.report,name:<module>.vendor_statement_report
+msgid "Vendor Statement"
+msgstr "كشف حساب مورد"
+```
+
 ## ⚠️ Pitfalls
+
+- **A hand-made record has no xmlid, so installing the module creates a SECOND
+  one.** If you prototyped the variant in the UI or a shell, delete that record
+  before `-i`. Nothing warns you — you end up with two identically named reports
+  in the selector. Assert against it in a test:
+  `search([('name','=','Vendor Statement')])` must equal the `env.ref(...)` record.
+- **`AccountTestInvoicingCommon` may not even initialise on a client database.**
+  On a heavily customised one it failed in `setUpClass` with
+  `ValueError: Expected singleton: product.template(21101, 21102)`. Report-config
+  tests need no invoicing fixtures — use a plain `TransactionCase` and they run
+  everywhere.
 
 - **Identify the printing report before writing a line.** Render both candidates
   and compare — `_get_pdf_export_html` needs no wkhtmltopdf, so this costs seconds:
@@ -135,13 +196,25 @@ env.cr.rollback()          # nothing persisted
 ## Verification
 
 Verified on Odoo 18.0 Enterprise, `account_reports` 18.0, against a 568 MB
-production copy — created inside a transaction and rolled back:
+production copy — first as a rolled-back transaction, then shipped as a module:
 
-- title rendered `'Vendor Statement'` ✅
-- appeared in the variant dropdown next to Partner Ledger / Customer Statement /
+- title rendered `'Vendor Statement'`, Arabic `'كشف حساب مورد'` from `ar.po` ✅
+- appeared in the variant selector next to Partner Ledger / Customer Statement /
   Follow-Up Report ✅
 - `options['account_type']` reduced to Payable + Non Trade Payable, Payable
   selected ✅
-- returned 87 real vendor lines ✅
+- returned 87 real vendor lines; real PDF generated through wkhtmltopdf showing
+  `BILL/` documents only ✅
 - PDF template identical to the source report ✅
-- `SELECT` after `rollback()` confirmed zero leftover records ✅
+- `-i` with `--test-enable`: **7 tests, 0 failed, 0 errors**, including a
+  regression check that Partner Ledger / Customer Statement / Follow-Up kept
+  their titles and filters ✅
+- exactly one `Vendor Statement` record after install (the prototype was deleted
+  first) ✅
+
+**Bonus find while comparing printed output:** Odoo's own *Customer Statement*
+ships with `filter_account_type = 'both'`, so it prints `BILL/` documents next to
+`INV/` ones under a heading that says CUSTOMER STATEMENT. Worth raising with the
+client as a **question** rather than a defect — on the site above, settlement
+entries named "قيد تسوية حساب … عميل ومورد" suggested the combined view was
+intentional for partners who are both.
