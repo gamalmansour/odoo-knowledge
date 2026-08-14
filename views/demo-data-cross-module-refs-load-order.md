@@ -5,7 +5,7 @@
 | Category      | views                                      |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-07-07                                 |
+| Last Verified | 2026-08-14                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `demo`, `load-order`, `depends`, `xmlid`, `ParseError`, `install`, `qa-checklist`
@@ -73,3 +73,15 @@ psql -d demo_verify -c "SELECT name FROM ir_module_module WHERE name LIKE 'my_pr
   exceed BOQ limits will abort the module's whole demo, not just one record.
 - The first module whose demo fails is the ROOT cause; every later "failed" module is usually
   just a cascade. Fix the first one and re-run before touching the rest.
+- The ref can be **well-formed but point at the wrong module**: records defined in
+  `medical_hcp` (`hr.employee` demo) referenced as `medical_territory.demo_employee_mr1`.
+  `depends` is satisfied and the module list looks right, so review misses it — only a
+  defined-vs-referenced xmlid diff across the whole addon set catches it. Verified
+  2026-08-14 on CRM-medical: 35 such refs across 2 demo files, all silently dropped.
+- A missing xmlid is not the only thing `load_demo` swallows — any `ValidationError` from
+  an `@api.constrains` looks identical in the log. See
+  `views/demo-data-hardcoded-years-vs-date-range-constraints.md`.
+
+## References
+
+- Related file: `views/demo-data-hardcoded-years-vs-date-range-constraints.md`
