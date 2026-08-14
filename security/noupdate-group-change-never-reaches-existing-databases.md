@@ -5,7 +5,7 @@
 | Category      | security     |
 | Odoo Versions | All          |
 | Severity      | 🔴 Critical  |
-| Last Verified | 2026-08-05   |
+| Last Verified | 2026-08-14   |
 | Author        | ENG/Gamal Mansour |
 
 **Tags:** `res.groups`, `implied_ids`, `noupdate`, `migrations`, `access-rights`, `deployment`
@@ -121,6 +121,17 @@ is needed.
 - The same trap applies to any `noupdate="1"` data: `ir.rule` domains, sequences, mail
   templates, cron intervals. Changing them in XML never reaches an existing customer.
 - Green tests prove nothing here — `TransactionCase` is SUPERUSER and never exercises ACLs.
+- **Clearing `ir_model_data.noupdate` in SQL does not unlock the update.** The gate is the
+  `<data noupdate="1">` attribute read from the FILE (`self.noupdate` in
+  `odoo/tools/convert.py:_tag_record`); the database column is only a *second* check made
+  later in `model._load_records()`. Flip the column, re-run `-u`, and the log still says
+  `loading <module>/demo/foo.xml` while every existing record is skipped — the flag is not
+  even re-stamped, which is the tell that nothing was processed.
+- The same trap applies to **demo** files, which are almost always `noupdate="1"`. A
+  migration script is the wrong tool there (you do not ship migrations to repair fixtures):
+  fix the XML so every fresh install is correct, and bring existing databases in line with a
+  one-off data script. Verify BOTH paths — the script proves the database, only a clean
+  `-i` proves the XML.
 
 ## Verification
 
@@ -147,3 +158,6 @@ WHERE r.gid = (SELECT res_id FROM ir_model_data
 - Related file: `backend/env-su-guard-silently-passes-in-transactioncase.md`
 - Related file: `backend/testing-access-error-base-group-user.md`
 - Related file: `deployment/translate-true-change-crashes-until-module-upgrade.md`
+- Related file: `security/consolidating-duplicate-groups-xmlid-rename-and-link-vs-replace.md`
+- Related file: `views/demo-data-hardcoded-years-vs-date-range-constraints.md`
+- Odoo source: `odoo/tools/convert.py` (`_tag_record`, the `self.noupdate` gate)
