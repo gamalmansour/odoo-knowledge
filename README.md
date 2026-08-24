@@ -273,7 +273,7 @@ _No entries yet._
 |---|------|----------|----------|------|-------------|
 | 1 | [inheriting-an-existing-odoo-system-audit-sequence.md](Best%20Practices/inheriting-an-existing-odoo-system-audit-sequence.md) | 🔴 Critical | All | `implementation`, `audit`, `handover`, `takeover`, `brownfield`, `discovery` | Auditing an inherited system: get the business model and the data status (real/test/imported) BEFORE reading code — otherwise correct design gets filed as defects and volume-based conclusions turn out void. Includes the 6-step takeover sequence and the broken/unexplained/hygiene split |
 | 2 | [module-name-collision.md](Best%20Practices/module-name-collision.md) | 🟡 Medium | All | `modules`, `naming`, `collision` | Module technical-name collisions between custom addons paths |
-| 3 | [odoo-19-warnings.md](Best%20Practices/odoo-19-warnings.md) | 🟡 Medium | 19 | `odoo19`, `warnings`, `deprecation` | Deprecation warnings surfaced by Odoo 19 |
+| 3 | [odoo-19-warnings.md](Best%20Practices/odoo-19-warnings.md) | 🟡 Medium | 19 | `odoo19`, `warnings`, `deprecation` | Deprecation warnings surfaced by Odoo 19 · **+ §7 search-view `<group>` takes no attributes (hard ParseError), §8 demo data is now opt-in via `--with-demo`, §9 group changes need a server restart** |
 
 ### Misc
 

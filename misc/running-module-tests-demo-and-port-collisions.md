@@ -65,3 +65,8 @@ ERROR ... duplicate key value violates unique constraint "..._code_uniq"
 
 - Related file: `setup/csrf-session-conflict-multi-instance.md` (multi-instance session/CSRF variant)
 - Related file: `setup/clean-db-install-verification-demo-as-data-and-missing-rule-fields.md` (demo-as-data install verification)
+
+> **Odoo 19 note (2026-08-24):** demo data is now opt-in — `--without-demo` is the
+> default and `--with-demo` must be passed explicitly. A "demo + test-enable must
+> also be clean" run therefore needs `--with-demo`, not the bare command.
+> See `Best Practices/odoo-19-warnings.md` §8.
