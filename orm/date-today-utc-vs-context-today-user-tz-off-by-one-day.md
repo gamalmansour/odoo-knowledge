@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-08-05                                 |
+| Last Verified | 2026-08-24                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `dates`, `timezone`, `context_today`, `Date.today`, `invoice_date`, `period-cutoff`, `flaky-tests`
@@ -69,6 +69,15 @@ Keep `Date.today()` (UTC) only for **system-internal, non-user-facing** stamps w
 ## ⚠️ Pitfalls
 
 - `context_today` **requires a record** (`fields.Date.context_today(self)`) — it reads the tz from `self.env.user`. Calling `fields.Date.context_today()` bare raises.
+- **On a public/portal controller `context_today` is just UTC.** `auth="public"` runs as the public user, which has no `tz`, so the "user timezone" you think you are getting is the server's UTC — in Cairo (UTC+2/+3) the date flips two to three hours before local midnight. Anything that means "once per day" (a daily limit, a streak, an attendance flag) silently misfires for exactly the late-evening hours when a consumer app is busiest. Carry the timezone on the record the request is scoped to and derive the date from it:
+
+  ```python
+  def today(self):
+      """Today in this group's own timezone — the API caller has none."""
+      self.ensure_one()
+      tz = pytz.timezone(self.tz or "Africa/Cairo")
+      return pytz.utc.localize(fields.Datetime.now()).astimezone(tz).date()
+  ```
 - A user with **no timezone set** falls back to UTC, so the bug hides for them and appears only for colleagues who set one.
 - The failure window is **only a few hours a day**, so CI that runs each morning is green and the nightly run is red — classic "flaky test" that is actually a real defect.
 - Do NOT "fix" the tests by loosening the assertion to a 1-day tolerance; that hides a genuine period-cutoff bug.
