@@ -192,6 +192,11 @@ confirmed accurate:
   the corruption: pending computes flush afterwards and overwrite it. The symptom is a
   test that reports "nothing to repair".
 
+Ship **one** path, not two. Keeping the old shell script around "for emergencies"
+leaves a second way to do the same dangerous operation — one with no review screen, no
+audit log and an `APPLY` flag somebody can flip back. Delete it and let the module's
+README carry the history of why it existed.
+
 Guard the phase separation in code, not in a comment: phase 1 snapshots
 `SUM(stock_quant.quantity)` before and after and raises if it moved. If that ever
 fires, the repair took the `write()` path and corrected stock behind the operator.
