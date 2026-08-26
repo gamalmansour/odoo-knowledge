@@ -170,6 +170,32 @@ restored (Keyfob 0 → 20, Safety pin 10 → 30, Barrier 29 → 69 at TOLL/Stock
 entries totalling 76,730.34 AED**, and the Egyptian company byte-identical before and after
 (1,200 quants / 18,887.12 units).
 
+## Delivery: wizard, not a shell script
+
+A one-time shell script is tempting, but a module wins on three things that matter
+for a repair touching stock and the ledger: it runs without SSH, it can be gated by a
+**dedicated** security group (never `stock.group_stock_manager` — this posts journal
+entries), and it leaves a **permanent, undeletable audit log** of who ran what, why,
+and which entries came out.
+
+Make it a **wizard, not a server action**. A server action is one button that does
+everything; the whole point of this repair is *review before apply* — on the real data
+**4 of 9 discrepancies had to be refused**, which a single-shot action cannot express.
+
+Two implementation gotchas hit while building it, both already in this KB and both
+confirmed accurate:
+
+- `odoo-19-warnings.md` §7 — a search view's `<group>` takes **no attributes** in Odoo 19.
+  `<group string="Group By">` is a hard `ParseError` at install.
+- `calendar-privacy-...md` — **`env.flush_all()` before any raw SQL.** A test that
+  corrupts a move line with a raw `UPDATE` right after `_action_done()` silently loses
+  the corruption: pending computes flush afterwards and overwrite it. The symptom is a
+  test that reports "nothing to repair".
+
+Guard the phase separation in code, not in a comment: phase 1 snapshots
+`SUM(stock_quant.quantity)` before and after and raises if it moved. If that ever
+fires, the repair took the `write()` path and corrected stock behind the operator.
+
 ## Related
 
 - `orm/stored-compute-incomplete-depends-silent-staleness.md` — same failure class, different trigger
