@@ -169,6 +169,7 @@
 
 | # | File | Severity | Versions | Tags | Description |
 |---|------|----------|----------|------|-------------|
+| 99 | [vendor-write-override-mirrors-restricted-model-blocks-user-saves.md](views/vendor-write-override-mirrors-restricted-model-blocks-user-saves.md) | 🔴 Critical | All | `security`, `AccessError`, `res.users`, `ir.ui.menu`, `third-party`, `write-override`, `no-op` | A vendor `res.users.write` override mirrors hidden menus onto admin-only `ir.ui.menu` with the CALLER's rights, so every restricted user gets AccessError saving their own preferences (23 users live) — prune the no-op LINK/UNLINK commands and skip the write instead of reaching for sudo (which would let a user unhide menus) |
 | 1 | [wkhtmltopdf-report-overlapping-header-columns.md](views/wkhtmltopdf-report-overlapping-header-columns.md) | 🟡 Medium | 17, 18, 19 | `wkhtmltopdf`, `qweb`, `report`, `bootstrap`, `overlap` | Legacy col-auto and mw-100 column classes inside report informations row cause text to overlap in newer Odoo versions |
 | 2 | [qweb-report-zebra-striping-and-colspan.md](views/qweb-report-zebra-striping-and-colspan.md) | 🟡 Medium | All | `qweb`, `report`, `bootstrap`, `zebra-striping`, `colspan` | QWeb report table zebra-striping removal and table alignment/colspan issues |
 | 3 | [tree-view-column-invisible-odoo17-18.md](views/tree-view-column-invisible-odoo17-18.md) | 🟡 Medium | 17, 18, 19 | `views`, `tree`, `list`, `invisible`, `column_invisible` | Migrating invisible to column_invisible inside tree/list view fields in Odoo 17 & 18 |
