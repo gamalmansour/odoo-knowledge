@@ -5,10 +5,10 @@
 | Category      | views                                      |
 | Odoo Versions | 15, 16, 17, 18, 19                         |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-07-28                                 |
+| Last Verified | 2026-09-03                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `qweb`, `t-esc`, `portal`, `500`, `format-string`, `convert.py`, `percent`, `arch_db`
+**Tags:** `qweb`, `t-esc`, `portal`, `500`, `format-string`, `convert.py`, `percent`, `arch_db`, `report`, `str.format`
 
 ---
 
@@ -56,6 +56,17 @@ Never rely on `%%` inside a view/template file. Move the literal percent OUT of 
 </span>
 ```
 
+**Cleaner still — use `str.format`, which has no escape for the loader to eat:**
+
+```xml
+<td><span t-esc="'{:.1f}%'.format(kpi.value)"/></td>
+```
+
+A single `%` passes through `_process()` untouched and `.format()` treats it as a plain
+character, so the whole thing stays inside one expression instead of being split
+between an expression and loose text. f-strings are not available in QWeb, so
+`.format()` is the portable choice.
+
 Alternative (ugly, not recommended): write `%%%%` in the file so the loader's collapse leaves `%%` in the DB.
 
 Then upgrade the module and verify **in the DB**, per language:
@@ -68,12 +79,43 @@ WHERE key = 'module.template_name';
 
 Finally, sweep the codebase for other landmines: `grep -rn "%%" custom/*/views/*.xml custom/*/data/*.xml custom/*/report/*.xml`.
 
+## Also seen in: QWeb PDF reports (2026-09-03, Odoo 18)
+
+Same root cause, different surface. Six report templates in one file; the three that
+printed a percentage raised `ValueError: incomplete format` when rendered, the three
+that did not were fine:
+
+```
+coverage             ValueError: incomplete format
+frequency            OK
+cycle_achievement    ValueError: incomplete format
+coaching_trend       OK
+territory_summary    ValueError: incomplete format
+rep_performance      OK
+```
+
+The split along "does this report show a % sign" is the tell. It misdirects badly:
+half the reports working makes it look like missing data for particular KPI types
+rather than a template defect.
+
+Here the failure only surfaces on **print** — the action returns an `ir.actions.report`
+happily, the `ir.actions.report` record and the QWeb view both exist, and every
+structural check passes. Render it to catch this:
+
+```python
+env['ir.actions.report']._render_qweb_html('module.report_x_document', [rec.id])
+```
+
 ## ⚠️ Pitfalls
 
 - **`-u` proves nothing here**: unlike most view bugs, re-upgrading rewrites the SAME broken arch. If the DB shows different content than the file after a fresh `-u`, suspect loader-side transformation (`%%` collapse, `%(xmlid)d` substitution), not staleness.
 - **`dev=all` masks it**: with `dev=xml` views render straight from the (correct) file, so the developer sees a working page locally while every non-dev server 500s from the mangled DB arch.
 - **`-u` on the wrong cluster**: machines with two PostgreSQL clusters (psql default 5432 vs conf 5433) — always check the startup log line `database: user@host:port` (see [odoo-silent-db-autocreate-masks-wrong-cluster](../setup/odoo-silent-db-autocreate-masks-wrong-cluster.md)).
 - **Shell reproduction recipe (Odoo 19):** `MockRequest` moved to `odoo.addons.http_routing.tests.common`, and in `odoo shell` (no HTTP server) `HttpCase.http_port()` raises `AttributeError` — patch first: `HttpCase.http_port = classmethod(lambda cls: None)`, then `with MockRequest(env(user=rep.id)): env['ir.qweb']._render('module.template', values)` gives the real portal traceback without portal credentials.
+- **The repair script is vulnerable to the same bug.** A Python one-liner written to
+  fix this raises `ValueError: unsupported format character` on its own replacement
+  text — `"'{:.1f}%'.format(%s)" % name` has a `%'` in it. Build the replacement by
+  concatenation, not by `%`-formatting.
 - **Preview EDITED templates before any `-u` (same recipe, one more line):** load the modified XML into the current transaction first — `from odoo.tools.convert import convert_file; convert_file(env, 'module', 'views/portal_templates.xml', None, mode='update', noupdate=False)` — then render via `MockRequest` and finish with `env.cr.rollback()`. Verifies new/changed QWeb end-to-end (including what the loader does to it, e.g. the `%%` collapse) without touching the DB.
 
 ## Verification
