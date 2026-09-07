@@ -139,6 +139,8 @@ _No entries yet._
 | 3 | [translation-newlines-issue.md](misc/translation-newlines-issue.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `translation`, `i18n`, `po`, `newlines` | Translation fails for UserError when Python string contains explicit newlines (\n\n) |
 | 4 | [po-file-syntax-fatal-errors.md](misc/po-file-syntax-fatal-errors.md) | 🔴 Critical | All | `translation`, `i18n`, `po`, `syntax`, `msgfmt`, `quotes` | Unescaped quotes or duplicate msgids in PO files crash the parser, preventing translations from loading |
 | 5 | [translation-wiped-out-by-export.md](misc/translation-wiped-out-by-export.md) | 🔴 Critical | All | `translation`, `i18n`, `po`, `export`, `polib` | Odoo i18n export wipes out existing PO translations if they are missing in DB; securely restore via polib |
+| 6 | [salla-webhook-invoice-vs-order-id-mapping.md](misc/salla-webhook-invoice-vs-order-id-mapping.md) | 🔴 Critical | 16, 17, 18, 19 | `salla`, `webhook`, `invoice.created`, `order_id` | Salla invoice.created sends invoice id instead of order id leading to missing order lookups |
+
 
 ---
 
