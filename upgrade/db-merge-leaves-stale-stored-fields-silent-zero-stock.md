@@ -5,7 +5,7 @@
 | Category      | upgrade                                    |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-08-26                                 |
+| Last Verified | 2026-09-07                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `upgrade`, `migration`, `merge`, `multi-company`, `stock.move.line`, `quantity_product_uom`, `stored-computed`, `related`, `stock.quant`, `silent-failure`, `valuation`
@@ -140,6 +140,14 @@ SELECT sml.product_id, sml.location_dest_id, sml.lot_id, sml.package_id, sml.own
 - **Refuse negative targets in internal locations.** `_apply_inventory` does not refuse
   them; a negative ledger balance means a missing opening receipt, which is a business
   decision.
+- **Reconciliation must track created moves to prevent compounding on re-runs.**
+  When `action_apply_inventory()` runs in Phase 2, Odoo generates a new `stock.move` from the
+  virtual inventory loss location into the destination internal location. If the ledger CTE in
+  subsequent scans does not exclude reconciliation moves, the ledger query sums BOTH the original
+  receipts AND the reconciliation moves (e.g. 150 + 150 = 300) against a quant of 150.
+  The wizard detects a false difference (+150) and re-running compounds adjustments indefinitely!
+  **Fix:** Track the created `stock.move` IDs on `stock.repair.log`, exclude them in the ledger CTE,
+  and defensively guard `_apply` to no-op if `quant.quantity == ledger_quantity`.
 - **Scope by a stable business key, not a company id.** Ids differ between production,
   staging and local restores; resolving the company by country + currency and asserting a
   single match prevents a stock correction from landing on the wrong legal entity.
