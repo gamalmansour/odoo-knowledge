@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 17, 18, 19 (verified on 19)                |
 | Severity      | 🟢 Low                                     |
-| Last Verified | 2026-08-06                                 |
+| Last Verified | 2026-09-08                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `demo-data`, `pos.order`, `pos.session`, `sale.order`, `purchase.order`, `backdating`, `seeding`, `reports`
@@ -69,6 +69,16 @@ Other essentials:
 - Cash vs bank methods: filter `config.payment_method_ids` by `is_cash_count` — do not hardcode.
 - Backend-created POS orders do NOT apply loyalty/promotion programs (those are UI-side) — fine
   for seeding, but don't expect promo lines in the seeded history.
+
+Two more traps found while seeding a manufacturing demo (Odoo 18 EE, 2026-09-08):
+- **A quality point on a picking type turns `button_validate()` into a wizard**, and
+  `quality.check.do_pass()` is a singleton method — `picking.check_ids.do_pass()` raises
+  `ValueError: Expected singleton`. Pass the checks one at a time first, then validate.
+- The returned wizard is not always `stock.backorder.confirmation`, so probe for the method
+  (`process` / `action_confirm` / `do_pass`) instead of hardcoding `.process()`.
+- Build-order traps that decide whether the seeded numbers are true at all (chart template,
+  variant codes and costs, stock valuation accounts, Anglo-Saxon vs Continental) are in
+  `setup/client-demo-database-build-order-odoo18.md`.
 
 ## 🏭 MRP addendum (verified 2026-08-06 on Odoo 18, anwar_factory demo)
 
