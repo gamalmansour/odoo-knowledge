@@ -355,6 +355,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | [Dynamic Phases (CRM Spirit)](orm/dynamic-phases-crm-spirit.md) | ORM | How to migrate from Selection to a dynamic phase model |
 | Views | [Domain Date Restriction Pitfall](views/domain-date-restriction-pitfall.md) | Domain too strict for future scheduling |
 | Views | [Res.Users Form Inheritance Pitfall: Simple vs Full Form](views/res-users-simple-form-vs-full-form-inheritance.md) | V16, V17, V18, V19 |
+| Views | [Adding Chatter in Odoo 17 & 18: Requirements, Syntax, and Pitfalls](views/adding-chatter-odoo17-odoo18-requirements.md) | V17, V18, V19 |
 | Models | [Delivery Order Destination Pitfall](models/delivery-order-destination-pitfall.md) | Prevent delivery orders from getting stuck in vehicle locations |
 | Changing Search Fields in Target Models | changing_search_fields.md |
 | `name_get_deprecation_odoo17.md` | upgrade | Deprecation of name_get in Odoo 17+ (Use _compute_display_name) |
