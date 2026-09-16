@@ -365,4 +365,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | `name_get_deprecation_odoo17.md` | upgrade | Deprecation of name_get in Odoo 17+ (Use _compute_display_name) |
 | Data Migration | Complex Hierarchical Excel Import | [Link](data_migration/complex-hierarchical-excel-import.md) |
 | Frontend | [POS JS Missing RPCError Import](frontend/pos_js_missing_rpcerror_import.md) | V18 |
+| Frontend | [Three.js WebGL Lifecycle Management and Billboard Sprites in OWL Client Actions](frontend/threejs-webgl-lifecycle-memory-leak-owl-component.md) | V17, V18, V19 |
 - [Odoo 19 Stock Valuation Changes](upgrades/odoo19_stock_valuation.md) - Changes from stock.valuation.layer to product.value
