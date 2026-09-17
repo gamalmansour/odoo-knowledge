@@ -167,25 +167,60 @@ Target `div.sending-receipt-management`:
 
 ### 3. Add POS Configuration Settings (`models/pos_config.py` & `models/res_config_settings.py`)
 
-Allow cashiers/admins to configure:
-- `whatsapp_client_type`: Web vs Desktop app.
-- `whatsapp_base_url`: Public domain override (so `{receipt_url}` is reachable externally, not `localhost`).
-- `whatsapp_auto_copy_receipt`: Toggle image auto-copy to clipboard.
+### 4. Dual Delivery Mode: Browser Flow vs. UltraMsg Server Gateway
+
+In high-volume POS environments where cashiers cannot afford any browser window switching, or when browsers isolate WhatsApp Web via `Cross-Origin-Opener-Policy` (COOP):
+1. **Option 1 (Browser / Desktop):** Manual client-side deep link with clipboard image copy.
+2. **Option 2 (UltraMsg Server Gateway):** Zero-click automated server-side dispatch.
+   - On payment validation (`onMounted` hook in `ReceiptScreen`), the frontend converts the receipt canvas to Base64 and invokes `action_send_whatsapp_gateway(phone, ticket_image)` on `pos.order`.
+   - The backend dispatches the formatted text message and uploads the ticket PNG directly via UltraMsg API endpoints (`/messages/chat` and `/messages/image`).
+   - Zero tabs opened, zero cashier distraction.
+
+```javascript
+// Automatic Gateway Dispatch in onMounted:
+async actionSendReceiptViaGateway(isAuto = false) {
+    const rawPhone = this.state.phone;
+    const cleanPhone = this.cleanPhoneNumber(rawPhone);
+    if (!cleanPhone) return;
+
+    let ticketImageBase64 = false;
+    if (this.pos.config.whatsapp_gateway_send_image !== false) {
+        try {
+            const canvas = await this.renderer.toCanvas(OrderReceipt, {
+                data: this.pos.get_order().export_for_printing(),
+            });
+            ticketImageBase64 = canvas.toDataURL("image/png");
+        } catch (e) {
+            console.warn("[WhatsApp Gateway] Canvas render failed:", e);
+        }
+    }
+
+    const orderId = this.currentOrder?.id;
+    if (orderId) {
+        await this.pos.data.call("pos.order", "action_send_whatsapp_gateway", [
+            [orderId],
+            cleanPhone,
+            ticketImageBase64
+        ]);
+        this.notification.add(_t("Receipt sent via WhatsApp successfully!"), { type: "success" });
+    }
+}
+```
 
 ## ⚠️ Pitfalls
 
-- **Multi-Tab Browser Hang:** NEVER use `window.open(url, "_blank")` in high-frequency POS environments. Always name the window (e.g. `window.open(url, "whatsapp_pos_window")`) so the existing WhatsApp Web tab is refocused and navigated.
+- **WhatsApp Web COOP Multi-Tab Trap:** WhatsApp Web sets `Cross-Origin-Opener-Policy: same-origin`. This policy causes modern Chrome/Edge to isolate the opened WhatsApp tab, breaking JavaScript cross-window communication across subsequent orders. While window naming mitigates this, the definitive zero-tab solution is server-side gateway dispatch (UltraMsg).
+- **Clipboard API Activation Loss:** Calling `navigator.clipboard.write` inside an asynchronous callback (e.g., inside `canvas.toBlob(...)`) can fail with a `NotAllowedError` because browser user activation expires. Resolve this by passing a `Promise<Blob>` directly into `new ClipboardItem({ "image/png": blobPromise })` and awaiting the clipboard write before opening windows.
 - **`api.whatsapp.com` Redirect Penalty:** `api.whatsapp.com/send` performs an intermediate server redirect which introduces a 1-3 second delay. Use `https://web.whatsapp.com/send` directly for web.
-- **Image URL Inability:** WhatsApp web scheme rejects image attachment parameters. Generating a PNG canvas blob via `renderer.toCanvas` and pushing it to `navigator.clipboard.write()` gives cashiers a one-click clipboard workflow where they only press `Ctrl+V` / `Cmd+V`.
+- **Image URL Inability:** WhatsApp web scheme rejects image attachment parameters. Either use client-side clipboard copy or automated server gateway API dispatch.
 - **Localhost Link Trap:** If POS runs locally or on internal IP (`192.168.x.x`), `{receipt_url}` sent to customers' phones will fail. Provide a `whatsapp_base_url` setting on `pos.config` (e.g., `https://pos.company.com`).
 - **Server Cache:** When modifying `__manifest__.py` assets, restarting the server or running `./odoo-bin -u <module>` is required to re-bundle the assets.
-- **Eastern Arabic Digits:** Always normalize `[٠-٩]` to ASCII digits `[0-9]` in JavaScript before constructing `wa.me` links.
+- **Eastern Arabic Digits:** Always normalize `[٠-٩]` to ASCII digits `[0-9]` in JavaScript before constructing `wa.me` links or sending to gateway APIs.
 
 ## Verification
 
 1. Start POS session in browser.
-2. Complete an order to reach `ReceiptScreen`.
-3. Click WhatsApp button: verify WhatsApp Web opens in the target tab `"whatsapp_pos_window"`.
-4. Without closing the tab, complete another order and click WhatsApp again: verify the SAME tab updates without opening a second tab.
-5. In WhatsApp Web, press `Ctrl+V` (or `Cmd+V` on Mac): verify the rendered receipt image pastes cleanly into the chat.
-6. Check that `{receipt_url}` contains the valid `access_token` and the configured public domain.
+2. In Settings, test switching between **Browser** and **UltraMsg Gateway**.
+3. For **UltraMsg Gateway**, click **Test Connection** to verify API credentials and instance status.
+4. Complete a sale: verify message and receipt PNG arrive automatically on the customer's phone without opening any browser tabs.
+5. For **Browser**, verify clipboard image copy and tab navigation.
