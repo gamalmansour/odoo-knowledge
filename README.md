@@ -172,6 +172,7 @@
 | 78 | [api-depends-on-a-field-declared-in-a-later-module.md](orm/api-depends-on-a-field-declared-in-a-later-module.md) | 🔴 Critical | All | `api.depends`, `module-load-order`, `upgrade`, `registry` | @api.depends resolves eagerly at registry build, so it cannot reference a field a later-loading module declares - unlike @api.onchange |
 | 79 | [stored-compute-on-top-of-a-non-stored-one-never-refreshes.md](orm/stored-compute-on-top-of-a-non-stored-one-never-refreshes.md) | 🔴 Critical | All | `compute`, `store`, `api.depends`, `silent-failure` | A stored compute depending on a non-stored one inherits only its dependencies, so it freezes at its first value |
 | 80 | [boq-three-level-breakdown-domain-actions.md](orm/boq-three-level-breakdown-domain-actions.md) | 🟡 Medium | 16, 17, 18, 19 | `orm`, `boq`, `breakdown`, `hierarchy`, `actions`, `domain`, `parent_id`, `rollup` | Three-level BOQ Breakdown hierarchy (BOQ Item -> Root Breakdown -> Nested Sub-items) with domain-separated actions and automatic recursive unit cost rollup |
+| 81 | [pos-config-load-pos-data-fields-pitfall.md](orm/pos-config-load-pos-data-fields-pitfall.md) | 🔴 Critical | 18 | `pos`, `pos.config`, `load_data`, `initData`, `_load_pos_data_fields`, `KeyError` | Do NOT override _load_pos_data_fields on pos.config in Odoo 18: pos.config defaults to [] which loads ALL 110+ fields; appending custom fields restricts the query and causes KeyError: 'use_pricelist' |
 
 ### Views
 
