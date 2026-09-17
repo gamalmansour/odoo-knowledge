@@ -216,6 +216,7 @@ async actionSendReceiptViaGateway(isAuto = false) {
 - **Localhost Link Trap:** If POS runs locally or on internal IP (`192.168.x.x`), `{receipt_url}` sent to customers' phones will fail. Provide a `whatsapp_base_url` setting on `pos.config` (e.g., `https://pos.company.com`).
 - **Server Cache:** When modifying `__manifest__.py` assets, restarting the server or running `./odoo-bin -u <module>` is required to re-bundle the assets.
 - **Eastern Arabic Digits:** Always normalize `[٠-٩]` to ASCII digits `[0-9]` in JavaScript before constructing `wa.me` links or sending to gateway APIs.
+- **UltraMsg /instance/status Nested Dictionary:** The `/instance/status` endpoint returns a nested structure `{"status": {"accountStatus": {"status": "authenticated", "substatus": "connected"}}}` rather than a flat string. Parsers must unwrap `accountStatus` to avoid false positive error notifications.
 
 ## Verification
 
