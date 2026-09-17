@@ -223,7 +223,7 @@ async actionSendReceiptViaGateway(isAuto = false) {
 - **UltraMsg `/messages/image` Asynchronous Failure Trap:** In UltraMsg, posting base64 data to `/messages/image` is accepted with HTTP 200, but fails asynchronously inside UltraMsg's worker with `status: unsent, failed_reason: error`, causing complete delivery failure. In contrast, `/messages/chat` (text) delivers with 100% reliability and zero failure rate. Therefore, UltraMsg gateway dispatch should always use `/messages/chat` delivering the formatted electronic ticket breakdown and direct validation link.
 - **Duplicate Send Prevention (Auto-Send + Cashier Click):** When auto-send on screen mount is enabled (`onMounted`), cashiers often instinctively click the WhatsApp button on the receipt screen, causing a duplicate message to be delivered. Prevent this via a two-layer safeguard:
   1. **Frontend (OWL):** Track `this.state.whatsappSent` and `this._lastSentPhone`. If the cashier clicks the button again without changing the phone number, intercept it with an informational toast notification (`تم إرسال الفاتورة لهذا الرقم بالفعل`) and do not invoke the backend.
-  2. **Backend (Python):** Maintain an in-memory 30-second debounce dictionary on `PosOrder._recent_gateway_dispatches` to safely ignore duplicate calls for the same order unless explicitly forced with a different destination.
+  2. **Backend (Python & PostgreSQL):** Maintain a database boolean field `whatsapp_gateway_sent = fields.Boolean(copy=False)` on `pos.order` alongside an in-memory 30-second debounce dictionary on `PosOrder._recent_gateway_dispatches` to safely ignore duplicate calls for the same order across workers, threads, or browser refreshes unless explicitly forced with a different destination.
 
 
 ## Verification
