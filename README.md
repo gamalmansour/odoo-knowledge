@@ -264,6 +264,8 @@
 | 2 | [sales-target-crm-won-customers-cartons.md](sale/sales-target-crm-won-customers-cartons.md) | 🟡 Medium | 16, 17, 18, 19 | `sale.target`, `crm.lead`, `uom`, `performance`, `n+1`, `read_group` | Efficiently compute product cartons and won crm customers in sales targets without N+1 query bottlenecks |
 | 3 | [non-stored-compute-fields-in-list-and-search-views.md](performance/non-stored-compute-fields-in-list-and-search-views.md) | 🔴 Critical | All | `performance`, `computed-fields`, `store`, `list-view`, `search`, `scaling` | `store=False` computed fields placed in tree/search/group-by re-run the compute (often full table scans) on every render — instant in demo, multi-second after a year of data |
 | 4 | [avoid-in-memory-record-filtering-in-wizards.md](performance/avoid-in-memory-record-filtering-in-wizards.md) | 🔴 Critical | All | `performance`, `memory-leak`, `filtered`, `orm`, `wizard` | Avoid loading entire database tables in memory when filtering by using native Odoo domains instead of Python's filtered(). |
+| 5 | [pos-order-validation-invoice-download-freeze.md](performance/pos-order-validation-invoice-download-freeze.md) | 🔴 Critical | 17, 18 | `pos`, `payment_screen`, `shouldDownloadInvoice`, `wkhtmltopdf`, `performance`, `ui-freeze` | POS order validation freezes for 8-10s on corporate customers due to auto A4 invoice PDF rendering; fixed by overriding `shouldDownloadInvoice()` and providing on-demand download |
+
 
 ### Deployment
 
