@@ -217,11 +217,18 @@ async actionSendReceiptViaGateway(isAuto = false) {
 - **Server Cache:** When modifying `__manifest__.py` assets, restarting the server or running `./odoo-bin -u <module>` is required to re-bundle the assets.
 - **Eastern Arabic Digits:** Always normalize `[٠-٩]` to ASCII digits `[0-9]` in JavaScript before constructing `wa.me` links or sending to gateway APIs.
 - **UltraMsg /instance/status Nested Dictionary:** The `/instance/status` endpoint returns a nested structure `{"status": {"accountStatus": {"status": "authenticated", "substatus": "connected"}}}` rather than a flat string. Parsers must unwrap `accountStatus` to avoid false positive error notifications.
+- **Synced Order `partner_id` Integer Trap (Odoo 18):** In Odoo 18, after order validation/sync, `pos.order` relational fields (`partner_id`) are loaded with `load=False`, returning raw integer IDs (e.g., `3`) instead of model records. Calling `order.get_partner()` yields an integer, causing `partner.mobile` and `partner.phone` to evaluate to `undefined`. A robust patch must resolve IDs through `pos.models["res.partner"]?.get(id)`.
+- **Arab Region `phone` vs `mobile` Discrepancy:** Standard Odoo 18 `ReceiptScreen` only checks `partner?.mobile || ""`. In Egypt and Saudi Arabia, customer numbers are almost universally stored in `partner.phone` (with `mobile` being `False`). Always fall back to `partner.mobile || partner.phone || ""`.
+- **Finalized Order `assert_editable()` Trap:** Calling `order.set_partner(partner)` on `ReceiptScreen` throws `Error: Finalized Order cannot be modified` because `order.finalized` is `true`. When changing or selecting a customer on `ReceiptScreen`, directly assign `order.partner_id = partner` in JS and call `pos.data.write("pos.order", [order.id], { partner_id: partner.id })` for server persistence.
 
 ## Verification
 
 1. Start POS session in browser.
-2. In Settings, test switching between **Browser** and **UltraMsg Gateway**.
-3. For **UltraMsg Gateway**, click **Test Connection** to verify API credentials and instance status.
-4. Complete a sale: verify message and receipt PNG arrive automatically on the customer's phone without opening any browser tabs.
-5. For **Browser**, verify clipboard image copy and tab navigation.
+2. Select a customer whose phone is stored in `phone` field.
+3. Validate order: verify the phone input on `ReceiptScreen` is automatically populated with the customer's phone.
+4. For orders without a customer (walk-in): click **"اختيار عميل"**, select a customer from `PartnerList`: verify customer name updates, order updates, and phone fills immediately.
+5. In Settings, test switching between **Browser** and **UltraMsg Gateway**.
+6. For **UltraMsg Gateway**, click **Test Connection** to verify API credentials and instance status.
+7. Complete a sale: verify message and receipt PNG arrive automatically on the customer's phone without opening any browser tabs.
+8. For **Browser**, verify clipboard image copy and tab navigation.
+
