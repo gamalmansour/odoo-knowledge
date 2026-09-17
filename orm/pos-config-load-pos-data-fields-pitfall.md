@@ -1,4 +1,4 @@
-# Do Not Override _load_pos_data_fields on pos.config in Odoo 18
+# Do Not Override _load_pos_data_fields on pos.config or pos.order in Odoo 18
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
@@ -8,58 +8,71 @@
 | Last Verified | 2026-09-17                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `point_of_sale`, `pos.config`, `_load_pos_data_fields`, `load_data`, `initData`
+**Tags:** `point_of_sale`, `pos.config`, `pos.order`, `_load_pos_data_fields`, `load_data`, `initData`, `taxTotals`
 
 ---
 
 ## Problem
 
-When opening Point of Sale in Odoo 18, the screen fails to load and the browser console throws:
+When opening Point of Sale in Odoo 18, the screen fails to load or crashes immediately with either:
 
+1. **When `pos.config` is overridden:**
 ```
-IndexedDB 1 Ready
-point_of_sale.assets_prod.min.js:6101 TypeError: Cannot convert undefined or null to object
+point_of_sale.assets_prod.min.js: TypeError: Cannot convert undefined or null to object
     at Object.entries (<anonymous>)
     at Proxy.initData (point_of_sale.assets_prod.min.js:8858:166)
-    at async Proxy.setup (point_of_sale.assets_prod.min.js:8833:356)
 ```
+or `KeyError: 'use_pricelist'`.
 
-The underlying Python RPC call `pos.session.load_data` fails with:
-`KeyError: 'use_pricelist'` (or missing standard fields on `pos.config`).
+2. **When `pos.order` is overridden:**
+```
+TypeError: Cannot read properties of undefined (reading 'filter')
+    at get taxTotals (point_of_sale.assets_prod.min.js:8944:1016)
+    at Object.get (point_of_sale.assets_prod.min.js:1055:71)
+    at Proxy.get_total_with_tax (point_of_sale.assets_prod.min.js:9007:34)
+    at Proxy.getCustomerDisplayData (point_of_sale.assets_prod.min.js:9064:248)
+```
+(because `this.payment_ids` is `undefined` on `pos.order`).
 
 ## Root Cause
 
-In Odoo 18, `pos.config` inherits `pos.load.mixin`, which defaults `_load_pos_data_fields(config_id)` to `[]`.
-When `fields` is empty (`[]`), Odoo's ORM `self.search_read(domain, fields, load=False)` automatically loads **ALL** fields of `pos.config` (over 100+ fields, including any custom fields added via `_inherit`).
+In Odoo 18, both `pos.config` and `pos.order` inherit `pos.load.mixin`, which defaults `_load_pos_data_fields(config_id)` to `[]`.
+When `fields` is an empty list (`[]`), Odoo's ORM `self.read([], load=False)` or `self.search_read(domain, [], load=False)` automatically loads **ALL** fields of the model (including all custom fields added via `_inherit`).
 
-If a custom module attempts to expose its custom field to POS by overriding `_load_pos_data_fields` on `pos.config`:
+If a custom module attempts to expose a custom field by overriding `_load_pos_data_fields`:
 ```python
-# ❌ WRONG
+# ❌ WRONG (for pos.config and pos.order)
 def _load_pos_data_fields(self, config_id):
     params = super()._load_pos_data_fields(config_id)
     if 'my_custom_field' not in params:
         params.append('my_custom_field')
     return params
 ```
-`super()._load_pos_data_fields()` returns `[]`. Appending `'my_custom_field'` converts `fields` from empty (which meant "all fields") to `['my_custom_field']` (which restricts the query to ONLY that field and `id`).
-As a result, `pos.config` is read with only `id` and `my_custom_field`, stripping out essential fields like `use_pricelist`, `currency_id`, `name`, etc. `pos.config._load_pos_data` crashes on `data[0]['use_pricelist']`.
+`super()._load_pos_data_fields()` returns `[]`. Appending `'my_custom_field'` converts `fields` from empty (which meant "all fields") to `['my_custom_field']` (which tells the ORM to restrict the query to ONLY that field and `id`).
+
+- On `pos.config`: It strips `use_pricelist`, `currency_id`, `name`, etc. → POS initialization crashes.
+- On `pos.order`: It strips `payment_ids`, `lines`, `session_id`, etc. → POS order totals (`taxTotals`) crashes because `this.payment_ids` is undefined.
 
 ## Solution ✅
 
-Do **NOT** override `_load_pos_data_fields` on `pos.config`! Any custom field defined on `pos.config` is automatically fetched and available in `pos.config` on the frontend because `pos.config` loads all fields by default.
+Do **NOT** override `_load_pos_data_fields` on `pos.config` or `pos.order`!
+Any field defined on `pos.config` or `pos.order` is automatically loaded by the ORM into the POS frontend because both models load all fields (`[]`) by default.
 
 ```python
-# ✅ CORRECT: Simply define the field on pos.config
-class PosConfig(models.Model):
-    _inherit = 'pos.config'
+# ✅ CORRECT: Simply define the field on pos.order or pos.config
+class PosOrder(models.Model):
+    _inherit = 'pos.order'
 
-    whatsapp_receipt_template = fields.Text(string='WhatsApp Receipt Template')
+    access_token = fields.Char(string='Security Token', copy=False)
     # No _load_pos_data_fields override needed!
 ```
 
 ## ⚠️ Pitfalls
 
-- Unlike other models (`res.partner`, `product.product`, `pos.order`) where `_load_pos_data_fields` returns an explicit list of field names and you MUST append custom fields, `pos.config` returns `[]` to mean "all fields". Overriding it breaks POS loading completely.
+- **Model Discrepancy:**
+  - Models like `pos.config` and `pos.order` default to `[]` (read all fields). DO NOT override `_load_pos_data_fields` on them.
+  - Models like `pos.order.line` and `pos.payment` return explicit lists of field names (`['qty', 'price_unit', ...]`). For those models, you DO need to override and append custom fields.
+  - Always check the base implementation in `point_of_sale` before overriding `_load_pos_data_fields`!
 
 ## Verification
 
