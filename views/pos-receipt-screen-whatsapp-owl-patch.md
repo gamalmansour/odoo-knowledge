@@ -18,6 +18,9 @@ When attempting to add external communication buttons (e.g. WhatsApp, SMS, or Te
 1. The customer phone number input is hidden by default because `showPhoneInput()` returns `false` in core `ReceiptScreen`.
 2. Phone numbers entered by cashiers in Arabic locales frequently contain Eastern Arabic-Indic numerals (`٠١٢٣٤٥٦٧٨٩`) or omit international country calling codes (e.g., Saudi `05...` instead of `9665...`), causing WhatsApp `api.whatsapp.com` links to fail silently or open with an invalid destination.
 3. Injecting actions into the receipt screen requires targeting the specific action container (`div.sending-receipt-management`) rather than appending to outer layout blocks.
+4. Each order opens a brand-new browser tab when using `window.open(url, "_blank")`, forcing WhatsApp Web to reconnect and re-sync on every order, causing extreme cashier lag and tab clutter.
+5. WhatsApp Web URL parameters (`api.whatsapp.com` or `web.whatsapp.com`) do NOT support file or image attachments due to browser security restrictions, making direct receipt image attachment via URL impossible.
+6. In Odoo 18, `pos.order` on the frontend frequently lacks the backend-generated `access_token`, resulting in empty or broken `{receipt_url}` electronic ticket links.
 
 ## Root Cause
 
@@ -29,14 +32,18 @@ When attempting to add external communication buttons (e.g. WhatsApp, SMS, or Te
    ```
    Without overriding this method, `<input t-if="showPhoneInput()" .../>` will never render.
 2. In Arab markets (Saudi Arabia, Egypt, UAE), customers or cashiers frequently input phone numbers using localized device keyboards producing Unicode Eastern Arabic digits (`٠-٩`), which are rejected by international deep links like `api.whatsapp.com/send?phone=...`.
+3. Using `_blank` as the window target in `window.open()` instructs the browser to always create an isolated tab, rather than reusing an existing WhatsApp Web tab.
+4. Meta's web URL scheme only permits text payloads (`?text=...`). Sending actual image files requires either third-party WhatsApp Cloud APIs or client-side clipboard integration.
+5. In Odoo 18, `access_token` is generated on the server during order sync and not mirrored back immediately into client memory.
 
 ## Solution ✅
 
-### 1. Patch `ReceiptScreen` in JavaScript (`static/src/overrides/receipt_screen.js`)
+### 1. Enhanced `ReceiptScreen` Patch (`static/src/overrides/receipt_screen.js`)
 
 ```javascript
 import { patch } from "@web/core/utils/patch";
 import { ReceiptScreen } from "@point_of_sale/app/screens/receipt_screen/receipt_screen";
+import { OrderReceipt } from "@point_of_sale/app/screens/receipt_screen/receipt/order_receipt";
 import { _t } from "@web/core/l10n/translation";
 
 patch(ReceiptScreen.prototype, {
@@ -75,16 +82,64 @@ patch(ReceiptScreen.prototype, {
         return clean;
     },
 
-    actionSendReceiptOnWhatsApp() {
+    async actionSendReceiptOnWhatsApp() {
         const rawPhone = this.state.phone;
         const cleanPhone = this.cleanPhoneNumber(rawPhone);
         if (!cleanPhone) {
             this.notification.add(_t("Please enter a valid customer phone number"), { type: "danger" });
             return;
         }
-        const message = this.buildWhatsAppReceiptMessage();
-        const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank");
+
+        // 1. Guaranteed server access_token resolution for electronic receipt
+        let accessToken = this.currentOrder?.access_token;
+        if (!accessToken && this.currentOrder?.id) {
+            try {
+                const [orderData] = await this.pos.data.read("pos.order", [this.currentOrder.id], ["access_token"]);
+                if (orderData?.access_token) {
+                    accessToken = orderData.access_token;
+                }
+            } catch (err) {
+                console.warn("[WhatsApp] Could not fetch server access_token:", err);
+            }
+        }
+
+        // 2. Auto-copy thermal receipt image to clipboard (Instant Cmd+V)
+        if (this.pos.config.whatsapp_auto_copy_receipt !== false) {
+            try {
+                const canvas = await this.renderer.toCanvas(OrderReceipt, {
+                    data: this.pos.get_order().export_for_printing(),
+                });
+                canvas.toBlob(async (blob) => {
+                    if (blob && navigator.clipboard?.write) {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({ "image/png": blob }),
+                        ]);
+                        this.notification.add(
+                            _t("Receipt image copied to clipboard! Press Ctrl+V in WhatsApp to attach it."),
+                            { type: "info" }
+                        );
+                    }
+                }, "image/png");
+            } catch (e) {
+                console.warn("[WhatsApp] Clipboard copy failed:", e);
+            }
+        }
+
+        // 3. Single-Tab Reuse + Direct URL Scheme
+        const message = await this.buildWhatsAppReceiptMessage(accessToken);
+        const encodedText = encodeURIComponent(message);
+        const clientType = this.pos.config.whatsapp_client_type || "web";
+
+        let url = "";
+        if (clientType === "desktop") {
+            url = `whatsapp://send?phone=${cleanPhone}&text=${encodedText}`;
+        } else {
+            // Bypass api.whatsapp.com redirect delay
+            url = `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodedText}`;
+        }
+
+        // Reuse existing tab named "whatsapp_pos_window" to prevent tab explosion
+        window.open(url, "whatsapp_pos_window");
     },
 });
 ```
@@ -110,20 +165,19 @@ Target `div.sending-receipt-management`:
 </templates>
 ```
 
-### 3. Register POS Assets Bundle in `__manifest__.py`
+### 3. Add POS Configuration Settings (`models/pos_config.py` & `models/res_config_settings.py`)
 
-```python
-    'depends': ['point_of_sale'],
-    'assets': {
-        'point_of_sale._assets_pos': [
-            'my_module/static/src/**/*',
-        ],
-    },
-```
+Allow cashiers/admins to configure:
+- `whatsapp_client_type`: Web vs Desktop app.
+- `whatsapp_base_url`: Public domain override (so `{receipt_url}` is reachable externally, not `localhost`).
+- `whatsapp_auto_copy_receipt`: Toggle image auto-copy to clipboard.
 
 ## ⚠️ Pitfalls
 
-- **Manifest Asset Bundle:** In Odoo 17 and 18, POS assets are registered under `'point_of_sale._assets_pos'`, NOT `point_of_sale.assets`.
+- **Multi-Tab Browser Hang:** NEVER use `window.open(url, "_blank")` in high-frequency POS environments. Always name the window (e.g. `window.open(url, "whatsapp_pos_window")`) so the existing WhatsApp Web tab is refocused and navigated.
+- **`api.whatsapp.com` Redirect Penalty:** `api.whatsapp.com/send` performs an intermediate server redirect which introduces a 1-3 second delay. Use `https://web.whatsapp.com/send` directly for web.
+- **Image URL Inability:** WhatsApp web scheme rejects image attachment parameters. Generating a PNG canvas blob via `renderer.toCanvas` and pushing it to `navigator.clipboard.write()` gives cashiers a one-click clipboard workflow where they only press `Ctrl+V` / `Cmd+V`.
+- **Localhost Link Trap:** If POS runs locally or on internal IP (`192.168.x.x`), `{receipt_url}` sent to customers' phones will fail. Provide a `whatsapp_base_url` setting on `pos.config` (e.g., `https://pos.company.com`).
 - **Server Cache:** When modifying `__manifest__.py` assets, restarting the server or running `./odoo-bin -u <module>` is required to re-bundle the assets.
 - **Eastern Arabic Digits:** Always normalize `[٠-٩]` to ASCII digits `[0-9]` in JavaScript before constructing `wa.me` links.
 
@@ -131,5 +185,7 @@ Target `div.sending-receipt-management`:
 
 1. Start POS session in browser.
 2. Complete an order to reach `ReceiptScreen`.
-3. Verify that the customer phone input is visible and pre-filled with partner mobile/phone.
-4. Click the green WhatsApp button and confirm the deep link opens with the correctly formatted international phone number and receipt body.
+3. Click WhatsApp button: verify WhatsApp Web opens in the target tab `"whatsapp_pos_window"`.
+4. Without closing the tab, complete another order and click WhatsApp again: verify the SAME tab updates without opening a second tab.
+5. In WhatsApp Web, press `Ctrl+V` (or `Cmd+V` on Mac): verify the rendered receipt image pastes cleanly into the chat.
+6. Check that `{receipt_url}` contains the valid `access_token` and the configured public domain.
