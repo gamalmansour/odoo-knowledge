@@ -313,6 +313,7 @@ _No entries yet._
 | 6 | [saudi-gtpl-bank-guarantees-advance-amortization.md](Best%20Practices/saudi-gtpl-bank-guarantees-advance-amortization.md) | 🔴 Critical | All | `saudi-gtpl`, `bank-guarantee`, `amortization`, `advance-payment`, `performance-bond`, `etimad` | Saudi GTPL Bank Guarantees: Advance payment auto-amortization reduction, Performance bond Article 75 release gates, and Etimad bid bonds |
 | 7 | [saudi-construction-labor-saudization-and-sbc-ptw.md](Best%20Practices/saudi-construction-labor-saudization-and-sbc-ptw.md) | 🔴 Critical | All | `saudi-arabia`, `saudization`, `nitaqat`, `qiwa`, `sbc`, `civil-defense`, `ptw` | Saudi labor Saudization (Nitaqat & Qiwa quotas) and Saudi Building Code (SBC 201/801) & Civil Defense Permit-to-Work gates |
 | 8 | [saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md](Best%20Practices/saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md) | 🔴 Critical | All | `saudi-arabia`, `sbc`, `qaqc`, `concrete-testing`, `dlp`, `decennial-warranty`, `civil-transactions-law-470`, `idi` | Saudi Building Code QA/QC (SBC concrete breaks & proctor compaction) and statutory Decennial Warranty DLP (Civil Transactions Law Art. 470 & IDI) |
+| 9 | [saudi-gtpl-claims-eot-and-time-bar-defense.md](Best%20Practices/saudi-gtpl-claims-eot-and-time-bar-defense.md) | 🔴 Critical | All | `saudi-arabia`, `gtpl`, `claims`, `eot`, `time-bar`, `prolongation-costs`, `tia` | Saudi Public Works GTPL Art. 74 claims, statutory notice time-bar defense, prolongation site overheads, and forensic TIA schedule analysis |
 
 ### Misc
 
