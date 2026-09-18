@@ -312,6 +312,7 @@ _No entries yet._
 | 5 | [saudi-public-works-etimad-ipc-governance.md](Best%20Practices/saudi-public-works-etimad-ipc-governance.md) | 🔴 Critical | All | `saudi-arabia`, `etimad`, `gtpl`, `ipc`, `contracting`, `gosi`, `zakat`, `liquidated-damages` | Saudi public works contracting: Etimad IPC workflow, GTPL 10% delay penalty cap, and statutory clearances |
 | 6 | [saudi-gtpl-bank-guarantees-advance-amortization.md](Best%20Practices/saudi-gtpl-bank-guarantees-advance-amortization.md) | 🔴 Critical | All | `saudi-gtpl`, `bank-guarantee`, `amortization`, `advance-payment`, `performance-bond`, `etimad` | Saudi GTPL Bank Guarantees: Advance payment auto-amortization reduction, Performance bond Article 75 release gates, and Etimad bid bonds |
 | 7 | [saudi-construction-labor-saudization-and-sbc-ptw.md](Best%20Practices/saudi-construction-labor-saudization-and-sbc-ptw.md) | 🔴 Critical | All | `saudi-arabia`, `saudization`, `nitaqat`, `qiwa`, `sbc`, `civil-defense`, `ptw` | Saudi labor Saudization (Nitaqat & Qiwa quotas) and Saudi Building Code (SBC 201/801) & Civil Defense Permit-to-Work gates |
+| 8 | [saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md](Best%20Practices/saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md) | 🔴 Critical | All | `saudi-arabia`, `sbc`, `qaqc`, `concrete-testing`, `dlp`, `decennial-warranty`, `civil-transactions-law-470`, `idi` | Saudi Building Code QA/QC (SBC concrete breaks & proctor compaction) and statutory Decennial Warranty DLP (Civil Transactions Law Art. 470 & IDI) |
 
 ### Misc
 
