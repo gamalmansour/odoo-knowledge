@@ -309,6 +309,7 @@ _No entries yet._
 | 2 | [module-name-collision.md](Best%20Practices/module-name-collision.md) | 🟡 Medium | All | `modules`, `naming`, `collision` | Module technical-name collisions between custom addons paths |
 | 3 | [odoo-19-warnings.md](Best%20Practices/odoo-19-warnings.md) | 🟡 Medium | 19 | `odoo19`, `warnings`, `deprecation` | Deprecation warnings surfaced by Odoo 19 · **+ §7 search-view `<group>` takes no attributes (hard ParseError), §8 demo data is now opt-in via `--with-demo`, §9 group changes need a server restart** |
 | 4 | [saudi-realestate-rett-vs-zatca-phase2-compliance.md](Best%20Practices/saudi-realestate-rett-vs-zatca-phase2-compliance.md) | 🔴 Critical | All | `saudi-arabia`, `zatca`, `rett`, `real-estate`, `e-invoicing`, `first-home`, `rega` | Saudi real estate taxation: decoupling RETT (5%) & First-Home Citizen Subsidy from ZATCA Phase 2 E-Invoicing (VATEX-SA-30 exemption) |
+| 5 | [saudi-public-works-etimad-ipc-governance.md](Best%20Practices/saudi-public-works-etimad-ipc-governance.md) | 🔴 Critical | All | `saudi-arabia`, `etimad`, `gtpl`, `ipc`, `contracting`, `gosi`, `zakat`, `liquidated-damages` | Saudi public works contracting: Etimad IPC workflow, GTPL 10% delay penalty cap, and statutory clearances |
 
 ### Misc
 
