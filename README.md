@@ -317,6 +317,7 @@ _No entries yet._
 | 10 | [saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md](Best%20Practices/saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md) | 🔴 Critical | 17, 18, 19 | `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa`, `monshaat`, `gosi`, `zakat`, `portal` | Saudi Subcontractor Governance: GTPL Articles 71-72 (30% cap), statutory clearances (GOSI, Zakat, Saudization, CR), and LCGPA self-service portal |
 | 11 | [saudi-saber-lcgpa-and-mwan-waste-compliance.md](Best%20Practices/saudi-saber-lcgpa-and-mwan-waste-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `saber`, `saso`, `lcgpa`, `mandatory-list`, `mwan`, `c-and-d-waste`, `balady` | Saudi SASO/SABER Conformity, LCGPA Mandatory National Products List procurement gates, and MWAN C&D Waste manifests & weighbridge tickets |
 | 12 | [saudi-gtpl-etimad-tendering-and-equipment-safety.md](Best%20Practices/saudi-gtpl-etimad-tendering-and-equipment-safety.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `gtpl`, `etimad`, `tender`, `bid-bond`, `article-36`, `lcgpa`, `equipment-safety`, `tuv`, `saso`, `crane-inspection`, `aramco-sticker`, `neom` | Saudi GTPL Etimad Tendering (Article 36 1%-2% Bid Bonds & LCGPA Article 59 10% preference) and third-party equipment safety inspection (TÜV/SASO crane proof load tests & Aramco/NEOM stickers) |
+| 13 | [saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md](Best%20Practices/saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `dcc`, `submittals`, `rfi`, `consultant-sla`, `balady`, `wafi`, `escrow`, `sbc`, `gtpl-article-74`, `eot`, `geotagging`, `exif` | Saudi DCC Consultant SLA tracking (14-day/7-day GTPL Art. 74 EOT claims) and high-precision geotagged site evidence for Balady 5 stages & Wafi off-plan escrow release |
 
 
 ### Misc
@@ -359,7 +360,7 @@ odoo-knowledge/
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
-├── Best Practices/         ← 12 entries
+├── Best Practices/         ← 13 entries
 └── misc/                   ← 15 entries
 ```
 
