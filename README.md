@@ -316,6 +316,8 @@ _No entries yet._
 | 9 | [saudi-gtpl-claims-eot-and-time-bar-defense.md](Best%20Practices/saudi-gtpl-claims-eot-and-time-bar-defense.md) | 🔴 Critical | All | `saudi-arabia`, `gtpl`, `claims`, `eot`, `time-bar`, `prolongation-costs`, `tia` | Saudi Public Works GTPL Art. 74 claims, statutory notice time-bar defense, prolongation site overheads, and forensic TIA schedule analysis |
 | 10 | [saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md](Best%20Practices/saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md) | 🔴 Critical | 17, 18, 19 | `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa`, `monshaat`, `gosi`, `zakat`, `portal` | Saudi Subcontractor Governance: GTPL Articles 71-72 (30% cap), statutory clearances (GOSI, Zakat, Saudization, CR), and LCGPA self-service portal |
 | 11 | [saudi-saber-lcgpa-and-mwan-waste-compliance.md](Best%20Practices/saudi-saber-lcgpa-and-mwan-waste-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `saber`, `saso`, `lcgpa`, `mandatory-list`, `mwan`, `c-and-d-waste`, `balady` | Saudi SASO/SABER Conformity, LCGPA Mandatory National Products List procurement gates, and MWAN C&D Waste manifests & weighbridge tickets |
+| 12 | [saudi-gtpl-etimad-tendering-and-equipment-safety.md](Best%20Practices/saudi-gtpl-etimad-tendering-and-equipment-safety.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `gtpl`, `etimad`, `tender`, `bid-bond`, `article-36`, `lcgpa`, `equipment-safety`, `tuv`, `saso`, `crane-inspection`, `aramco-sticker`, `neom` | Saudi GTPL Etimad Tendering (Article 36 1%-2% Bid Bonds & LCGPA Article 59 10% preference) and third-party equipment safety inspection (TÜV/SASO crane proof load tests & Aramco/NEOM stickers) |
+
 
 ### Misc
 
@@ -357,14 +359,14 @@ odoo-knowledge/
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
-├── Best Practices/         ← 3 entries
+├── Best Practices/         ← 12 entries
 └── misc/                   ← 15 entries
 ```
 
 ### Stats
 
-- **Total Entries:** 39
-- **Last Updated:** 2026-08-10
+- **Total Entries:** 48
+- **Last Updated:** 2026-09-18
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
