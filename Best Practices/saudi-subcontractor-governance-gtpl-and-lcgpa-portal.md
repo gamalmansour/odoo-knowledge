@@ -5,7 +5,7 @@
 | Category      | Best Practices                             |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-09-18                                 |
+| Last Verified | 2026-09-19                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa`, `monshaat`, `gosi`, `zakat`, `portal`, `statutory-clearances`
@@ -93,6 +93,13 @@ def action_approve(self) -> None:
 Provide a secure portal route where subcontractors can inspect their certificate validity, review itemized progress payment certificates, and submit renewed certificate details:
 - Route: `/my/subcontract/<id>`
 - Post Action: `/my/subcontract/<id>/update_clearance`
+
+### 4. Periodic Performance Evaluations & HSE/QAQC Metric Feeds (`subcontractor.evaluation`)
+
+Evaluate active subcontractors across four core pillars: Quality, Timeliness, Safety, and Cooperation (1-5 scale):
+- Compute `score_overall` as a weighted average.
+- Automatically feed site safety compliance from `hse.observation` (deducting 0.2 per unsafe act) and `hse.incident` (deducting 1.0 per incident) to generate a data-driven `suggested_safety_score`.
+- Provide Pivot and Graph views (`action_subcontractor_evaluation`) for contractor performance benchmarking across projects.
 
 ## ⚠️ Pitfalls
 
