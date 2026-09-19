@@ -241,6 +241,7 @@
 | 40 | [res-config-settings-app-class-owl-error.md](views/res-config-settings-app-class-owl-error.md) | 🔴 Critical | 18 | `res.config.settings`, `owl`, `settings-app`, `invalid-props`, `compiler`, `migration-v18` | In Odoo 18, putting class attribute on <app> in res_config_settings crashes with OwlError: Invalid props for component 'SettingsApp': unknown key 'class'; use plain <app> or notApp="1" |
 | 41 | [forbidden-owl-directive-t-if-in-form-arch.md](views/forbidden-owl-directive-t-if-in-form-arch.md) | 🔴 Critical | 17, 18, 19 | `views`, `owl`, `arch`, `t-if`, `invisible`, `form-view`, `parse-error` | Forbidden owl directive used in arch (t-if) in Odoo 17/18 form views; use invisible attribute instead of t-if on standard HTML tags in form arch |
 | 42 | [search-filter-selection-value-spelling-mismatch.md](views/search-filter-selection-value-spelling-mismatch.md) | 🟡 Medium | All | `views`, `search-view`, `filter`, `selection`, `spelling-mismatch`, `silent-empty`, `labor`, `labour` | Search view filter domain hardcoding selection value variant (e.g. British 'labour' vs American 'labor') silently returns empty results |
+| 43 | [odoo18-kanban-image-owl-deprecation.md](views/odoo18-kanban-image-owl-deprecation.md) | 🔴 Critical | 17, 18, 19 | `kanban`, `owl`, `kanban_image`, `qweb`, `views`, `deprecation`, `TypeError` | kanban_image() helper removed from QWeb template context in Odoo 17+ OWL Kanban cards, causing TypeError: ctx.kanban_image is not a function |
 
 
 
