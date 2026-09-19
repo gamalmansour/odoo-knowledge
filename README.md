@@ -183,6 +183,8 @@
 | 83 | [stored-compute-related-field-attributeerror-preload.md](orm/stored-compute-related-field-attributeerror-preload.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `preload_registries`, `AttributeError`, `inheritance`, `cross-model` | Stored compute @api.depends traversing non-existent related field aborts preload_registries on server start with AttributeError |
 | 84 | [missing-company-id-subcontract-model-preload-error.md](orm/missing-company-id-subcontract-model-preload-error.md) | 🔴 Critical | All | `orm`, `multi-company`, `company_id`, `computed-fields`, `store`, `preload_registries`, `AttributeError`, `inheritance` | Child contract models missing company_id break cross-model computes and abort preload_registries on startup |
 | 85 | [cross-module-statutory-clearance-gate-breaks-commercial-subcontracts-and-tests.md](orm/cross-module-statutory-clearance-gate-breaks-commercial-subcontracts-and-tests.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `statutory-clearance`, `subcontractor`, `cross-module`, `api-depends`, `gtpl`, `test-isolation` | Broad country-based clearance gate blocks commercial contracts and unit tests; traverse partner_id for searchable country code |
+| 86 | [odoo18-inconsistent-compute-sudo-registry-warning.md](orm/odoo18-inconsistent-compute-sudo-registry-warning.md) | 🟡 Medium | 18, 19 | `orm`, `compute_sudo`, `registry`, `warning`, `computed-fields`, `odoo18` | Inconsistent compute_sudo on fields sharing the same compute method triggers registry UserWarning in Odoo 18 |
+
 
 
 ### Views
