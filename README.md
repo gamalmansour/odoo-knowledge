@@ -327,6 +327,7 @@ _No entries yet._
 | 12 | [saudi-gtpl-etimad-tendering-and-equipment-safety.md](Best%20Practices/saudi-gtpl-etimad-tendering-and-equipment-safety.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `gtpl`, `etimad`, `tender`, `bid-bond`, `article-36`, `lcgpa`, `equipment-safety`, `tuv`, `saso`, `crane-inspection`, `aramco-sticker`, `neom` | Saudi GTPL Etimad Tendering (Article 36 1%-2% Bid Bonds & LCGPA Article 59 10% preference) and third-party equipment safety inspection (TÜV/SASO crane proof load tests & Aramco/NEOM stickers) |
 | 13 | [saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md](Best%20Practices/saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `dcc`, `submittals`, `rfi`, `consultant-sla`, `balady`, `wafi`, `escrow`, `sbc`, `gtpl-article-74`, `eot`, `geotagging`, `exif` | Saudi DCC Consultant SLA tracking (14-day/7-day GTPL Art. 74 EOT claims) and high-precision geotagged site evidence for Balady 5 stages & Wafi off-plan escrow release |
 | 14 | [saudi-gtpl-variation-orders-and-contract-amendments-governance.md](Best%20Practices/saudi-gtpl-variation-orders-and-contract-amendments-governance.md) | 🔴 Critical | 17, 18, 19 | `gtpl`, `contract_amendment`, `variation_order`, `value_engineering`, `eot`, `construction` | Saudi GTPL variation orders (+10%/-20% caps), contract amendments lifecycle, atomic BOQ sync, and EOT duration adjustments |
+| 15 | [construction-suite-cross-module-data-coherence-and-e2e-testing.md](Best%20Practices/construction-suite-cross-module-data-coherence-and-e2e-testing.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `end-to-end`, `data-integrity`, `cross-module`, `seeding`, `boq`, `wbs`, `hse`, `subcontractor`, `qaqc` | Construction Suite Cross-Module Data Coherence & End-to-End Testing pipeline across all 21 lifecycle touchpoints |
 
 
 
@@ -370,14 +371,14 @@ odoo-knowledge/
 ├── performance/            ← (empty)
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
-├── Best Practices/         ← 13 entries
+├── Best Practices/         ← 15 entries
 └── misc/                   ← 15 entries
 ```
 
 ### Stats
 
-- **Total Entries:** 48
-- **Last Updated:** 2026-09-18
+- **Total Entries:** 49
+- **Last Updated:** 2026-09-19
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
 ---
