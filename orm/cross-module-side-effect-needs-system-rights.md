@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-08-05                                 |
+| Last Verified | 2026-09-19                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `security`, `acl`, `sudo`, `cross-module`, `AccessError`, `workflow`, `uat`
@@ -22,15 +22,16 @@ odoo.exceptions.AccessError: You are not allowed to create 'Owner Contract' (con
 
 The action *did* its own part (the tender was logged as won), then the automation reached into a neighbouring module — and because the whole method is one transaction, **everything rolls back**. The user sees a technical error and loses the work.
 
-Found nine times in one UAT pass of a construction suite, always the same shape:
+Found ten times in UAT and operational multi-agent testing of a construction suite, always the same shape:
 
-| Button (module) | Hidden side effect (other module) | Role that breaks |
+| Button / Trigger (module) | Hidden side effect (other module) | Role that breaks |
 |---|---|---|
 | Mark as Won (tender) | creates `contract.owner` | Tender Manager |
 | Activate (contract) | creates `construction.project` + BOQ | Contract Manager |
 | Fetch BOQ (contract) | reads `project.boq.item` | Contract Manager |
 | Complete (work order) | reads `purchase.order.line`, creates `stock.picking` + `account.move` | Site Engineer |
 | Release Retention (DLP) | writes `contract.owner`, creates `account.move` | DLP Manager |
+| Create Project (project) | creates `stock.location` + `account.analytic.account` | Project Manager |
 
 ## Root Cause
 
