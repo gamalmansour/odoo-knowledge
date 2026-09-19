@@ -87,3 +87,6 @@ cost_to_allocate = total_cost - frozen_cost
    If units have 0.0 m² area or 0.0 price, multi-tier fallback (area → price → unit count) is mandatory to prevent `ZeroDivisionError`.
 3. **Odoo Computed Field Assignment Trap:**
    `total_budget` on `construction.project` is a computed field stored from `project.boq.item` records. Setting `'total_budget': 4000000.0` in `project.create()` is silently dropped; test fixtures must create a BOQ item to establish the budget.
+4. **Variable-Area Multi-Floor Architectural Layouts:**
+   When testing pro-rata allocation on non-uniform apartments (e.g., 3 units per floor with 120, 180, 250 m²), verify that the 3D spatial coordinate slots (2 front + 1 rear wide suite) and floating badge numbers (`idx + 1`) align seamlessly with the architectural floor plan.
+
