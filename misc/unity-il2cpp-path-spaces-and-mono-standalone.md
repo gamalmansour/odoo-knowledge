@@ -75,6 +75,7 @@ BuildPipeline.BuildPlayer(buildPlayerOptions);
 
 - Do not symlink the root folder itself (`ln -s /source /target`); Unity canonicalizes root directory paths and will restore the spaced path.
 - Always delete `Library/Bee` after changing stripping settings to ensure DAG caches do not re-trigger previous build failures.
+- **Apple Silicon Multi-Threaded IL2CPP Race Condition (`PhaseWorker` Segfault):** On macOS ARM64, Unity 6's IL2CPP conversion can intermittently segfault with `ExitCode 139 / KERN_INVALID_ADDRESS` in `PhaseWorker` (`ArraySortHelper.PickPivotAndPartition` -> `OrderingCompareExtensions.Compare_4`) during metadata usage sorting. Fix by forcing single-threaded conversion via `PlayerSettings.SetAdditionalIl2CppArgs("--jobs=1")`. Clang++ C++ compilation remains fully multi-threaded via NDK.
 
 ## Verification
 
