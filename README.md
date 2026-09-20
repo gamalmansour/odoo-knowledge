@@ -358,6 +358,7 @@ _No entries yet._
 | 14 | [httpcase-put-delete-verbs-and-date-field-valueerror.md](misc/httpcase-put-delete-verbs-and-date-field-valueerror.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `testing`, `httpcase`, `url_open`, `requests-session`, `fields.Date`, `ValueError`, `savepoint`, `rest-api`, `400-vs-500` | `HttpCase.url_open` has no PUT/DELETE — call `self.opener.put()/.delete()` directly (it's a `requests.Session`); and `fields.Date.to_date` raises a bare `ValueError` (not `ValidationError`) on a malformed string, so a REST `write()` handler must catch it explicitly to answer 400, not 500 |
 | 15 | [httpcase-public-user-company-mismatch-credit-note-singleton.md](misc/httpcase-public-user-company-mismatch-credit-note-singleton.md) | 🟡 Medium | 17 | `testing`, `httpcase`, `auth-public`, `multi-company`, `account.move`, `credit-note`, `exchange-difference`, `public-user` | An `auth='public'` route dispatches as `base.public_user`, not the test's own admin user — a credit-note reversal via HTTP against a custom test company crashes with `ValueError: Expected singleton: res.company()` deep in exchange-difference reconciliation; scope `base.public_user`'s company to the test company in `setUpClass` |
 | 16 | [polymorphic-ecommerce-webhook-payload-type-guards.md](misc/polymorphic-ecommerce-webhook-payload-type-guards.md) | 🔴 Critical | All | `webhook`, `salla`, `ecommerce`, `integration`, `payload`, `type-error` | E-commerce webhooks crashing with 'str' object has no attribute 'get' when fields like date, status, amounts, taxes are scalar rather than dicts — universal extractor and type guards |
+| 17 | [unity-il2cpp-path-spaces-and-mono-standalone.md](misc/unity-il2cpp-path-spaces-and-mono-standalone.md) | 🟡 Medium | All | `unity6`, `il2cpp`, `bee_backend`, `spaces_in_path`, `symlinks`, `mono` | Unity 6 il2cpp command-line splitting on macOS when project path has spaces — real directory symlink fix & Mono standalone desktop build |
 ---
 
 ## 🔧 Quick Reference
@@ -377,12 +378,12 @@ odoo-knowledge/
 ├── deployment/             ← (empty)
 ├── upgrade/                ← 2 entries
 ├── Best Practices/         ← 15 entries
-└── misc/                   ← 15 entries
+└── misc/                   ← 16 entries
 ```
 
 ### Stats
 
-- **Total Entries:** 50
+- **Total Entries:** 51
 - **Last Updated:** 2026-09-19
 - **Contributors:** ENG/Mohamed Saber, ENG/Mohamed Hamdy, ENG/Gamal Mansour
 
