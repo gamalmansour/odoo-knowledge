@@ -5,7 +5,7 @@
 | Category      | performance                    |
 | Odoo Versions | All (14, 15, 16, 17, 18, 19)  |
 | Severity      | 🔴 Critical                    |
-| Last Verified | 2026-06-27                     |
+| Last Verified | 2026-09-22                     |
 | Author        | ENG/Gamal Mansour              |
 
 **Tags:** `performance`, `N+1`, `computed-fields`, `read_group`, `search`, `sql`
@@ -169,8 +169,44 @@ if delivery_visits:
 
 The key insight: instead of navigating the relation from parent → children N times, query the child model directly with `visit_id IN (...)` — one round-trip regardless of how many parents exist.
 
+## Pattern — Hierarchical Tree Rollup (WBS / CBS / _parent_store)
+
+When computing aggregate amounts on a tree model with `_parent_store = True` (e.g. `construction.cost.code`), computing `child_of` inside a `search()` loop per record causes N+1 SQL queries:
+
+```python
+# ❌ WRONG — Fires 1 SQL search per cost code in the tree
+for rec in self:
+    codes = self.search([('id', 'child_of', rec.id)])
+    lines = Move.search([('cost_code_id', 'in', codes.ids), ('parent_state', '=', 'posted')])
+    rec.actual_amount = sum(lines.mapped('balance'))
+```
+
+```python
+# ✅ CORRECT (Odoo 17/18+) — 1 aggregated SQL query across the whole ledger
+grouped_data = Move.sudo()._read_group(
+    domain=[
+        ('cost_code_id', '!=', False),
+        ('parent_state', '=', 'posted'),
+        ('display_type', 'in', ('product', False)),
+        ('company_id', '=', current_company_id),
+    ],
+    groupby=['cost_code_id'],
+    aggregates=['balance:sum'],
+)
+direct_amounts = {code.id: (bal or 0.0) for code, bal in grouped_data}
+
+for rec in self:
+    if not rec.id:
+        rec.actual_amount = 0.0
+        continue
+    # child_of in-memory or targeted set lookup
+    child_codes = self.search([('id', 'child_of', rec.id)])
+    rec.actual_amount = sum(direct_amounts.get(cid, 0.0) for cid in child_codes.ids)
+```
+
 ## References
 
 - [Odoo read_group docs](https://www.odoo.com/documentation/19.0/developer/reference/backend/orm.html#odoo.models.Model.read_group)
+- Fixed in: `construction_costcode/models/cost_code.py` — `_compute_actual` (2026-09-22)
 - Fixed in: `custom/sale_target/models/sale_target.py` — `_compute_achievement` + `get_portal_collection_data` (2026-06-27)
 - Fixed in: `custom/sale_visit/models/sale_visit.py` — `_compute_shortages` (2026-06-27)
