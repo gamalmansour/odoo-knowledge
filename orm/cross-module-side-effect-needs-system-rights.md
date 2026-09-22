@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-09-19                                 |
+| Last Verified | 2026-09-22                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `security`, `acl`, `sudo`, `cross-module`, `AccessError`, `workflow`, `uat`
@@ -32,6 +32,9 @@ Found ten times in UAT and operational multi-agent testing of a construction sui
 | Complete (work order) | reads `purchase.order.line`, creates `stock.picking` + `account.move` | Site Engineer |
 | Release Retention (DLP) | writes `contract.owner`, creates `account.move` | DLP Manager |
 | Create Project (project) | creates `stock.location` + `account.analytic.account` | Project Manager |
+| Approve Budget Override (cost) | writes `project.work.order` + calls `message_post` | Cost Manager |
+| Confirm Fuel Log (equipment) | updates `equipment.current_meter` | Site Engineer |
+| Create Backcharge from NCR (qc) | creates `construction.backcharge` | QC Inspector |
 
 ## Root Cause
 
@@ -89,6 +92,7 @@ The dividing line: **is the user doing this thing, or is the system doing it bec
 - **Never blanket-`sudo` a whole action.** Sudo only the specific create/search that crosses the boundary, and comment the reason — otherwise you silently disable every rule the module has.
 - **`sudo()` propagates through the recordset**, so `wizard.sudo().action_x()` covers everything `action_x` creates via `self.env` — useful, but check nothing user-scoped depends on the real uid inside.
 - Returning a sudo'd record to the UI can raise on display; return it re-bound to the caller's env: `return contract.with_env(self.env)`.
+- **Chatter `message_post` checks parent record ACLs:** When an authorized approver (e.g. Cost Manager) updates a record belonging to another team (e.g. `project.work.order`) using `self.sudo().write(...)`, calling `self.message_post(...)` on the non-sudo recordset fails with `AccessError: (Document type: Message, Operation: create)` because Odoo validates write/read permissions on the parent document. Always use `self.sudo().message_post(...)` so audit trail notes post successfully without granting blanket write access to the user.
 - **Unit tests will not catch any of this.** Only a UAT pass with real roles (`with_user`) will.
 
 ## Verification
