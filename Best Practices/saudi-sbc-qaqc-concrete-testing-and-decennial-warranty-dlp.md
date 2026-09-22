@@ -5,7 +5,7 @@
 | Category      | Best Practices                             |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-09-18                                 |
+| Last Verified | 2026-09-22                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `saudi-arabia`, `sbc`, `qaqc`, `concrete-testing`, `slump`, `compressive-strength`, `soil-compaction`, `dlp`, `decennial-warranty`, `civil-transactions-law-470`, `idi`, `balady`
@@ -78,7 +78,32 @@ Strictly guard result recording in `action_record_result()`:
 - Block recording if concrete test is `'fail'` (strength below design $f'_c$).
 - Block recording if soil proctor compaction is `'fail'` ($< 95\%$).
 
-### 2. Saudi Decennial Warranty & Handover Safety Gates (`construction_dlp`)
+### 2. Cost of Poor Quality (COPQ) & Master Checklist Templates Engine
+
+1. **CBS Cost Code Tagging for COPQ Tracking**:
+   - Link `qc.project.mixin` to `construction.cost.code` (`cost_code_id`).
+   - Automatically propagate CBS codes from `qc.checklist.template` → `qc.inspection.request` → `qc.ncr`.
+   - Aggregate financial non-conformance costs (`cost_of_quality`) by CBS division (e.g. Division 03 Concrete, Division 07 Waterproofing) so executives and project managers can track COPQ in real time.
+
+2. **Standard Engineering Checklist Templates & 1-Click ITP Generation**:
+   - Pre-load standard reusable checklist templates (`qc.checklist.template`) derived from proven megaproject quality control procedures:
+     * Pre-Pour Concrete & Rebar Inspection (Formwork, cover spacers, rebar spacing, embedments, DPM).
+     * Concrete Pouring & Quality Testing (Batch tickets, transit time, fresh concrete temp, slump, 6-specimen sampling, wet curing).
+     * Block Works & Masonry (Alignment, plumbness, mortar mix 1:3, wall ties, lintel bearings ≥ 200mm).
+     * Protected Membrane Roofing & Waterproofing (Foam concrete slopes ≥1.5%, chamfers, primer, 4mm torching, 100mm overlaps, 48-72h water flood test).
+     * Plumbing Water Supply Hydrostatic Test (PPR PN16/20, air bleeding, 10-15 bar pressure hold, zero drop).
+     * Drainage Network Gravity Flow & Leakage Test (UPVC Class 4/5, 1.5-2.0% gradient, rubber plug water test, ball flow test).
+     * HVAC Ductwork Installation & SMACNA Leakage Test (Gauge thickness, UL fire dampers, trapeze hangers, elastomeric sealant, CFM leakage measurement).
+     * Electrical Conduits, Wiring & Megger Test (High-impact UPVC, box FFL heights, phase color coding, PE continuity, 500V/1000V DC Megger ≥ 100 MΩ).
+     * Earthworks Subgrade & Layer Compaction (A-1-a material, lifts ≤ 300mm, OMC ±2%, Modified Proctor ≥ 95% per SBC 303).
+     * Survey Works & Setting Out (Permanent TBMs, boundary setbacks, formation levels, column centerlines).
+   - Add `action_load_from_template()` on `qc.itp` to instantly generate project-specific ITP lines from master checklist templates with 1 click.
+
+3. **Material Inspection Request (MIR) Gate**:
+   - Dedicated MIR fields: `material_qty_delivered`, `material_uom_id`, `material_supplier_id`, `material_delivery_note_ref`, `has_mill_certificate`, and `material_storage_location`.
+   - Prevent installation of received materials on site until MIR is formally approved by the consultant.
+
+### 3. Saudi Decennial Warranty & Handover Safety Gates (`construction_dlp`)
 
 #### A. Statutory Warranty Register (`dlp.warranty`)
 - Configure mandatory warranty types with automated statutory durations:
