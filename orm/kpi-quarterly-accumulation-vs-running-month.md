@@ -86,6 +86,8 @@ Two critical defects commonly occur:
 
 - **Avoid Full Table Scans in CRM Hooks:** Never call `_cron_update_current_and_prev_month_status()` on `env['kpis.goal.tracker'].search([])` inside a `crm.lead` write hook. Always filter to `user_id = lead.user_id` and `state = 'running'`.
 - **Database Transaction Commit in Shell:** Remember that testing in Odoo shell does not commit by default. Always execute `env.cr.commit()` if you expect browser UI sessions to see values immediately.
+- **Misleading Naming vs Business Spec:** Naming a quarterly remaining target as `Remaining Target in Month` causes stakeholders to assume targets are split evenly per month (Target ÷ 3), whereas standard business specs (e.g. GT-011) operate on carry-forward of the remaining quarter target. The label should always be `Remaining Target`.
+- **Stale Stored Child Values:** Stored computed fields on parent records reflecting child lines (such as `remaining_target_in_month` fetching `months_ids.line_ids.remaining_target`) MUST include `months_ids.line_ids.remaining_target` in `@api.depends`. Omitting child fields causes old/erroneous values (like negative values from old test TCR records) to remain frozen in the database.
 - **Stage Flag Alignment:** Ensure stage boolean flags (`is_lead`, `is_meeting`, `is_ongoing`) accurately reflect stage names, otherwise counters will increment in unexpected categories (e.g., a lead in a "Meeting" stage increments `meeting`, not `lead`).
 
 ## Verification
