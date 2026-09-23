@@ -384,6 +384,7 @@ _No entries yet._
 | 19 | [unity-ios-device-il2cpp-compilation-and-codesign.md](misc/unity-ios-device-il2cpp-compilation-and-codesign.md) | 🔴 Critical | All | `unity6`, `ios`, `il2cpp`, `xcode`, `codesign`, `provisioning_profile`, `devicectl`, `arm64` | Unity 6 iOS physical device IL2CPP C++ compilation, DllImport segfault, and Apple code signing provisioning profile resolution |
 | 20 | [unity-arabic-rtl-bidi-shaping-mobile-ui.md](misc/unity-arabic-rtl-bidi-shaping-mobile-ui.md) | 🔴 Critical | All | `unity`, `mobile`, `arabic`, `rtl`, `bidi`, `shaping`, `ui`, `ios` | Unity mobile Arabic RTL text rendering, contextual glyph shaping, Lam-Alef ligatures, BiDi run grouping, and touch UI redesign |
 | 21 | [unity-mobile-locomotion-spawn-trap-and-camera-clipping.md](misc/unity-mobile-locomotion-spawn-trap-and-camera-clipping.md) | 🔴 Critical | All | `unity`, `character-controller`, `camera-clipping`, `mobile-touch`, `spherecast`, `locomotion` | Mobile character controller spawn entrapment inside scenery colliders, 3rd-person camera SphereCast face clipping collapse, and virtual touch input decoupling |
+| 22 | [odoo-app-store-assets-banners-and-manifest-specifications.md](misc/odoo-app-store-assets-banners-and-manifest-specifications.md) | 🟡 Medium | All | `app-store`, `banner`, `icon`, `manifest`, `images`, `branding`, `odoo18` | Official Odoo Apps Store asset standards: 1000x300 hero banner with 2x supersampling, 256x256 squircle icon, and manifest images array registration |
 ---
 
 ## 🔧 Quick Reference
