@@ -393,6 +393,7 @@ _No entries yet._
 | 20 | [unity-arabic-rtl-bidi-shaping-mobile-ui.md](misc/unity-arabic-rtl-bidi-shaping-mobile-ui.md) | 🔴 Critical | All | `unity`, `mobile`, `arabic`, `rtl`, `bidi`, `shaping`, `ui`, `ios` | Unity mobile Arabic RTL text rendering, contextual glyph shaping, Lam-Alef ligatures, BiDi run grouping, and touch UI redesign |
 | 22 | [odoo-app-store-assets-banners-and-manifest-specifications.md](misc/odoo-app-store-assets-banners-and-manifest-specifications.md) | 🟡 Medium | All | `app-store`, `banner`, `icon`, `manifest`, `images`, `branding`, `odoo18` | Official Odoo Apps Store asset standards: 1000x300 hero banner with 2x supersampling, 256x256 squircle icon, and manifest images array registration |
 | 23 | [unity-facial-blendshapes-and-rigid-eye-isolation.md](misc/unity-facial-blendshapes-and-rigid-eye-isolation.md) | 🟡 Medium | All | `unity`, `character-art`, `facial-rig`, `blendshapes`, `deformation`, `eye-isolation` | Unity stylized facial blendshape deformation with rigid eyeball shielding, parabolic corneal arc trajectories, and compound stress test bounds |
+| 24 | [unity-physical-mobile-performance-benchmarking-and-device-truth.md](backend/unity-physical-mobile-performance-benchmarking-and-device-truth.md) | 🟡 Medium | All | `unity`, `mobile`, `performance`, `profiling`, `ios`, `metal`, `thermal`, `battery`, `csharp` | Unity physical mobile performance benchmarking, 4-tier device hierarchy, measurement-first protocol, and Android blocked status |
 ---
 
 ## 🔧 Quick Reference
