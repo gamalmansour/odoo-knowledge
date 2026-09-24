@@ -49,6 +49,7 @@ When adding an intermediate tier like `Team Leader`:
 
 ## ⚠️ Pitfalls
 
+- **Company ID Confusion in Multi-Company Setups**: Never hardcode or assume `company_id = 2` is the main company (in this DB, ID 1 is `LXET Egypt` while ID 2 is `Franchise A`). If the matrix is created under `Franchise A` while the user, sales team, and deals belong to `LXET Egypt`, cross-company lookups may silently fall back or produce cross-company transaction lines. Always resolve the company dynamically via `user.company_id` or search by name.
 - **Do NOT omit consultants from `commission.team.hierarchy`**: Even though consultants do not earn cuts, their presence at the bottom of the hierarchy provides the termination condition (`line.user_id == self.agent_id: break`) for `_supervision_chain`.
 - **Calendar Quarter Matching**: TCR dates must fall inside the active quarter (`start_q` to `end_q`, e.g. July 1 to Sept 30 for Q3) for team TCRs to be aggregated for tier achievement.
 - **Job Matrix Mismatch**: When inserting hierarchy lines, ensure `job_matrix_id` points to the specific franchise company's matrix, not the general position or another company's matrix.
