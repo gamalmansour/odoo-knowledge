@@ -5,70 +5,95 @@
 | Category      | misc                                       |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-09-22                                 |
+| Last Verified | 2026-09-25                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `unity6`, `ios`, `il2cpp`, `xcode`, `codesign`, `provisioning_profile`, `devicectl`, `arm64`
+**Tags:** `unity6`, `ios`, `il2cpp`, `xcode`, `codesign`, `provisioning_profile`, `devicectl`, `arm64`, `exfat`, `burst`, `nativeaot`
 
 ---
 
 ## Problem
 
-When exporting and building a Unity 6 (6000.6.0f1) project targeting physical iOS devices (`iOSSdkVersion.DeviceSDK`), developers encounter two sequential blockers:
+When exporting and building a Unity 6 (6000.6.0f1) project targeting physical iOS devices (`iOSSdkVersion.DeviceSDK`), developers encounter four sequential blockers:
 
-1. **IL2CPP Segfault during Player Script Conversion:**
-   The IL2CPP conversion tool crashes with `Segmentation fault: 11` (signal 11) inside `.NET TP Worker` / `ItemsWithMetadataIndexCollectorPhaseSortSupport` when scanning unmanaged P/Invoke methods or invalid `[DllImport("__Internal")]` declarations in `Assembly-CSharp.dll`.
-2. **Missing Symbols during Xcode Linking:**
-   `UnityFramework` fails to link with:
+1. **IL2CPP Segfault during Player Script Conversion (macOS 26 / Darwin 25):**
+   The IL2CPP standalone converter crashes with `Fatal error. System.AccessViolationException` or `SIGSEGV` (signal 11) in `_sigtramp` / `GCHeap::GarbageCollect` due to .NET 8 / NativeAOT multithreaded Server GC thread suspension signals on Apple Silicon.
+2. **ExFAT AppleDouble Copy Crash in BeeBuildPostprocessor:**
+   When the project is hosted on an external ExFAT SSD, macOS creates AppleDouble (`._*`) resource fork shadow files in `Temp/BurstOutput/`. During iOS build postprocessing, Unity's `BeeBuildPostprocessor.GenerateNativePluginsForAssemblies` attempts to copy the Burst static library folder and throws:
    ```
-   Undefined symbols for architecture arm64:
-     "InitIl2CppDefaults()", referenced from: il2cpp::vm::Runtime::Init in il2cpp.a
-     "_g_CodegenRegistration", referenced from: il2cpp::vm::Runtime::Init in il2cpp.a
+   System.ArgumentException: Copy() called on path that doesnt exist: Temp/BurstOutput/DebugInformation/StaticLibraries/._lib_burst_generated.txt
+     at NiceIO.NPath.CopyWithDeterminedDestination ...
+     at UnityEditor.Modules.BeeBuildPostprocessor.GenerateNativePluginsForAssemblies ...
    ```
-3. **Physical Installation Failure via devicectl:**
+3. **Missing Symbols during Xcode Linking:**
+   `UnityFramework` fails to link if `Il2CppOutputProject/Source/il2cppOutput` C++ files are missing or incomplete.
+4. **Physical Device Launch Security Denial:**
    ```
-   ERROR: Unable to Install app (0xe8008015: A valid provisioning profile for this executable was not found.)
+   ERROR: Unable to launch com.meenysed.game because it has an invalid code signature, inadequate entitlements or its profile has not been explicitly trusted by the user. (FBSOpenApplicationErrorDomain error 3)
    ```
 
 ## Root Cause
 
-1. **Invalid iOS Managed API Assumptions:**
-   `UnityEngine.iOS.Device.thermalState` does not exist in standard Unity C# APIs. Attempting to bridge it with raw P/Invoke `[DllImport("__Internal")]` inside `Assembly-CSharp` can trigger an IL2CPP code generation bug during AST collection in Unity 6.
-2. **Missing C++ Output Source Files:**
-   When IL2CPP fails or partially exports, `Il2CppOutputProject/Source/il2cppOutput` lacks the generated C++ files (such as `Il2CppMetadataRegistration.cpp` and `Il2CppCodeRegistration.cpp`). Because these source files define the runtime codegen tables, linking `UnityFramework` against `libGameAssembly.a` fails.
-3. **Apple Provisioning Profile Expiry:**
-   Physical iOS devices strictly enforce an embedded provisioning profile (`embedded.mobileprovision`). If the Apple ID session stored in Xcode preferences has expired, automated signing (`-allowProvisioningUpdates`) fails with `Unable to log in with account ... login details were rejected`.
+1. **NativeAOT Server GC on Darwin 25:**
+   The .NET 8 NativeAOT runtime bundled with Unity 6 IL2CPP defaults to multithreaded Server GC (`gcServer=1`), which issues thread suspension signals that conflict with Darwin 25 kernel thread scheduling on Apple Silicon.
+2. **ExFAT VFS Extended Attributes Lack Native Support:**
+   ExFAT does not natively support Darwin extended attributes (xattr). The macOS kernel automatically creates AppleDouble `._*` companion files. Unity's `NiceIO.NPath` directory copy enumerates these files but standard filesystem APIs fail to open them as regular files.
+3. **First-Time Developer Profile Trust on iOS:**
+   Physical iOS devices require explicit user authorization for Free/Personal Developer team certificates before SpringBoard allows process launch.
 
 ## Solution ✅
 
-### 1. Remove Invalid APIs and Fragile DllImports
-Avoid declaring ad-hoc P/Invoke `DllImport("__Internal")` inside core game assemblies unless accompanied by an explicit Xcode plugin framework. For performance profiling, use built-in `UnityEngine.SystemInfo` properties (`batteryLevel`, `batteryStatus`, `targetFrameRate`).
-
-### 2. Verify IL2CPP C++ Source Synchronization
-Ensure `Il2CppOutputProject/Source/il2cppOutput` contains the full set of generated C++ files (~470 files). Both `iOS_Simulator` and `iOS` targets share the same IL2CPP portable C++ code for ARM64:
+### 1. Fix IL2CPP NativeAOT Server GC Crash
+Export the following environment variables before invoking Unity batchmode or IL2CPP:
 ```bash
-cp -R Builds/iOS_Simulator/Il2CppOutputProject/Source/il2cppOutput/* Builds/iOS/Il2CppOutputProject/Source/il2cppOutput/
+export DOTNET_gcServer=0
+export DOTNET_gcConcurrent=0
+export DOTNET_GCHeapHardLimit=0x200000000
+export COMPlus_gcServer=0
+export COMPlus_gcConcurrent=0
 ```
 
-### 3. Compile UnityFramework and MainApp on External Volume
-Compile using an external mounted disk (e.g. `/Volumes/XcodeDisk/DerivedData`) to prevent internal SSD exhaustion:
+### 2. Suppress Burst AOT & Clean AppleDouble Files on ExFAT
+1. Disable Burst AOT compilation for iOS by creating `ProjectSettings/BurstAotSettings_iOS.json` and `ProjectSettings/CommonBurstAotSettings.json`:
+   ```json
+   {
+     "MonoBehaviour": {
+       "Version": 5,
+       "EnableBurstCompilation": false,
+       "EnableOptimisations": false,
+       "EnableSafetyChecks": false,
+       "EnableDebugInAllBuilds": false,
+       "UsePlatformSDKLinker": false,
+       "EnableArmv9SecurityFeatures": false
+     }
+   }
+   ```
+2. Set `export COPYFILE_DISABLE=1`.
+3. In custom C# build scripts, run a background thread during `BuildPipeline.BuildPlayer` that purges any `._*` files created in `Temp/`.
+
+### 3. Archive & Package IPA via Xcode CLI
 ```bash
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
-xcrun xcodebuild \
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
   -project Builds/iOS/Unity-iPhone.xcodeproj \
-  -scheme UnityFramework \
-  -configuration ReleaseForRunning \
-  -destination "generic/platform=iOS" \
-  -derivedDataPath /Volumes/XcodeDisk/DerivedData \
-  CODE_SIGNING_ALLOWED=NO build
+  -scheme Unity-iPhone \
+  -configuration Release \
+  -destination 'generic/platform=iOS' \
+  -archivePath Builds/iOS/MeenYsed.xcarchive archive -allowProvisioningUpdates
+
+# Package into IPA
+mkdir -p /tmp/ipa/Payload
+cp -R Builds/iOS/MeenYsed.xcarchive/Products/Applications/MeenYsed-.app /tmp/ipa/Payload/
+cd /tmp/ipa && zip -qr MeenYsed_Release.ipa Payload
 ```
 
-### 4. Resolve Device Provisioning in Xcode GUI
-When automated signing fails due to expired Apple credentials:
-1. Open the project in Xcode GUI: `open -a Xcode Builds/iOS/Unity-iPhone.xcodeproj`.
-2. Go to **Settings -> Accounts** and refresh the Apple ID login (enter 2FA code).
-3. Under Target **Unity-iPhone -> Signing & Capabilities**, let Xcode automatically generate the development profile for the bundle ID.
-4. Install directly via Xcode Run button or via CLI:
-```bash
-xcrun devicectl device install app --device "<UDID>" /Volumes/XcodeDisk/DerivedData/Build/Products/ReleaseForRunning-iphoneos/MeenYsed-.app
-```
+### 4. Install & Authorize on Physical iOS Device
+1. Install via `devicectl`:
+   ```bash
+   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun devicectl device install app --device "<UDID>" MeenYsed_Release.ipa
+   ```
+2. On the physical iPhone:
+   Navigate to **Settings (الإعدادات) → General (عام) → VPN & Device Management (إدارة VPN والجهاز) → Developer App (`<Developer Email>`) → Trust (الوثوق في المطور)**.
+3. Once trusted, launch via `devicectl` or tap the icon directly on the home screen:
+   ```bash
+   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun devicectl device process launch --device "<UDID>" com.meenysed.game
+   ```
