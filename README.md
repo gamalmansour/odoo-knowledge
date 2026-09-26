@@ -321,7 +321,9 @@
 
 ### Deployment
 
-_No entries yet._
+| # | File | Severity | Versions | Tags | Description |
+|---|------|----------|----------|------|-------------|
+| 1 | [odoo-18-production-ubuntu-setup-with-nginx-and-systemd.md](deployment/odoo-18-production-ubuntu-setup-with-nginx-and-systemd.md) | 🔴 Critical | 18 | `odoo18`, `deployment`, `ubuntu`, `nginx`, `systemd`, `postgresql`, `wkhtmltopdf`, `rtlcss`, `websocket` | Complete, automated Odoo 18 Community production installation on Ubuntu 24.04/22.04 LTS with Nginx, Systemd, PostgreSQL, Wkhtmltopdf, and RTLCSS |
 
 ### Upgrade
 
