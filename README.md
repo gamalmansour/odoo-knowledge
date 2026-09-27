@@ -275,6 +275,7 @@
 | 44 | [owl-client-action-dict-key-casing-silent-ui-hide.md](views/owl-client-action-dict-key-casing-silent-ui-hide.md) | 🔴 Critical | 16, 17, 18, 19 | `owl`, `client-action`, `javascript`, `casing`, `silent-failure`, `ui-gap` | Python/JS dictionary key casing mismatch (snake_case vs camelCase) causes UI selector dropdowns in OWL Client Actions to be silently hidden |
 | 45 | [3d-building-matrix-regex-floor-collapse-and-mesh-overlap.md](views/3d-building-matrix-regex-floor-collapse-and-mesh-overlap.md) | 🔴 Critical | 16, 17, 18, 19 | `views`, `owl`, `threejs`, `webgl`, `3d`, `digital-twin`, `realestate`, `bim`, `regex` | 3D Building Matrix collapses multi-unit projects into 1 floor with 2 overlapping apartments due to prefix regex matching instead of sequential multi-floor auto-distribution |
 | 46 | [pwa-phaser-chromakey-texture-atlas-pipeline.md](frontend/pwa-phaser-chromakey-texture-atlas-pipeline.md) | 🟡 Medium | All | `pwa`, `phaser`, `chromakey`, `texture-atlas`, `3d-art`, `cache-busting` | Automated pipeline for AI 3D sprite chromakeying, despill, texture atlas packing, and service worker cache-busting in Odoo PWA games |
+| 47 | [odoo-19-search-view-group-attributes-deprecated.md](views/odoo-19-search-view-group-attributes-deprecated.md) | 🔴 Critical | 19 | `views`, `search-view`, `group-by`, `relaxng`, `odoo19` | RelaxNG validation error on search view with expand/string on group tag and unsearchable computed filters in Odoo 19 |
 
 
 
