@@ -210,6 +210,7 @@
 | 96 | [construction-seeding-field-pitfalls-dcc-qc-claims.md](orm/construction-seeding-field-pitfalls-dcc-qc-claims.md) | 🔴 Critical | 18, 19 | `construction`, `seeding`, `dcc`, `qc`, `concrete`, `claims`, `eot`, `orm` | Seeding and programmatic record creation traps: DCC engineering discipline uppercase codes, concrete cube strength calculated via crushing load in kN, and EOT claim field mapping |
 | 97 | [avoid-hardcoded-record-name-matching-use-boolean-flags.md](orm/avoid-hardcoded-record-name-matching-use-boolean-flags.md) | 🔴 Critical | All | `orm`, `anti-pattern`, `data-integrity`, `i18n`, `localization`, `boolean-flags` | Avoiding String-Hardcoded Business Logic (Name Matching Anti-Pattern) via Explicit Boolean Flags |
 | 98 | [commission-intermediate-tier-team-hierarchy-supervision.md](orm/commission-intermediate-tier-team-hierarchy-supervision.md) | 🔴 Critical | 16, 17, 18, 19 | `commission`, `hierarchy`, `supervision-cut`, `kpi`, `goal-tracker`, `brokerage`, `crm-team` | Multi-level commission hierarchy and supervision cut architecture: ordering sequence top-down, terminating supervision chain at agent, and linking intermediate managers via goal tracker team lines |
+| 99 | [one2many-empty-when-create-omits-inverse-field.md](orm/one2many-empty-when-create-omits-inverse-field.md) | 🔴 Critical | All | `orm`, `one2many`, `many2one`, `create`, `write`, `approval`, `silent-ui-gap`, `foreign-key` | One2many table renders empty when programmatic create() omits inverse Many2one field during lifecycle approval triggers |
 
 
 
