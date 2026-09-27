@@ -61,7 +61,8 @@
 
 | # | File | Severity | Versions | Tags | Description |
 |---|------|----------|----------|------|-------------|
-| 1 | [extending-selection-fields-safely.md](orm/extending-selection-fields-safely.md) | 🟡 Medium | All | `orm`, `selection`, `fields`, `inheritance` | Safely extending selection fields in Odoo without breaking original core options |
+| 1 | [odoo-19-cannot-convert-non-stored-field-to-sql-in-domain.md](orm/odoo-19-cannot-convert-non-stored-field-to-sql-in-domain.md) | 🔴 Critical | 19 | `odoo-19`, `orm`, `domain`, `non-stored`, `sale_order_count` | ValueError: Cannot convert model.field to SQL because it is not stored in action or search domain |
+| 2 | [extending-selection-fields-safely.md](orm/extending-selection-fields-safely.md) | 🟡 Medium | All | `orm`, `selection`, `fields`, `inheritance` | Safely extending selection fields in Odoo without breaking original core options |
 | 2 | [prevent-qty-moved-exceeding-qty-constraint.md](orm/prevent-qty-moved-exceeding-qty-constraint.md) | 🔴 Critical | 18 | `orm`, `constraint`, `validation`, `related-field` | Prevent qty_moved from exceeding actual qty in warehouse transactions via dynamic constraints and readonly form state |
 | 3 | [partner-outstanding-due-amount-calculation-odoo.md](orm/partner-outstanding-due-amount-calculation-odoo.md) | 🟢 Low | All | `orm`, `partner`, `due-amount`, `credit`, `debit` | Computed res.partner due_amount field and drilldown stat button to unpaid invoices |
 | 4 | [forwarding-carrier-banking-info-refund-request.md](orm/forwarding-carrier-banking-info-refund-request.md) | 🟡 Medium | 17, 18, 19 | `orm`, `refund`, `credit-note`, `carrier`, `banking` | Forwarding carrier and banking info from Sale Order to Refund Request & Credit Note |
