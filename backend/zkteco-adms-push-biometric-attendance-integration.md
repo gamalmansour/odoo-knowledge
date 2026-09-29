@@ -160,6 +160,8 @@ def _process_to_attendance(self, employee):
    In Odoo 19 search views, `<group expand="0" string="Group By">` violates RelaxNG validation. `<group>` in search views should have no attributes.
 5. **Nginx / Reverse Proxy Configuration:**
    If Odoo is behind Nginx, ensure `/iclock/` routes pass raw body without buffering timeouts and forward client IP (`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`).
+6. **Selection Method Must Accept `self`:**
+   When passing a callable to `fields.Selection(selection=func)`, Odoo's web client calls `fields_get()`, which runs `determine(selection, env[model])` passing `self` to the callable. A zero-argument function (`def _get_timezones():`) will cause `TypeError: takes 0 positional arguments but 1 was given` when loading views in the browser. Always accept `self`: `def _tz_get(self):`.
 
 ---
 
