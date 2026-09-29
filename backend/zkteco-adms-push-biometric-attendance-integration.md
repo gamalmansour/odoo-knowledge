@@ -168,6 +168,8 @@ def _process_first_last_attendance(self, employee):
    If Odoo is behind Nginx, ensure `/iclock/` routes pass raw body without buffering timeouts and forward client IP (`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`).
 6. **Selection Method Must Accept `self`:**
    When passing a callable to `fields.Selection(selection=func)`, Odoo's web client calls `fields_get()`, which runs `determine(selection, env[model])` passing `self` to the callable. A zero-argument function (`def _get_timezones():`) will cause `TypeError: takes 0 positional arguments but 1 was given` when loading views in the browser. Always accept `self`: `def _tz_get(self):`.
+7. **Odoo 19 `hr.attendance` Open Session Constraint (`_check_validity`):**
+   If an employee has an open attendance session (`check_out=False`) from an earlier date, calling `Attendance.create({'employee_id': ..., 'check_in': ...})` triggers `ValidationError`. Always defensively auto-close prior open attendances (`prior.write({'check_out': prior.check_in})`) before creating the new day's attendance record. See `backend/zkteco-offline-excel-usb-attendance-import.md` for batch handling.
 
 ---
 
