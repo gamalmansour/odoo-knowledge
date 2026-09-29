@@ -127,6 +127,12 @@ Sort all parsed rows chronologically `(pin, punch_datetime)` before evaluation. 
    Never write directly to `hr.attendance` without saving the raw punches in a staging table (`zkteco.attendance.log`). Staging logs allow HR to audit original timestamps and reprocess unmapped employees once their profile is linked.
 5. **Missing `active` Boolean on Models with `state` Selection:**
    If a model uses `state = fields.Selection([('draft', '...'), ('active', 'Active')])` and omits `active = fields.Boolean(default=True)`, any search using `('active', '=', True)` (such as in wizard defaults or standard Odoo archive domains) triggers `ValueError: Invalid field model.active in condition ('active', '=', True)`. Always declare `active = fields.Boolean(default=True)` alongside `state` and query `('state', '=', 'active')` for status checks.
+6. **Descending Sort Trap in Batch Reprocessing (`action_reprocess`):**
+   When users select all records from a tree view ordered by `punch_time desc`, the recordset is received in reverse chronological order (Day 10 before Day 9). Creating open attendances for later days causes Odoo 19's `@api.constrains('_check_validity')` to fail when earlier days are processed. Furthermore, descending order flips check-in and check-out punches.
+   **Remedy:**
+   - Always force chronological ascending sort: `self.sorted(lambda l: l.punch_time)`.
+   - Group records by `(employee, local_calendar_date)` in device timezone.
+   - For `first_last` policy, pass BOTH `check_in` and `check_out` simultaneously in the initial `Attendance.create({'check_in': ..., 'check_out': ...})` dict to bypass open-session validation conflicts completely.
 
 ---
 
