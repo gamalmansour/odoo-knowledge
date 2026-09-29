@@ -125,6 +125,8 @@ Sort all parsed rows chronologically `(pin, punch_datetime)` before evaluation. 
    ZKTeco formats timestamps with short month names like `01-Sep-26 08:30 AM`. Use `%d-%b-%y %I:%M %p` with fallback parsing for `%Y-%m-%d %H:%M:%S` and ISO 8601.
 4. **Always Provide Raw Logs:**
    Never write directly to `hr.attendance` without saving the raw punches in a staging table (`zkteco.attendance.log`). Staging logs allow HR to audit original timestamps and reprocess unmapped employees once their profile is linked.
+5. **Missing `active` Boolean on Models with `state` Selection:**
+   If a model uses `state = fields.Selection([('draft', '...'), ('active', 'Active')])` and omits `active = fields.Boolean(default=True)`, any search using `('active', '=', True)` (such as in wizard defaults or standard Odoo archive domains) triggers `ValueError: Invalid field model.active in condition ('active', '=', True)`. Always declare `active = fields.Boolean(default=True)` alongside `state` and query `('state', '=', 'active')` for status checks.
 
 ---
 
