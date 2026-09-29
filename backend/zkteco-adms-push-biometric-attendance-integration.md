@@ -107,43 +107,49 @@ class ZktecoPushController(http.Controller):
         return Response('OK\n', content_type='text/plain')
 ```
 
-### 2. Debounce & Attendance State Machine (`models/zkteco_attendance_log.py`)
+### 2. Debounce & First-In / Last-Out Access Control Policy (`models/zkteco_attendance_log.py`)
 
-Prevent rapid double-punching from closing attendance immediately after check-in:
+When biometric terminals control electronic door locks, employees punch repeatedly (e.g. 5–10 times a day) simply to open doors. The **First-In / Last-Out** policy ensures:
+- **First punch of the local day:** creates `hr.attendance` Check-In.
+- **Subsequent door opening punches:** continuously update Check-Out of the same day's record (rather than splitting attendance into fragmented micro-sessions).
+- **All individual punches:** remain preserved in `zkteco.attendance.log` for forensic audit.
 
 ```python
-def _process_to_attendance(self, employee):
-    debounce_sec = self.device_id.debounce_seconds or 60
-    threshold = self.punch_time - timedelta(seconds=debounce_sec)
+def _process_first_last_attendance(self, employee):
+    Attendance = self.env['hr.attendance']
+    device_tz = pytz.timezone(self.device_id.device_timezone or 'Africa/Cairo')
 
-    recent_punch = self.search([
-        ('id', '!=', self.id),
+    # Identify local calendar day boundaries in UTC
+    punch_utc = pytz.UTC.localize(self.punch_time) if self.punch_time.tzinfo is None else self.punch_time
+    punch_local = punch_utc.astimezone(device_tz)
+    local_date = punch_local.date()
+
+    start_local = device_tz.localize(datetime.combine(local_date, datetime.min.time()))
+    end_local = device_tz.localize(datetime.combine(local_date, datetime.max.time()))
+    start_utc = start_local.astimezone(pytz.UTC).replace(tzinfo=None)
+    end_utc = end_local.astimezone(pytz.UTC).replace(tzinfo=None)
+
+    # Search for today's existing attendance
+    day_att = Attendance.search([
         ('employee_id', '=', employee.id),
-        ('punch_time', '>=', threshold),
-        ('punch_time', '<=', self.punch_time),
-        ('state', '=', 'processed'),
-    ], limit=1)
+        ('check_in', '>=', start_utc),
+        ('check_in', '<=', end_utc),
+    ], order='check_in asc', limit=1)
 
-    if recent_punch:
-        self.write({'state': 'ignored', 'error_message': 'Debounce filtered'})
-        return
-
-    open_attendance = self.env['hr.attendance'].search([
-        ('employee_id', '=', employee.id),
-        ('check_out', '=', False),
-    ], order='check_in desc', limit=1)
-
-    if open_attendance:
-        open_attendance.write({'check_out': self.punch_time, 'out_mode': 'biometric'})
-        self.write({'state': 'processed', 'attendance_id': open_attendance.id})
-    else:
-        new_att = self.env['hr.attendance'].create({
+    if not day_att:
+        # First punch of the day: create Check-In
+        new_att = Attendance.create({
             'employee_id': employee.id,
             'check_in': self.punch_time,
             'in_mode': 'biometric',
             'zk_device_id': self.device_id.id,
         })
         self.write({'state': 'processed', 'attendance_id': new_att.id})
+    else:
+        # Subsequent punch: update Check-Out with latest time
+        if not day_att.check_out or self.punch_time >= day_att.check_out:
+            day_att.write({'check_out': self.punch_time, 'out_mode': 'biometric'})
+            self.write({'state': 'processed', 'attendance_id': day_att.id})
 ```
 
 ---
