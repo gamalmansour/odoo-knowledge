@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 15, 16, 17, 18, 19                         |
 | Severity      | 🟡 Medium                                  |
-| Last Verified | 2026-07-22                                 |
+| Last Verified | 2026-10-03                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `copy`, `sections`, `display_type`, `line_section`, `two-pass`, `data-loss`, `boq`
@@ -85,6 +85,7 @@ def _check_section_id(self):
 - **Do not "fix" that by auto-numbering on import.** BOQ ordering is the estimator's manual input; a system that renumbers 10/20/30 on every import silently overwrites a human decision. Copy `sequence` verbatim and solve grouping with `section_id`.
 - **Never fall back to the source section id.** If `line_map` has no entry for the section (stale/cross-document link), leave the item unsectioned. Writing the source id points the copy at another document's section — worse than null.
 - **A stale link is not a crash, it is silent corruption.** Nothing raises; the item just joins the wrong group. This is why the constraint matters more than the domain.
+- **Missing `widget="section_and_note_one2many"` on destination view:** Even when `display_type='line_section'` and `section_and_note_text` are correctly populated on the lines, the `<field name="boq_line_ids">` tag on the destination form view MUST declare `widget="section_and_note_one2many" mode="list"`. Without this widget, Odoo's web client falls back to the default `ListRenderer`, which ignores `display_type` and renders section headers as ordinary table rows with separate empty columns.
 - **Section rows must not carry a `section_id` of their own** — assert it in tests, or nested-section bugs appear later.
 - **Existing records need a backfill**, and the copy usually already stores the provenance (`tender_boq_line_id`), so the link is recoverable:
   ```sql
