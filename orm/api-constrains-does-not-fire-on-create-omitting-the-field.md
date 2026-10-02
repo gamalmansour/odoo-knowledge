@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | All                                        |
 | Severity      | 🟡 Medium                                  |
-| Last Verified | 2026-07-23                                 |
+| Last Verified | 2026-09-22                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `constrains`, `create`, `validation`, `required`, `related-field`, `x2many`
@@ -63,6 +63,7 @@ A draft with nothing yet is allowed; it simply cannot advance. This matches how 
 - **A green test can hide it**: any test that passes one trigger field makes the constraint fire, so the gap only shows when a test creates the record with none of them. Add exactly that test.
 - If you genuinely need save-time enforcement, override `create()`/`write()` instead — but a lifecycle gate is usually the better UX (draft can be incomplete).
 - Keep `@api.constrains` for the *edit* path (it fires fine when the user changes one of the fields) as a secondary net if you like, but never as the sole enforcement.
+- **Non-writeable / non-stored related fields in `@api.constrains` trigger Odoo 18 log warnings:** Listing an un-stored related field (such as `cost_control_mode = fields.Selection(related='project_id.profile_id.cost_control_mode')`) inside `@api.constrains(...)` triggers `WARNING odoo.models: method ... @constrains parameter 'cost_control_mode' is not writeable` and is ignored by `_validate_fields`. Constrain against the actual stored foreign keys (`project_id`, `work_order_id`) instead.
 - Don't reach for `required=True` conditionally — the DB NOT NULL is unconditional; conditional-required must be Python.
 
 ## Verification

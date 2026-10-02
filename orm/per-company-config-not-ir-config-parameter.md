@@ -5,10 +5,10 @@
 | Category      | orm                                        |
 | Odoo Versions | All                                        |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-08-26                                 |
+| Last Verified | 2026-10-01                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `orm`, `multi-company`, `ir.config_parameter`, `res.company`, `res.config.settings`, `payroll`, `gratuity`, `snapshot`, `money`, `migration`
+**Tags:** `orm`, `multi-company`, `ir.config_parameter`, `res.company`, `res.config.settings`, `payroll`, `gratuity`, `attendance`, `penalty-tiers`, `snapshot`, `money`, `migration`
 
 ---
 

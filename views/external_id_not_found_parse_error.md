@@ -3,7 +3,7 @@ title: ParseError - ValueError External ID not found (View Loading Order)
 date: 2026-06-30
 category: views
 tags: [xml, parseerror, manifest, data-order, external-id]
-odoo_versions: [15.0, 16.0, 17.0]
+odoo_versions: [15.0, 16.0, 17.0, 18.0, 19.0]
 ---
 
 # Problem ❌
@@ -39,5 +39,8 @@ Reorder the `data` array in `__manifest__.py` so that the file defining the ID i
 
 # ⚠️ Pitfalls
 - **Actions before Menus/Views:** Actions must generally be defined before the menus that trigger them, and before the views that reference them in buttons or contexts.
+- **Report Actions:** `reports/reports.xml` should be loaded before views that trigger report actions via `%(module.report_action_id)d`.
+- **Decoupling via Python Methods:** For report print buttons on form views, prefer `type="object"` calling a Python model method (`self.env.ref('...').report_action(self)`). This eliminates XML load-order fragility altogether.
 - **Security files:** `security/security_groups.xml` must almost always be loaded *before* `security/ir.model.access.csv`.
 - **Inherited Views:** If View B inherits View A within the same module, the file defining View A must appear before the file defining View B.
+
