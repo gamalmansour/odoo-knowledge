@@ -125,6 +125,7 @@ Add dynamic `required` and `invisible` attributes in the XML list/tree views, al
 2. **Display Type Lines (Sections & Notes):** In BOQ models using `display_type` for section headers and notes, always add `and not display_type` to both the Python constraint and XML `required` expression. Otherwise, section headers will trigger validation errors for missing products.
 3. **Existing Stored Data:** When changing `related=` to computed, ensure default empty strings (`""`) rather than `False` to prevent UI serialization warnings.
 4. **`widget="badge"` in Editable List Views Disables Dropdowns:** Never use `widget="badge"` on a field inside an editable list view (`<list editable="bottom">`). In Odoo's OWL web framework, `BadgeField` is a display-only formatter without an editable input template. Adding `widget="badge"` turns the field into a static pill and completely disables the dropdown menu from appearing when clicked. Use a plain `<field name="item_nature"/>` for editable selection fields.
+5. **Never Hide Child Drilldown Buttons on Parent Lines Based on `item_nature`:** Do not add `invisible="... or item_nature == 'direct'"` to the Sub-items action button (`action_open_sub_items`). Any existing parent lines whose nature defaulted to `'direct'` (or any user wishing to break down an existing line) will have their navigation button hidden. In Level 2 list views, the button must strictly be conditioned only on `invisible="parent_id != False"`.
 
 ---
 
