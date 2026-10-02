@@ -3,7 +3,7 @@
 **Category**: Development  
 **Tags**: compute, progress, boq, hierarchy  
 **Odoo Versions**: 17.0+  
-**Last Verified**: 2024-06-30
+**Last Verified**: 2026-10-02
 
 ## 📝 Problem Definition
 In a multi-level Bill of Quantities (BOQ), tracking progress at leaf nodes (Level 3) using `qty_executed / quantity` works perfectly. However, parent nodes (Levels 1 and 2) do not have a uniform unit of measure or direct quantities, meaning standard sums or averages provide inaccurate results. 
@@ -33,3 +33,8 @@ def _compute_progress_from_qty(self):
 - **Division by Zero:** Always check if `total_budget > 0` or `quantity > 0` before division.
 - **Recursive Dependency Missing:** Ensure you include `child_ids.progress_percentage` and `child_ids.budget_amount` in `@api.depends` so the parent updates automatically when a sub-item changes.
 - **Max limit:** Progress should technically not exceed 100%, hence `min(..., 100.0)`.
+- **`qty_executed` Overwrite Trap:** Never write directly to `qty_executed` in demo data or migration scripts. `qty_executed` is a computed field:
+  - For `execution_method == 'direct'`, it requires completed `project.work.order` (`quantity_executed`).
+  - For `execution_method == 'subcontract'`, it requires approved/invoiced `contract.subcontractor.invoice.line` linked via `boq_item_id`.
+  Direct assignment without these records will be wiped back to `0.0` on the next ORM recompute or flush.
+- **IPC Financial Rollup States:** In `contract.owner`, `total_billed` aggregates progress invoices where `state in ('approved', 'invoiced')`. Do NOT set custom states like `'paid'` directly on `contract.progress.invoice` because that will exclude them from the contract's billed total and project's `revenue_billed`.
