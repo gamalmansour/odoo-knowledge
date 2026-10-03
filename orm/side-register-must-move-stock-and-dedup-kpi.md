@@ -3,9 +3,9 @@
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
 | Category      | orm                                        |
-| Odoo Versions | All (verified on 17)                       |
+| Odoo Versions | All (verified on 17, 18)                  |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-07-02                                 |
+| Last Verified | 2026-10-03                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `stock`, `stock.scrap`, `kpi`, `double-counting`, `state-machine`, `anti-tamper`, `valuation`
