@@ -59,6 +59,8 @@
 | 24 | [unaccent-schema-insufficient-privilege.md](database/unaccent-schema-insufficient-privilege.md) | 🔴 Critical | All | `database`, `unaccent`, `unaccent_schema`, `permissions`, `insufficient-privilege`, `psycopg2`, `assets` | Asset regeneration or unlinking attachments fails with InsufficientPrivilege for unaccent_schema — grant odoo superuser and transfer schema and function ownership |
 | 25 | [cids-cookie-format-conflict-odoo17-odoo18.md](setup/cids-cookie-format-conflict-odoo17-odoo18.md) | 🔴 Critical | 17, 18 | `cookie`, `multi-instance`, `localhost`, `cids`, `web_studio`, `odoo18`, `odoo17`, `valueerror` | Cookie cids conflict between Odoo 18 (hyphens) and Odoo 17 (commas) causes ValueError in web_studio load_menus — clear cookie, use 127.0.0.1, or patch parser |
 | 26 | [cloned-db-template-missing-filestore-white-screen.md](setup/cloned-db-template-missing-filestore-white-screen.md) | 🔴 Critical | All | `database`, `cloning`, `createdb`, `filestore`, `white-screen`, `assets`, `500` | After createdb -T template new_db, missing filestore causes 500 FileNotFoundError on JS/CSS assets resulting in blank white screen — copy filestore folder to match new DB name |
+| 27 | [company-custody-accounting-config-and-employee-partner-deadlock.md](setup/company-custody-accounting-config-and-employee-partner-deadlock.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `custody`, `accounting`, `res.company`, `hr.employee`, `work_contact_id`, `deadlock` | Missing custody account/journal config in clean install plus decoupled employee partner causes UserError deadlock on custody payment/settlement |
+
 
 
 ### ORM
