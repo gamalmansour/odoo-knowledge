@@ -431,6 +431,8 @@
 | 23 | [unity-facial-blendshapes-and-rigid-eye-isolation.md](misc/unity-facial-blendshapes-and-rigid-eye-isolation.md) | 🟡 Medium | All | `unity`, `character-art`, `facial-rig`, `blendshapes`, `deformation`, `eye-isolation` | Unity stylized facial blendshape deformation with rigid eyeball shielding, parabolic corneal arc trajectories, and compound stress test bounds |
 | 24 | [unity-physical-mobile-performance-benchmarking-and-device-truth.md](backend/unity-physical-mobile-performance-benchmarking-and-device-truth.md) | 🟡 Medium | All | `unity`, `mobile`, `performance`, `profiling`, `ios`, `metal`, `thermal`, `battery`, `csharp` | Unity physical mobile performance benchmarking, 4-tier device hierarchy, measurement-first protocol, and Android blocked status |
 | 25 | [zatca-warning-br-ksa-f-08-crn-scheme.md](misc/zatca-warning-br-ksa-f-08-crn-scheme.md) | 🟡 Medium | 16, 17, 18, 19 | `zatca`, `l10n_sa_edi`, `e-invoicing`, `saudi-arabia`, `br-ksa-f-08`, `crn`, `vat`, `warning`, `bt-29`, `bt-46` | ZATCA returns warning [BR-KSA-F-08] because 15-digit VAT was entered in Identification Number (SA) under CRN scheme instead of 10-digit Commercial Registration number |
+| 26 | [odoo-sitemap-arabic-encoding-gsc-could-not-be-read.md](misc/odoo-sitemap-arabic-encoding-gsc-could-not-be-read.md) | 🔴 Critical | All | `seo`, `sitemap`, `gsc`, `google-search-console`, `encoding`, `arabic`, `url-encode`, `ir.attachment` | Odoo sitemap.xml fails in Google Search Console with 'Sitemap could not be read' due to unencoded Arabic URLs in loc tags |
+
 ---
 
 ## 🔧 Quick Reference
