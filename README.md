@@ -298,6 +298,8 @@
 | 47 | [odoo-19-search-view-group-attributes-deprecated.md](views/odoo-19-search-view-group-attributes-deprecated.md) | 🔴 Critical | 19 | `views`, `search-view`, `group-by`, `relaxng`, `odoo19` | RelaxNG validation error on search view with expand/string on group tag and unsearchable computed filters in Odoo 19 |
 | 48 | [removed-field-causes-view-validation-parseerror-chicken-egg.md](views/removed-field-causes-view-validation-parseerror-chicken-egg.md) | 🔴 Critical | All | `views`, `ParseError`, `manifest`, `load-order`, `field-removal`, `ir.ui.view`, `validation`, `chicken-and-egg` | Removing a field from Python and XML leaves stale inherited views in DB; earlier manifest XML files validating that model fail with "Field does not exist" before the updated XML file is reached (chicken-and-egg validation deadlock) |
 | 49 | [odoo-website-menu-hierarchy-ghost-cleanup.md](views/odoo-website-menu-hierarchy-ghost-cleanup.md) | 🟡 Medium | 16, 17, 18, 19 | `website`, `menu`, `website.menu`, `slides`, `forum`, `navigation`, `cro`, `b2b` | Odoo Website Menu Hierarchy & Ghost Menu Cleanup (Slides, Forum, Support) for High-Converting B2B Portals |
+| 50 | [odoo-qweb-lxml-empty-script-tag-auto-closing-syntax-error.md](views/odoo-qweb-lxml-empty-script-tag-auto-closing-syntax-error.md) | 🔴 Critical | All | `views`, `qweb`, `xml`, `lxml`, `script`, `syntaxerror`, `frontend`, `toast`, `self-closing` | Empty script tags collapsed by lxml to self-closing <script/> tags causing HTML5 parser SyntaxError on page transitions |
+
 
 
 
