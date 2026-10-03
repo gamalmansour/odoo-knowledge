@@ -86,8 +86,9 @@ def _check_section_id(self):
 - **Never fall back to the source section id.** If `line_map` has no entry for the section (stale/cross-document link), leave the item unsectioned. Writing the source id points the copy at another document's section — worse than null.
 - **A stale link is not a crash, it is silent corruption.** Nothing raises; the item just joins the wrong group. This is why the constraint matters more than the domain.
 - **Missing `widget="section_and_note_one2many"` on destination view:** Even when `display_type='line_section'` and `section_and_note_text` are correctly populated on the lines, the `<field name="boq_line_ids">` tag on the destination form view MUST declare `widget="section_and_note_one2many" mode="list"`. Without this widget, Odoo's web client falls back to the default `ListRenderer`, which ignores `display_type` and renders section headers as ordinary table rows with separate empty columns.
+- **Section lines in execution models must clear execution flags:** When sections exist in execution models like `project.boq.item`, rows with `display_type='line_section'` must have `execution_method=False`, `quantity=0.0`, `unit_price=0.0`, and `budget_amount=0.0`. Leaving `execution_method='direct'` on a section row can cause work-order generation or EVM progress engines to treat section headers as executable work packages.
 - **Section rows must not carry a `section_id` of their own** — assert it in tests, or nested-section bugs appear later.
-- **Existing records need a backfill**, and the copy usually already stores the provenance (`tender_boq_line_id`), so the link is recoverable:
+- **Existing records need a backfill**, and the copy usually already stores the provenance (`tender_boq_line_id` or `contract_boq_line_id`), so the link is recoverable:
   ```sql
   -- COUNT FIRST, never write straight to a customer DB
   select c.contract_id, count(*) from contract_boq_line c
@@ -98,12 +99,13 @@ def _check_section_id(self):
 ## Verification
 
 ```bash
-./odoo-bin -c odoo17_dev.conf -d <db> -u construction_contract --test-enable --stop-after-init
+./odoo-bin -c odoo18_con.conf -d <db> -u construction_project --test-enable --stop-after-init
 ```
 
 Assert on the *shape*, not just the counts: line count, section count, every item's `section_id` resolving inside the new document, `display_type='line_section'` on the target, unsectioned items staying unsectioned, and `sequence` copied verbatim.
 
 ## References
 
-- Implemented in `construction_contract` v17.0.1.7.0 — `models/contract_boq_line.py`, `models/tender_opportunity.py` (`_import_boq_to_contract`), `views/contract_boq_views.xml`, `tests/test_boq_section_transfer.py` (8 tests)
+- Implemented in `construction_contract` v18.0 — `models/contract_boq_line.py`, `models/tender_opportunity.py` (`_import_boq_to_contract`), `views/contract_owner_views.xml`, `tests/test_boq_section_transfer.py`
+- Extended to `construction_project` v18.0.1.32.0 — `models/project_boq_item.py` (`section_id`), `wizard/create_project_wizard.py`, `models/construction_project.py` (`action_import_boq_from_contract`), `views/construction_project_views.xml`, `tests/test_boq_section_handover.py`
 - Related file: `orm/carry-register-across-lifecycle-stages.md` — same cross-module `create()`-copy shape, for risk registers
