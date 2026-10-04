@@ -63,6 +63,7 @@
 | 28 | [bank-guarantee-accounting-defaults-and-lifecycle-entries.md](setup/bank-guarantee-accounting-defaults-and-lifecycle-entries.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `bank-guarantees`, `letters-of-guarantee`, `accounting`, `res.company`, `res.config.settings`, `demo-data` | Missing Bank Guarantees accounts and journal defaults in settings cause UserError crash on activation, release, or forfeiture |
 | 29 | [hse-bbs-observations-seeding-and-capa-linkage.md](setup/hse-bbs-observations-seeding-and-capa-linkage.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `bbs`, `observations`, `capa`, `demo-data`, `mail.activity.mixin` | BBS observations empty screen in clean DBs, default unsafe filter hiding safe acts, and missing CAPA action smart button linkage |
 | 30 | [subcontractor_penalties_ipc_coupling.md](setup/subcontractor_penalties_ipc_coupling.md) | 🟡 Medium | 17, 18, 19 | `hse`, `subcontractor`, `penalty`, `ipc`, `deductions`, `financials` | HSE Subcontractor Penalties and IPC Billing Coupling: Config gate, draft IPC domain, and reversible safety deduction lifecycle |
+| 31 | [hse-risk-assessment-matrix-and-capa-actions.md](setup/hse-risk-assessment-matrix-and-capa-actions.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `risk-assessment`, `matrix`, `capa`, `demo-data`, `smart-button` | Risk assessments empty screen, 5x5 matrix boundaries, CAPA actions smart button linkage, and workflow safeguards |
 
 
 
