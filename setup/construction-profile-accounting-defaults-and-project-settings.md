@@ -88,8 +88,12 @@ profiles.write({
 1. **Domain Restrictions on Profile Fields**:
    - `account_labor_cost_id`, `account_equipment_cost_id`, `account_material_cost_id` enforce `[('account_type', '=', 'expense')]`. Setting them to `expense_direct_cost` in certain Odoo versions triggers a domain violation in the UI unless `account_type` matches `'expense'`.
    - `account_advance_id` and `account_retention_id` strictly disallow `asset_receivable` and `liability_payable` because Odoo's payment term reconciler swallows deduction lines on progress invoices, causing unexplained invoice imbalance.
-2. **Project Inheritance**:
-   When projects are created, ensure they are linked to a profile (`project.profile_id`), otherwise project-level defaulting falls back to empty values.
+2. **Project and Contract Inheritance**:
+   When projects and contracts are created, ensure they are linked to a profile (`project.profile_id`, `contract.profile_id`). `contract.advance.receipt.action_post()` specifically checks `rec.contract_id.profile_id.account_advance_id`; if empty, it raises `UserError: Please assign a Construction Profile to the contract`.
+3. **COGS and WHT Account Configuration (`account_cogs_id`, `account_wht_id`)**:
+   `project.wip.recognition.wizard` requires `profile.account_cogs_id` (e.g. `400090` - `expense_direct_cost` for IFRS 15 Contract COGS) to transfer WIP to COGS. Subcontractor progress billing requires `profile.account_wht_id` (e.g. `201020` - `liability_current` for Withholding Tax 1% compliance). Both must be configured on the profile.
+4. **Lump Sum Contract IPC Billing via `current_pct` (Not `current_qty`)**:
+   On `contract.progress.invoice.line`, if `billing_method == 'lump_sum'`, `current_amount` is calculated as `(current_pct / 100.0) * line_value`. Setting `current_qty` on a lump-sum line leaves `current_amount = 0.0` and creates empty zero-amount customer invoices. Always update `current_pct` for lump sum contracts.
 
 ---
 
@@ -98,6 +102,7 @@ profiles.write({
 In Odoo Shell:
 ```python
 for p in env['construction.profile'].search([]):
+    assert p.account_wip_id and p.account_cogs_id and p.account_wht_id, f"Incomplete accounts on {p.name}"
     assert p.journal_construction_cost_id
     assert p.account_wip_id
     assert p.account_material_cost_id
