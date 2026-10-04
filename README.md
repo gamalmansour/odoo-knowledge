@@ -249,6 +249,8 @@
 | 107 | [cpm-schedule-network-cycles-and-tracking-guard.md](orm/cpm-schedule-network-cycles-and-tracking-guard.md) | 🟡 Medium | 16, 17, 18, 19 | `orm`, `project`, `schedule`, `cpm`, `kahn-algorithm`, `topological-sort`, `mail-thread`, `tracking`, `cycle-detection` | Critical Path Method (CPM) Network Dependency Integrity, topological sorting cycle detection, and mail.thread inheritance guard for tracking attributes |
 | 108 | [multi-item-work-order-resource-plan-aggregation.md](orm/multi-item-work-order-resource-plan-aggregation.md) | 🔴 Critical | 17, 18, 19 | `orm`, `construction`, `work-order`, `multi-item`, `resource-plan`, `compute`, `boq` | Aggregating actual execution costs and quantities for project resource plans across both header BOQ items and tabbed multi-item work order lines |
 | 109 | [construction-p2p-requisition-po-grn-store-issue-accounting-flow.md](orm/construction-p2p-requisition-po-grn-store-issue-accounting-flow.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `p2p`, `material-requisition`, `purchase`, `stock-picking`, `vendor-bill`, `store-issue`, `accounting`, `boq`, `odoo18` | Construction Material Requisition end-to-end P2P and site store issue cycle: automated PO vendor selection rule, Odoo 18 storable product real-time vs direct billing accounting paths, and distributed BOQ cost rollup |
+| 110 | [cron-batch-savepoint-infailedsqltransaction.md](orm/cron-batch-savepoint-infailedsqltransaction.md) | 🔴 Critical | All | `ir.cron`, `transaction`, `savepoint`, `InFailedSqlTransaction`, `batch-processing`, `unique-violation`, `webhook` | Scheduled action batch processing aborts with psycopg2 InFailedSqlTransaction when unhandled SQL error poisons Postgres transaction without savepoints |
+
 
 
 
