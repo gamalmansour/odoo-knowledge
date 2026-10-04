@@ -5,7 +5,7 @@
 | Category      | views                                      |
 | Odoo Versions | 18                                         |
 | Severity      | 🔴 Critical                                 |
-| Last Verified | 2026-09-17                                 |
+| Last Verified | 2026-10-04                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `res.config.settings`, `owl`, `settings-app`, `invalid-props`, `compiler`, `migration-v18`
@@ -73,6 +73,7 @@ After modifying the XML, upgrade the module to reload the view:
 
 - Even if the broken `<app>` tag belongs to another module (e.g. multi-channel integration), opening ANY settings page (General Settings, POS Settings, Sale Settings) will fail because `res.config.settings` combines all installed apps into one global form view.
 - Never add custom attributes to `<app>` tags that are not part of `SettingsApp.props` (`string`, `imgurl`, `name`/`key`, `notApp`).
+- **Restored Database Dumps:** When restoring a database dump from an older backup, `ir_ui_view` may still contain the stale `<app class="...">` tag even if the files on disk were already edited. You must execute `./odoo-bin -c odoo.conf -d <dbname> -u <module_name> --stop-after-init` after restoring the database to flush the corrected XML into `ir_ui_view`.
 
 ## Verification
 
