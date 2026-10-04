@@ -66,6 +66,7 @@
 | 31 | [hse-risk-assessment-matrix-and-capa-actions.md](setup/hse-risk-assessment-matrix-and-capa-actions.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `risk-assessment`, `matrix`, `capa`, `demo-data`, `smart-button` | Risk assessments empty screen, 5x5 matrix boundaries, CAPA actions smart button linkage, and workflow safeguards |
 | 32 | [hse-method-statements-approval-deadlock-and-swms.md](setup/hse-method-statements-approval-deadlock-and-swms.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `method-statement`, `swms`, `approval-mixin`, `deadlock`, `risk-assessment`, `smart-button` | Method statements empty screen in clean DBs, approval.mixin deadlock when approval_status is none, and SWMS risk assessment coupling |
 | 33 | [hse-inspections-and-audits-empty-screen-and-capa.md](setup/hse-inspections-and-audits-empty-screen-and-capa.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `inspection`, `audit`, `checklist`, `capa`, `demo-data`, `smart-button`, `context-filter` | Inspections & audits empty screen in clean DBs, restrictive my_inspections default filter, and missing CAPA smart button linkage |
+| 34 | [hse-training-sessions-and-certifications-lifecycle.md](setup/hse-training-sessions-and-certifications-lifecycle.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `training`, `sessions`, `certifications`, `sequence`, `smart-button`, `relativedelta` | Training courses, sessions, and certifications empty screen, missing CERT sequence, and audit traceability link |
 
 
 
