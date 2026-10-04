@@ -68,6 +68,7 @@
 | 33 | [hse-inspections-and-audits-empty-screen-and-capa.md](setup/hse-inspections-and-audits-empty-screen-and-capa.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `inspection`, `audit`, `checklist`, `capa`, `demo-data`, `smart-button`, `context-filter` | Inspections & audits empty screen in clean DBs, restrictive my_inspections default filter, and missing CAPA smart button linkage |
 | 34 | [hse-training-sessions-and-certifications-lifecycle.md](setup/hse-training-sessions-and-certifications-lifecycle.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `training`, `sessions`, `certifications`, `sequence`, `smart-button`, `relativedelta` | Training courses, sessions, and certifications empty screen, missing CERT sequence, and audit traceability link |
 | 35 | [hse-ppe-issuances-catalog-and-replacement-tracking.md](setup/hse-ppe-issuances-catalog-and-replacement-tracking.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `ppe`, `issuance`, `catalog`, `lifespan`, `replacement`, `mail.activity.mixin`, `smart-button` | PPE issuances empty screen, catalog menu visibility, equipment lifespan replacement calculation, and defensive validation |
+| 36 | [hse-kpi-engine-safe-manhours-and-cron-fix.md](setup/hse-kpi-engine-safe-manhours-and-cron-fix.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `kpi`, `dashboard`, `cron`, `ltifr`, `trir`, `safe-man-hours`, `search-view` | HSE KPI Engine empty records, cron search state='active' fix, dedicated search view, and safe man-hours leading indicators |
 
 
 
