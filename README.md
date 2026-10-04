@@ -307,6 +307,7 @@
 | 50 | [odoo-qweb-lxml-empty-script-tag-auto-closing-syntax-error.md](views/odoo-qweb-lxml-empty-script-tag-auto-closing-syntax-error.md) | 🔴 Critical | All | `views`, `qweb`, `xml`, `lxml`, `script`, `syntaxerror`, `frontend`, `toast`, `self-closing` | Empty script tags collapsed by lxml to self-closing <script/> tags causing HTML5 parser SyntaxError on page transitions |
 | 51 | [odoo-website-faq-accordion-details-and-faqpage-schema.md](views/odoo-website-faq-accordion-details-and-faqpage-schema.md) | 🟢 Low | All | `seo`, `schema`, `faq`, `faqpage`, `rich-snippets`, `website`, `qweb`, `details` | Native HTML5 zero-JS FAQ accordions and FAQPage schema injection for Google SERP rich snippet expansion |
 | 52 | [odoo18-enterprise-gantt-empty-date-window-and-scale-gotchas.md](views/odoo18-enterprise-gantt-empty-date-window-and-scale-gotchas.md) | 🔴 Critical | 16, 17, 18, 19 | `views`, `gantt`, `web_gantt`, `enterprise`, `dates`, `scales`, `empty-view` | Enterprise web_gantt renders empty canvas when focusDate (Today) falls outside record dates, plus non-standard scales like quarter drop silently |
+| 53 | [odoo-website-smooth-scroll-selector-hash-syntax-error.md](views/odoo-website-smooth-scroll-selector-hash-syntax-error.md) | 🔴 Critical | All | `website`, `javascript`, `querySelector`, `oauth`, `syntaxerror`, `smooth-scroll` | Website Smooth-Scroll querySelector '#' SyntaxError on Empty Anchor or OAuth Redirect |
 
 
 
