@@ -62,6 +62,7 @@
 | 27 | [company-custody-accounting-config-and-employee-partner-deadlock.md](setup/company-custody-accounting-config-and-employee-partner-deadlock.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `custody`, `accounting`, `res.company`, `hr.employee`, `work_contact_id`, `deadlock` | Missing custody account/journal config in clean install plus decoupled employee partner causes UserError deadlock on custody payment/settlement |
 | 28 | [bank-guarantee-accounting-defaults-and-lifecycle-entries.md](setup/bank-guarantee-accounting-defaults-and-lifecycle-entries.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `bank-guarantees`, `letters-of-guarantee`, `accounting`, `res.company`, `res.config.settings`, `demo-data` | Missing Bank Guarantees accounts and journal defaults in settings cause UserError crash on activation, release, or forfeiture |
 | 29 | [hse-bbs-observations-seeding-and-capa-linkage.md](setup/hse-bbs-observations-seeding-and-capa-linkage.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `hse`, `safety`, `bbs`, `observations`, `capa`, `demo-data`, `mail.activity.mixin` | BBS observations empty screen in clean DBs, default unsafe filter hiding safe acts, and missing CAPA action smart button linkage |
+| 30 | [subcontractor_penalties_ipc_coupling.md](setup/subcontractor_penalties_ipc_coupling.md) | 🟡 Medium | 17, 18, 19 | `hse`, `subcontractor`, `penalty`, `ipc`, `deductions`, `financials` | HSE Subcontractor Penalties and IPC Billing Coupling: Config gate, draft IPC domain, and reversible safety deduction lifecycle |
 
 
 
