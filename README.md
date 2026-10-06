@@ -411,6 +411,7 @@
 | 18 | [odoo19-leave-type-requires-allocation-boolean.md](upgrade/odoo19-leave-type-requires-allocation-boolean.md) | 🟡 Medium | 19 | `upgrade`, `hr_holidays`, `hr.leave.type`, `requires_allocation`, `boolean` | hr.leave.type.requires_allocation reverted from Selection ('yes'/'no') to Boolean in Odoo 19; truthy string 'no' evaluates to True |
 | 19 | [odoo19-hr-version-payroll-contract-lifecycle.md](upgrade/odoo19-hr-version-payroll-contract-lifecycle.md) | 🔴 Critical | 19 | `upgrade`, `odoo19`, `hr.version`, `hr.contract`, `hr_payroll`, `payslip`, `attendance`, `penalties` | Odoo 19 replaced hr.contract with hr.version: auto-initialization traps, unique date_version constraint, payslip contract_date_start requirement, and anti-duplicate deduction lifecycle |
 | 20 | [odoo19-stock-move-name-field-removal.md](upgrade/odoo19-stock-move-name-field-removal.md) | 🔴 Critical | 19 | `upgrade`, `odoo19`, `stock`, `stock.move`, `migration`, `tests` | stock.move 'name' field removed in Odoo 19 causing ValueError on create/write; replaced by product_id display_name and description_picking |
+| 21 | [data-merge-rule-unique-constraint-upgrade-failure.md](upgrade/data-merge-rule-unique-constraint-upgrade-failure.md) | 🔴 Critical | 16, 17, 18, 19 | `upgrade`, `base`, `data_cleaning`, `data_merge`, `unique-constraint`, `ir_model_data`, `psycopg2` | Fix PostgreSQL UniqueViolation on data_merge_rule (data_merge_rule_uniq_model_id_field_id) during base/data_cleaning upgrade caused by unlinked ir_model_data records |
 
 
 ### Best Practices
