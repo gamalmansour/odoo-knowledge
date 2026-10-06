@@ -254,7 +254,7 @@
 | 111 | [ecommerce-webhook-tax-extraction-and-fallback.md](orm/ecommerce-webhook-tax-extraction-and-fallback.md) | 🔴 Critical | 16, 17, 18, 19 | `webhook`, `ecommerce`, `salla`, `order.feed`, `taxes`, `vat`, `channel.account.mappings`, `silent-zero` | E-commerce webhook orders arriving with 0% tax due to dictionary ternary bug in vendor fetch_data and destructive tax wiping in order.feed |
 | 112 | [pos-kit-phantom-bom-stock-move-missingerror-unlink.md](orm/pos-kit-phantom-bom-stock-move-missingerror-unlink.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `pos`, `mrp`, `kit`, `phantom-bom`, `stock.move`, `_action_confirm`, `MissingError`, `unlink` | POS Kit sale rolls back with MissingError on stock.move because phantom BoM explosion unlinks the parent move while subclass overrides iterate on unlinked self |
 | 113 | [ecommerce-webhook-sku-first-product-matching.md](orm/ecommerce-webhook-sku-first-product-matching.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `webhook`, `ecommerce`, `salla`, `order.feed`, `sku`, `default_code`, `product.product`, `channel.product.mappings`, `variant-mismatch` | E-commerce webhook orders picking the wrong product variant due to stale template store ID mapping — enforcing strict SKU-first matching priority |
-
+| 114 | [global-discount-wizard-negative-lines-aggregation.md](orm/global-discount-wizard-negative-lines-aggregation.md) | 🔴 Critical | 17, 18, 19 | `sale`, `discount`, `sale_order_discount`, `wizard`, `negative-lines`, `aggregation`, `is_downpayment` | Odoo 17+ global discount wizard creates negative price lines with discount=0; custom order-level discount aggregators must aggregate both line discounts and global discount lines while excluding down payments |
 
 
 
