@@ -77,6 +77,8 @@
 | 42 | [construction-profile-accounting-defaults-and-project-settings.md](setup/construction-profile-accounting-defaults-and-project-settings.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `construction`, `construction_profile`, `accounting`, `wip`, `costing`, `revenue_recognition`, `journals`, `chart_of_accounts`, `odoo18` | Construction profile accounting defaults and project settings: decoupled CoA XML initialization, automated IFRS/Egyptian CoA mapping, and domain restriction safeguards |
 | 43 | [pos_default_receivable_account_misconfiguration.md](setup/pos_default_receivable_account_misconfiguration.md) | 🔴 Critical | 16, 17, 18, 19 | `pos`, `accounting`, `receivable`, `reconciliation`, `zatca`, `point_of_sale` | POS default receivable account misconfiguration hanging POS receivable account and corrupting VAT lines |
 | 44 | [odoo19-alias-domain-catchall-bounce-resolution.md](setup/odoo19-alias-domain-catchall-bounce-resolution.md) | 🔴 Critical | 17, 18, 19 | `setup`, `email`, `mail.alias.domain`, `catchall`, `reply-to`, `bounce`, `microsoft-365`, `odoo19` | Odoo 19 Alias Domain stale catchall resolution: decoupling stale alias domain from res.company to prevent mail delivery bounce errors |
+| 45 | [odoo20-installation-and-environment-setup-macos.md](setup/odoo20-installation-and-environment-setup-macos.md) | 🔴 Critical | 20.0 | `odoo20`, `setup`, `macos`, `apple-silicon`, `python3.12`, `enterprise` | Odoo 20.0 Environment setup, Homebrew Python 3.12 venv, Apple Silicon ARM64 wheels, addons path validation, and config compatibility |
+
 
 
 
