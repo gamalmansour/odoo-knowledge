@@ -159,6 +159,20 @@ class TestVersionOntologyBoundaryCases(unittest.TestCase):
                     f"Exotic ontology mismatch for '{spec}' with target={q_v}: expected {expected}, got {actual}",
                 )
 
+    def test_matches_version_invalid_target_version_returns_false(self):
+        """Tier 2: Unparseable version strings must evaluate to False."""
+        rule_discrete = parse_version_rule("16, 17, 18, 19")
+        self.assertFalse(matches_version(rule_discrete, "abc"))
+        self.assertFalse(matches_version(rule_discrete, "invalid"))
+        self.assertFalse(matches_version(rule_discrete, "v_unknown"))
+
+        rule_all = parse_version_rule("All")
+        self.assertFalse(matches_version(rule_all, "abc"))
+        self.assertFalse(matches_version(rule_all, "xyz"))
+
+        rule_range = parse_version_rule("19.0 - 20.0")
+        self.assertFalse(matches_version(rule_range, "abc"))
+
 
 @unittest.skipIf(parse_version_rule is None, "tools.kb_query is not yet implemented (Milestone 2)")
 class TestVersionOntologyCorpusAcceptance(unittest.TestCase):

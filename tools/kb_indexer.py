@@ -556,24 +556,8 @@ def index_all(
 
     total_files = len(disk_map)
 
-    # If force rebuild, remove existing db file if present
-    if force and db_path.exists():
-        con_temp = None
-        try:
-            # Check if active connection before removing
-            db_path.unlink()
-            for ext in ("-wal", "-shm"):
-                p_extra = db_path.parent / (db_path.name + ext)
-                if p_extra.exists():
-                    p_extra.unlink()
-        except OSError:
-            pass
-
     con = init_db(db_path)
     cur = con.cursor()
-
-    cur.execute("SELECT file_path, mtime FROM kb_entries")
-    db_records = dict(cur.fetchall())
 
     to_index: List[str] = []
     to_delete: List[str] = []
@@ -581,9 +565,12 @@ def index_all(
     if force:
         # Re-index all files
         to_index = list(disk_map.keys())
-        to_delete = [p for p in db_records if p not in disk_map]
+        to_delete = []
     else:
         # Incremental check
+        cur.execute("SELECT file_path, mtime FROM kb_entries")
+        db_records = dict(cur.fetchall())
+
         for rel_p, mt in disk_mtimes.items():
             if rel_p not in db_records or mt != db_records[rel_p]:
                 to_index.append(rel_p)
@@ -596,8 +583,15 @@ def index_all(
     deleted_count = len(to_delete)
 
     # Perform updates in a single batch transaction
-    if to_index or to_delete:
-        con.execute("BEGIN TRANSACTION")
+    if to_index or to_delete or force:
+        con.execute("BEGIN IMMEDIATE")
+
+        # When force rebuilding, safely truncate tables within transaction
+        # rather than unlinking DB files from disk, preserving open readers
+        # and WAL shared-memory mapping.
+        if force:
+            cur.execute("DELETE FROM kb_entries")
+            cur.execute("DELETE FROM kb_metadata")
 
         # Delete removed files
         for rel_p in to_delete:

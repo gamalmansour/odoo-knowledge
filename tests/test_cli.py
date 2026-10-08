@@ -135,6 +135,47 @@ class TestCLIBoundaryCases(unittest.TestCase):
         data = json.loads(res.stdout)
         self.assertIn("results", data)
 
+    def test_cli_invalid_version_returns_zero_hits_without_leaking_legacy(self):
+        """Tier 2: CLI search with -v abc returns zero hits across JSON and compact formats, and boolean queries exit 0."""
+        # JSON format
+        res_json = self.run_cli(["orm", "-v", "abc", "--format", "json"])
+        self.assertEqual(res_json.returncode, 0, f"CLI exited with {res_json.returncode}: {res_json.stderr}")
+        data = json.loads(res_json.stdout)
+        self.assertEqual(data["total_hits"], 0)
+        self.assertEqual(len(data["results"]), 0)
+
+        # Compact format
+        res_compact = self.run_cli(["orm", "-v", "abc", "-f", "compact"])
+        self.assertEqual(res_compact.returncode, 0)
+        self.assertIn("[No results found for 'orm']", res_compact.stdout)
+        self.assertNotIn("testing_compute_fields.md", res_compact.stdout)
+
+        # Standalone boolean operators exit 0 without tracebacks
+        for op in ("AND", "OR", "NOT"):
+            with self.subTest(op=op):
+                res = self.run_cli([op])
+                self.assertEqual(res.returncode, 0, f"CLI crashed on {op} with stderr: {res.stderr}")
+                self.assertNotIn("Traceback", res.stderr)
+                self.assertNotIn("Traceback", res.stdout)
+                self.assertNotIn("sqlite3.OperationalError", res.stderr)
+
+        # Leading, trailing, and consecutive booleans exit 0 without tracebacks
+        queries = [
+            "security AND",
+            "AND security",
+            "security OR",
+            "OR security",
+            "security NOT",
+            "NOT security",
+            "security AND AND access",
+        ]
+        for q in queries:
+            with self.subTest(query=q):
+                res = self.run_cli([q])
+                self.assertEqual(res.returncode, 0, f"CLI crashed on '{q}': {res.stderr}")
+                self.assertNotIn("Traceback", res.stderr)
+                self.assertNotIn("Traceback", res.stdout)
+
 
 class TestKBLauncherScript(unittest.TestCase):
     """Tier 1 & 4: Executable Launcher Script (./kb)."""

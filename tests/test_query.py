@@ -111,6 +111,65 @@ class TestQuerySanitizerBoundaryCases(unittest.TestCase):
                         self.fail(f"FTS5 syntax error on input '{inp}' -> sanitized '{sanitized}': {e}")
         conn.close()
 
+    def test_sanitize_standalone_boolean_operators(self):
+        """Tier 2: Standalone boolean operators must be safely escaped."""
+        for op in ("AND", "OR", "NOT", "and", "or", "not"):
+            with self.subTest(op=op):
+                sanitized = sanitize_fts5_query(op)
+                self.assertNotIn(sanitized.strip(), ("AND", "OR", "NOT"))
+                # Verify valid in SQLite FTS5
+                conn = sqlite3.connect(":memory:")
+                conn.execute("CREATE VIRTUAL TABLE t USING fts5(c);")
+                try:
+                    conn.execute("SELECT * FROM t WHERE t MATCH ?", (sanitized,))
+                except sqlite3.OperationalError as e:
+                    self.fail(f"FTS5 syntax error for standalone operator '{op}' -> '{sanitized}': {e}")
+                finally:
+                    conn.close()
+
+    def test_sanitize_leading_and_trailing_boolean_operators(self):
+        """Tier 2: Trailing and leading boolean operators must not trigger FTS5 syntax errors."""
+        cases = [
+            "security AND",
+            "security OR",
+            "security NOT",
+            "AND security",
+            "OR security",
+            "NOT security",
+            "  AND security  ",
+            "security AND   ",
+        ]
+        conn = sqlite3.connect(":memory:")
+        conn.execute("CREATE VIRTUAL TABLE t USING fts5(c);")
+        for inp in cases:
+            with self.subTest(raw_input=inp):
+                sanitized = sanitize_fts5_query(inp)
+                try:
+                    conn.execute("SELECT * FROM t WHERE t MATCH ?", (sanitized,))
+                except sqlite3.OperationalError as e:
+                    self.fail(f"FTS5 syntax error for input '{inp}' -> '{sanitized}': {e}")
+        conn.close()
+
+    def test_sanitize_consecutive_boolean_operators(self):
+        """Tier 2: Consecutive boolean operators must not trigger FTS5 syntax errors."""
+        cases = [
+            "security AND AND access",
+            "security OR OR access",
+            "security AND OR access",
+            "security OR AND access",
+            "security NOT NOT access",
+        ]
+        conn = sqlite3.connect(":memory:")
+        conn.execute("CREATE VIRTUAL TABLE t USING fts5(c);")
+        for inp in cases:
+            with self.subTest(raw_input=inp):
+                sanitized = sanitize_fts5_query(inp)
+                try:
+                    conn.execute("SELECT * FROM t WHERE t MATCH ?", (sanitized,))
+                except sqlite3.OperationalError as e:
+                    self.fail(f"FTS5 syntax error for input '{inp}' -> '{sanitized}': {e}")
+        conn.close()
+
 
 @unittest.skipIf(search is None, "tools.kb_query is not yet implemented (Milestone 2)")
 class TestSearchEngineFeatures(unittest.TestCase):
@@ -176,6 +235,40 @@ class TestSearchEngineFeatures(unittest.TestCase):
         self.assertLessEqual(len(results), 3)
         for r in results:
             self.assertEqual(r.get("category"), "upgrade")
+
+    def test_search_invalid_version_returns_empty(self):
+        """Tier 2: Invalid version string must return empty results and not leak legacy entries."""
+        for invalid_v in ("abc", "invalid_ver", "v_unknown"):
+            with self.subTest(version=invalid_v):
+                res = search("orm", target_version=invalid_v, db_path=self.db_path)
+                self.assertEqual(res, [], f"Expected empty list for invalid version '{invalid_v}', got {res}")
+
+        # Empty query with invalid version
+        res_empty = search("", target_version="abc", db_path=self.db_path)
+        self.assertEqual(res_empty, [])
+
+    def test_search_boolean_operators_no_traceback(self):
+        """Tier 2: Boolean operators in search query must not raise sqlite3.OperationalError."""
+        boolean_queries = [
+            "AND",
+            "OR",
+            "NOT",
+            "security AND",
+            "AND security",
+            "security OR",
+            "OR security",
+            "security NOT",
+            "NOT security",
+            "security AND AND access",
+            "security OR OR access",
+        ]
+        for bq in boolean_queries:
+            with self.subTest(query=bq):
+                try:
+                    results = search(bq, db_path=self.db_path)
+                    self.assertIsInstance(results, list)
+                except sqlite3.OperationalError as e:
+                    self.fail(f"search('{bq}') raised OperationalError: {e}")
 
 
 @unittest.skipIf(search is None, "tools.kb_query is not yet implemented (Milestone 2)")

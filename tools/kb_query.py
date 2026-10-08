@@ -122,7 +122,7 @@ def matches_version(
     try:
         target = float(target_version)
     except (ValueError, TypeError):
-        return True
+        return False
 
     # Support dictionary representation for flexibility
     if isinstance(rule, dict):
@@ -158,37 +158,75 @@ def matches_version(
 def sanitize_fts5_query(query_str: str) -> str:
     """
     Sanitizes user input into valid SQLite FTS5 query syntax.
-    Safely wraps dotted code symbols ('ir.access.csv', 'models.Constraint')
-    and punctuation in double quotes to prevent FTS5 syntax errors.
-    Preserves boolean operators (AND, OR, NOT) and explicit quoted phrases.
+
+    Ensures safe handling of dotted identifiers, code punctuation, explicit quotes,
+    and boolean operators (AND, OR, NOT).
+
+    Boolean Grammar Rules:
+    1. Case sensitivity: Only exact uppercase 'AND', 'OR', 'NOT' are recognized as
+       candidate operators. Lowercase/mixed words ('not', 'and', 'or') are treated as
+       standard search terms.
+    2. Grammatical position: Candidate operators are only preserved as FTS5 operators
+       if they are in a valid binary grammatical position (surrounded by search operand
+       tokens on both sides).
+    3. Invalid positions: If a boolean operator is standalone (only token), leading (start
+       of query), trailing (end of query), or consecutive (adjacent to another operator),
+       it is safely converted to a literal quoted word token (e.g. '"AND"*') to guarantee
+       zero FTS5 syntax errors.
+
+    :param query_str: Raw query string from user input.
+    :return: Validated, sanitized SQLite FTS5 query string.
     """
     if not query_str or not query_str.strip():
         return ""
 
-    # Preserve explicit quotes when splitting tokens
+    # Split into explicit quoted phrases or non-whitespace tokens
     raw_tokens = re.findall(r'"[^"]*"|\S+', query_str.strip())
-    processed: List[str] = []
+    if not raw_tokens:
+        return ""
 
-    for token in raw_tokens:
-        # Preserve boolean operators
-        if token.upper() in ("AND", "OR", "NOT"):
-            processed.append(token.upper())
-            continue
+    def _is_candidate_op(tok: str) -> bool:
+        """Determines if a token is an unquoted uppercase boolean operator."""
+        if tok.startswith('"') and tok.endswith('"') and len(tok) >= 2:
+            return False
+        return tok in ("AND", "OR", "NOT")
 
-        # Preserve explicitly quoted phrase
-        if token.startswith('"') and token.endswith('"') and len(token) >= 2:
-            clean_phrase = token[1:-1].replace('"', '""')
-            processed.append(f'"{clean_phrase}"')
-            continue
+    def _format_token_literal(tok: str) -> str:
+        """Formats a non-operator or invalid operator token into a safe FTS5 literal."""
+        if tok.startswith('"') and tok.endswith('"') and len(tok) >= 2:
+            clean_phrase = tok[1:-1].replace('"', '""')
+            return f'"{clean_phrase}"'
 
-        clean = token.replace('"', '""')
-
+        clean = tok.replace('"', '""')
         # Check if token contains code symbols or punctuation
         if any(c in clean for c in ".:_-/\\*?@$#`()[]^'~;"):
-            processed.append(f'"{clean}"')
+            return f'"{clean}"'
+        return f'"{clean}"*'
+
+    n = len(raw_tokens)
+    processed: List[str] = []
+
+    for i, token in enumerate(raw_tokens):
+        if _is_candidate_op(token):
+            # In FTS5, binary operators AND / OR / NOT require valid operand terms
+            # both before and after the operator.
+            # An operator is in a valid grammatical position if:
+            # 1. i > 0 (not leading / standalone)
+            # 2. i < n - 1 (not trailing / standalone)
+            # 3. raw_tokens[i - 1] is a search operand (not another operator)
+            # 4. raw_tokens[i + 1] is a search operand (not another operator)
+            if (
+                i > 0
+                and i < n - 1
+                and not _is_candidate_op(raw_tokens[i - 1])
+                and not _is_candidate_op(raw_tokens[i + 1])
+            ):
+                processed.append(token)
+            else:
+                # Standalone, leading, trailing, or consecutive: escape as literal word
+                processed.append(_format_token_literal(token))
         else:
-            # Standard word: support prefix search
-            processed.append(f'"{clean}"*')
+            processed.append(_format_token_literal(token))
 
     return " ".join(processed)
 
@@ -222,7 +260,7 @@ def get_db_connection(db_path: Path, repo_root: Path) -> sqlite3.Connection:
         try:
             tv = float(target_ver)
         except (ValueError, TypeError):
-            return 1
+            return 0
         rule = parse_version_rule(ver_str)
         return 1 if matches_version(rule, tv) else 0
 
@@ -322,7 +360,8 @@ def search(
             try:
                 norm_version = float(v_clean)
             except ValueError:
-                norm_version = None
+                # Invalid target version string: cannot match any document
+                return []
 
     con = get_db_connection(db_path, repo_root)
     cur = con.cursor()
@@ -338,6 +377,7 @@ def search(
     ver_pat = f"%{v_int_str}%" if norm_version is not None else None
     tag_pat = f"%odoo{v_int_str}%" if norm_version is not None else None
 
+    rows: List[Any] = []
     if not sanitized_q.strip():
         # Empty query: return most recent documents matching version / category filter
         sql = """
@@ -352,13 +392,17 @@ def search(
           e.id ASC
         LIMIT :limit
         """
-        cur.execute(sql, {
-            "target_ver": target_v_param,
-            "cat_param": cat_param,
-            "ver_pat": ver_pat,
-            "tag_pat": tag_pat,
-            "limit": limit,
-        })
+        try:
+            cur.execute(sql, {
+                "target_ver": target_v_param,
+                "cat_param": cat_param,
+                "ver_pat": ver_pat,
+                "tag_pat": tag_pat,
+                "limit": limit,
+            })
+            rows = cur.fetchall()
+        except (sqlite3.OperationalError, sqlite3.DatabaseError):
+            return []
     else:
         # FTS5 search with BM25 scoring:
         # Columns in kb_fts: (title, category, tags, problem, solution, pitfalls, raw_content)
@@ -378,16 +422,33 @@ def search(
           bm_rank ASC
         LIMIT :limit
         """
-        cur.execute(sql, {
+        query_params = {
             "query": sanitized_q,
             "target_ver": target_v_param,
             "cat_param": cat_param,
             "ver_pat": ver_pat,
             "tag_pat": tag_pat,
             "limit": limit,
-        })
+        }
+        try:
+            cur.execute(sql, query_params)
+            rows = cur.fetchall()
+        except sqlite3.OperationalError:
+            # Fallback query: retry by searching all terms as plain escaped literal phrase tokens
+            raw_tokens = [t.strip('"') for t in re.findall(r'"[^"]*"|\S+', query.strip())]
+            raw_tokens = [t.replace('"', '""') for t in raw_tokens if t.strip('"')]
+            fallback_q = " ".join(f'"{t}"*' for t in raw_tokens if t)
 
-    rows = cur.fetchall()
+            if not fallback_q.strip():
+                return []
+
+            query_params["query"] = fallback_q
+            try:
+                cur.execute(sql, query_params)
+                rows = cur.fetchall()
+            except (sqlite3.OperationalError, sqlite3.DatabaseError):
+                # If fallback also fails, return an empty list without crashing CLI
+                return []
     results: List[Dict[str, Any]] = []
 
     # Tag filter in Python if tags provided
