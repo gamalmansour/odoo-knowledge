@@ -16,3 +16,6 @@ Thumbs.db
 # Temporary files
 /tmp/
 *.tmp
+
+# Local KB Cache DB
+.kb_cache.db*
