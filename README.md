@@ -422,6 +422,8 @@
 | 19 | [odoo19-hr-version-payroll-contract-lifecycle.md](upgrade/odoo19-hr-version-payroll-contract-lifecycle.md) | 🔴 Critical | 19 | `upgrade`, `odoo19`, `hr.version`, `hr.contract`, `hr_payroll`, `payslip`, `attendance`, `penalties` | Odoo 19 replaced hr.contract with hr.version: auto-initialization traps, unique date_version constraint, payslip contract_date_start requirement, and anti-duplicate deduction lifecycle |
 | 20 | [odoo19-stock-move-name-field-removal.md](upgrade/odoo19-stock-move-name-field-removal.md) | 🔴 Critical | 19 | `upgrade`, `odoo19`, `stock`, `stock.move`, `migration`, `tests` | stock.move 'name' field removed in Odoo 19 causing ValueError on create/write; replaced by product_id display_name and description_picking |
 | 21 | [data-merge-rule-unique-constraint-upgrade-failure.md](upgrade/data-merge-rule-unique-constraint-upgrade-failure.md) | 🔴 Critical | 16, 17, 18, 19 | `upgrade`, `base`, `data_cleaning`, `data_merge`, `unique-constraint`, `ir_model_data`, `psycopg2` | Fix PostgreSQL UniqueViolation on data_merge_rule (data_merge_rule_uniq_model_id_field_id) during base/data_cleaning upgrade caused by unlinked ir_model_data records |
+| 22 | [odoo19-to-odoo20-migration-cookbook-code-replacements.md](upgrade/odoo19-to-odoo20-migration-cookbook-code-replacements.md) | 🔴 Critical | 19, 20 | `odoo20`, `upgrade`, `migration`, `cookbook`, `code-replacements`, `ir.access.csv`, `owl3`, `constraints`, `accounting`, `inventory`, `hr` | Complete code replacements cookbook from Odoo 19 to Odoo 20: ir.access.csv unified syntax (KeyError ir.rule), models.Constraint, datetime.UTC/ZoneInfo, Owl 3 proxy/signal, PDF engines, and full model/field mapping tables |
+
 
 
 ### Best Practices
