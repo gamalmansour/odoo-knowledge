@@ -64,22 +64,24 @@ The e-invoice has been refused by the SdI.
 
 ## Solution ✅
 
-### 1. Resetting Proxy Client Credentials (DB Duplicate Fix)
-Execute via Odoo Server Action or `odoo-bin shell`:
-```python
-# Unlink old proxy client and certificate to allow fresh registration
-proxy_users = env['account_edi_proxy_client.user'].search([
-    ('company_id', '=', company.id),
-    ('edi_format_code', 'in', ['it_edi', 'l10n_it_edi'])
-])
-proxy_users.unlink()
+### 1. Resetting Proxy Client Credentials (The Deadlock / Catch-22 Resolution)
+When `Invalid signature for request` occurs due to an expired/desynchronized token, Odoo enters a classic Catch-22:
+- Calling `_renew_token()` fails with `Invalid signature for request` (because the server rejects the dead token used to sign the renewal).
+- Unlinking the proxy user and re-registering via UI fails with `A user already exists with this identification` (because Odoo IAP central server refuses duplicate company Codice Fiscale).
 
-# Clear stored certificate keys if present in config parameters
-env['ir.config_parameter'].sudo().search([
-    ('key', 'like', 'account_edi_proxy_client%')
-]).unlink()
+**The Proven Workaround (No Odoo Support Ticket Needed):**
+1. Unlink the dead proxy user:
+```python
+env['account_edi_proxy_client.user'].sudo().search([('proxy_type', '=', 'l10n_it_edi')]).unlink()
+# In V18+, also remove any dangling keys:
+if 'certificate.key' in env:
+    env['certificate.key'].sudo().search([('name', 'ilike', 'l10n_it_edi%')]).unlink()
 ```
-Then navigate to **Accounting → Settings → Electronic Invoicing (Italy)**, re-select **Official (Servizio Ufficiale)**, and re-register.
+2. In **Settings → Companies → [Company]**, temporarily change **Codice Fiscale** to a unique, valid 16-character Italian personal tax code with valid checksum (e.g. the legal representative's CF). *Do NOT use public test codes like `MRTMTT91D08F205J` as they may already be registered on the IAP server.*
+3. In **Accounting → Settings → Italian Electronic Invoicing**, select **Official**, tick **Allow Odoo to process invoices**, and click **Save**. The IAP server registers a brand new `id_client` and issues a fresh, active `refresh_token`.
+4. Immediately return to **Settings → Companies → [Company]** and restore the company's original 11-digit Codice Fiscale / VAT (e.g. `14472720961`).
+5. Outbound invoices will now transmit through the newly authorized proxy client, while the generated XML properly reflects the company's real tax identity. SdI validates and accepts the invoice cleanly.
+
 
 ### 2. Ensuring Individual Customer Names Split Correctly
 Always ensure the customer name contains at least two words (First name + Surname):
