@@ -339,6 +339,7 @@
 | 52 | [odoo18-enterprise-gantt-empty-date-window-and-scale-gotchas.md](views/odoo18-enterprise-gantt-empty-date-window-and-scale-gotchas.md) | 🔴 Critical | 16, 17, 18, 19 | `views`, `gantt`, `web_gantt`, `enterprise`, `dates`, `scales`, `empty-view` | Enterprise web_gantt renders empty canvas when focusDate (Today) falls outside record dates, plus non-standard scales like quarter drop silently |
 | 53 | [odoo-website-smooth-scroll-selector-hash-syntax-error.md](views/odoo-website-smooth-scroll-selector-hash-syntax-error.md) | 🔴 Critical | All | `website`, `javascript`, `querySelector`, `oauth`, `syntaxerror`, `smooth-scroll` | Website Smooth-Scroll querySelector '#' SyntaxError on Empty Anchor or OAuth Redirect |
 | 54 | [print-ready-a4-css-layouts.md](views/print-ready-a4-css-layouts.md) | 🟡 Medium | All | `css`, `print`, `pdf`, `layout`, `a4` | Designing pixel-perfect, print-ready A4 HTML/CSS pages and custom PDF layouts |
+| 55 | [unknown-field-in-domain-missing-manifest-dependency.md](views/unknown-field-in-domain-missing-manifest-dependency.md) | 🔴 Critical | 16, 17, 18, 19 | `domain`, `_unknown`, `depends`, `manifest`, `ParseError` | Python Many2one domain filtering on undeclared comodel causes ParseError: Unknown field "_unknown.field" during view validation |
 
 
 ### Security
