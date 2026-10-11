@@ -478,6 +478,7 @@
 | 25 | [zatca-warning-br-ksa-f-08-crn-scheme.md](misc/zatca-warning-br-ksa-f-08-crn-scheme.md) | 🟡 Medium | 16, 17, 18, 19 | `zatca`, `l10n_sa_edi`, `e-invoicing`, `saudi-arabia`, `br-ksa-f-08`, `crn`, `vat`, `warning`, `bt-29`, `bt-46` | ZATCA returns warning [BR-KSA-F-08] because 15-digit VAT was entered in Identification Number (SA) under CRN scheme instead of 10-digit Commercial Registration number |
 | 26 | [odoo-sitemap-arabic-encoding-gsc-could-not-be-read.md](misc/odoo-sitemap-arabic-encoding-gsc-could-not-be-read.md) | 🔴 Critical | All | `seo`, `sitemap`, `gsc`, `google-search-console`, `encoding`, `arabic`, `url-encode`, `ir.attachment` | Odoo sitemap.xml fails in Google Search Console with 'Sitemap could not be read' due to unencoded Arabic URLs in loc tags |
 | 27 | [salla-webhook-invoice-vs-order-id-mapping.md](misc/salla-webhook-invoice-vs-order-id-mapping.md) | 🔴 Critical | 16, 17, 18, 19 | `salla`, `webhook`, `invoice.created`, `order_id` | Salla invoice.created sends invoice id instead of order id leading to missing order lookups |
+| 28 | [suno-ai-audio-extraction-paywall-bypass.md](misc/suno-ai-audio-extraction-paywall-bypass.md) | 🟡 Medium | All | `suno`, `ai-music`, `audio-extraction`, `paywall-bypass`, `m4a-opus`, `media`, `marketing` | Suno AI audio extraction and paywall bypass pipeline: automated HLS fragmented Opus decryption and clean MP3 retrieval without paid subscriptions |
 
 ---
 
