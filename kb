@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# High-performance CLI launcher for odoo-knowledge
+set -euo pipefail
+
+# Resolve script directory regardless of symlinks or invocation working directory
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+KB_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+# Execute Python query engine with passed arguments
+exec python3 "$KB_DIR/tools/kb_query.py" "$@"

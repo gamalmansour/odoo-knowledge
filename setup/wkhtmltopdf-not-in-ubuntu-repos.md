@@ -1,14 +1,14 @@
-# wkhtmltopdf Not Available in Ubuntu 24.04+ Repos
+# wkhtmltopdf Not Available in Ubuntu 24.04+ Repos (nor Homebrew on macOS)
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
 | Category      | setup                                      |
 | Odoo Versions | All (15, 16, 17, 18, 19)                   |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-05-20                                 |
-| Author        | ENG/Mohamed Saber                          |
+| Last Verified | 2026-08-03                                 |
+| Author        | ENG/Mohamed Saber (macOS: ENG/Gamal Mansour) |
 
-**Tags:** `wkhtmltopdf`, `pdf`, `reports`, `ubuntu`, `apt`, `deb`
+**Tags:** `wkhtmltopdf`, `pdf`, `reports`, `ubuntu`, `apt`, `deb`, `macos`, `homebrew`, `rosetta`
 
 ---
 
@@ -45,6 +45,61 @@ sudo apt install -f -y
 # Cleanup
 rm /tmp/wkhtmltox.deb
 ```
+
+## Solution ✅ — macOS (verified 2026-08-03 on Apple Silicon)
+
+Symptom in the UI: *"Unable to find Wkhtmltopdf on this system. The report
+will be shown in html."* — it appears in **every database** because the
+binary lives on the machine, not in the DB.
+
+Homebrew no longer ships it (`brew info --cask wkhtmltopdf` →
+`No Cask with this name exists`; upstream is unmaintained). Use the official
+`.pkg` from the same GitHub releases:
+
+```bash
+curl -L -o ~/Downloads/wkhtmltox.pkg https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-2/wkhtmltox-0.12.6-2.macos-cocoa.pkg
+sudo installer -pkg ~/Downloads/wkhtmltox.pkg -target /
+wkhtmltopdf --version   # -> wkhtmltopdf 0.12.6 (with patched qt)
+```
+
+- The pkg is **x86_64** — on Apple Silicon it runs through **Rosetta 2**.
+  Check with `arch -x86_64 /usr/bin/true`; install Rosetta first with
+  `softwareupdate --install-rosetta` if that fails.
+- Installs to `/usr/local/bin/wkhtmltopdf` (+`wkhtmltoimage`), already on PATH.
+- Restart Odoo afterwards; the boot log should print
+  `Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf`.
+- **Odoo.sh / Odoo Online are never affected** — the platform preinstalls it;
+  this is a local-dev problem only.
+
+### If the installer fails with "An error occurred while extracting files"
+
+Seen live (2026-08-03): the download can be **corrupted in transit while still
+matching the published byte size exactly** — only the sha256 differs. The
+Installer then fails mid-extraction. Diagnose without reinstalling:
+
+```bash
+mkdir /tmp/wk && cd /tmp/wk && tar -xf ~/Downloads/wkhtmltox.pkg   # bsdtar reads pkg/xar
+gzip -t Payload && echo OK || echo "corrupt download — redownload"
+```
+
+`gzip: data stream error` ⇒ redownload the pkg (fresh copy had a different
+sha256 and a clean Payload).
+
+### Sudo-less install (verified alternative, Apple Silicon)
+
+The macOS binary is **self-contained** (static Qt; `otool -L` shows only
+system frameworks — the bundled `libwkhtmltox` dylib is NOT needed at
+runtime). So you can skip the Installer entirely:
+
+```bash
+cd /tmp/wk && tar -xf Payload
+tar -xzf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz -C /tmp/wk
+cp /tmp/wk/bin/wkhtmltopdf /tmp/wk/bin/wkhtmltoimage /opt/homebrew/bin/  # user-writable, on PATH
+wkhtmltopdf --version   # wkhtmltopdf 0.12.6 (with patched qt)
+```
+
+Verify end-to-end: `wkhtmltopdf test.html test.pdf` produces a real PDF
+(~11KB for a one-liner page) through Rosetta.
 
 ## ⚠️ Pitfalls
 

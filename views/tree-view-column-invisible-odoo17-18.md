@@ -5,10 +5,10 @@
 | Category      | views                                      |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🟡 Medium                                  |
-| Last Verified | 2026-05-20                                 |
+| Last Verified | 2026-10-03                                 |
 | Author        | ENG/Mohamed Saber                          |
 
-**Tags:** `views`, `tree`, `list`, `invisible`, `column_invisible`, `xml`
+**Tags:** `views`, `tree`, `list`, `invisible`, `column_invisible`, `xml`, `owl`, `evalColumnInvisible`
 
 ---
 
@@ -44,14 +44,19 @@ Replace the `invisible` attribute with `column_invisible` for `<field>` elements
 </tree>
 ```
 
-> **Note:** If dynamically showing/hiding a column based on a parent/context field, use the `parent` prefix:
+> **Note:** If dynamically showing/hiding a column based on a parent/context field in an embedded one2many/many2many subview inside a Form, use the `parent` prefix:
 > `column_invisible="parent.some_parent_field == 'value'"`
 
 ## ⚠️ Pitfalls
 
+- **Do NOT reference record fields in `column_invisible` in top-level `<list>` / `<tree>` views:**
+  In a standalone top-level list view (e.g., opened via a menu action `view_mode="list,form"`), the ListRenderer evaluates `column_invisible` against `this.props.list.evalContext`, which contains only `context` (there is NO `record` and NO `parent`).
+  Writing `column_invisible="not is_saudi_market"` on a column will crash the client with:
+  `OwlError: Can not evaluate python expression: (bool(not is_saudi_market)) Error: Name 'is_saudi_market' is not defined` at `ListRenderer.evalColumnInvisible`.
+  **Rule:** For optional, regional, or situational columns in top-level list views, use `optional="hide"` (or check `context.get(...)`), NEVER dynamic record field conditions.
 - **Do NOT rename invisible on buttons:** Buttons (`<button>`) inside list/tree views STILL use `invisible` to hide individual row buttons. Applying `column_invisible` to buttons will not work.
 - **Do NOT apply in Form/Search Views:** Only replace the attribute for `<field>` elements inside a `<tree>` or `<list>` context.
 
 ## Verification
 
-Open the list/tree view in Odoo 17 or 18 dev mode, inspect the columns, and ensure columns marked as `column_invisible` are completely hidden from the table headers and body, without leaving blank slots.
+Open the list/tree view in Odoo 17 or 18 dev mode, inspect the columns, and ensure columns marked as `column_invisible` are completely hidden from the table headers and body, without leaving blank slots. For top-level views, ensure no OwlErrors occur in `onWillRender` / `evalColumnInvisible`.

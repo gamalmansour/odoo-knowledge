@@ -5,7 +5,7 @@
 | Category      | orm                            |
 | Odoo Versions | All (14, 15, 16, 17, 18, 19)  |
 | Severity      | 🔴 Critical                    |
-| Last Verified | 2026-06-06                     |
+| Last Verified | 2026-08-24                     |
 | Author        | ENG/Gamal Mansour              |
 
 **Tags:** `translation`, `i18n`, `fields`, `_()`, `class-body`, `bug`
@@ -22,9 +22,8 @@ class CustomerLevel(models.Model):
     name = fields.Char(string=_('Level Name'))        # BUG
     color = fields.Integer(string=_('Color Index'))   # BUG
 
-    _sql_constraints = [
-        ('unique_name', 'UNIQUE(name)', _('Name must be unique!'))  # BUG
-    ]
+    # Odoo 19: _sql_constraints is ignored entirely — see the note below
+    _unique_name = models.Constraint('UNIQUE(name)', _('Name must be unique!'))  # BUG
 ```
 
 No error is raised — it silently fails to translate for users with different languages.
@@ -35,7 +34,7 @@ In Python, class bodies are executed once when the module is first imported. `_(
 
 ## Solution ✅
 
-Remove `_()` from `string=`, `help=`, and `_sql_constraints` messages entirely. Use plain English strings — Odoo's i18n handles the translation automatically via `.po` files:
+Remove `_()` from `string=`, `help=`, and constraint messages entirely. Use plain English strings — Odoo's i18n handles the translation automatically via `.po` files:
 
 ```python
 # ✅ CORRECT
@@ -43,9 +42,7 @@ class CustomerLevel(models.Model):
     name = fields.Char(string='Level Name')        # translated via i18n
     color = fields.Integer(string='Color Index')   # translated via i18n
 
-    _sql_constraints = [
-        ('unique_name', 'UNIQUE(name)', 'Name must be unique!')  # plain string
-    ]
+    _unique_name = models.Constraint('UNIQUE(name)', 'Name must be unique!')  # plain string
 ```
 
 Keep `_()` only inside **method bodies** where it runs at request time:
@@ -59,8 +56,9 @@ def action_confirm(self):
 ## ⚠️ Pitfalls
 
 - This bug is **silent** — no error, no warning. The string just never translates.
-- It also affects `_sql_constraints` error messages and `Selection` labels if wrapped.
-- Affects: `string=`, `help=`, `selection` list items in field defs, and `_sql_constraints`.
+- It also affects constraint error messages and `Selection` labels if wrapped.
+- Affects: `string=`, `help=`, `selection` list items in field defs, and constraint messages.
+- **Odoo 19:** `_sql_constraints` is no longer supported at all — it logs `Model attribute '_sql_constraints' is no longer supported` and the constraint is never created. Use `models.Constraint(...)` / `models.UniqueIndex(...)` class attributes, and keep their messages as plain English strings for the same reason. See `Best Practices/odoo-19-warnings.md`.
 - **Do NOT** wrap `compute=`, `inverse=`, `search=` — those are method names, not strings.
 
 ## Verification
