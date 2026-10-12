@@ -340,6 +340,7 @@
 | 53 | [odoo-website-smooth-scroll-selector-hash-syntax-error.md](views/odoo-website-smooth-scroll-selector-hash-syntax-error.md) | 🔴 Critical | All | `website`, `javascript`, `querySelector`, `oauth`, `syntaxerror`, `smooth-scroll` | Website Smooth-Scroll querySelector '#' SyntaxError on Empty Anchor or OAuth Redirect |
 | 54 | [print-ready-a4-css-layouts.md](views/print-ready-a4-css-layouts.md) | 🟡 Medium | All | `css`, `print`, `pdf`, `layout`, `a4` | Designing pixel-perfect, print-ready A4 HTML/CSS pages and custom PDF layouts |
 | 55 | [unknown-field-in-domain-missing-manifest-dependency.md](views/unknown-field-in-domain-missing-manifest-dependency.md) | 🔴 Critical | 16, 17, 18, 19 | `domain`, `_unknown`, `depends`, `manifest`, `ParseError` | Python Many2one domain filtering on undeclared comodel causes ParseError: Unknown field "_unknown.field" during view validation |
+| 56 | [res-config-settings-orphan-fields-leak.md](views/res-config-settings-orphan-fields-leak.md) | 🟡 Medium | 17, 18 | `res.config.settings`, `views`, `owl`, `xpath`, `settings`, `hr_attendance` | Settings section visible in all modules due to direct xpath //form injection without enclosing app tag in Odoo 17/18 OWL settings |
 
 
 ### Security
