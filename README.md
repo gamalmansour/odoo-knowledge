@@ -531,6 +531,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | Changing Search Fields in Target Models | changing_search_fields.md |
 | `name_get_deprecation_odoo17.md` | upgrade | Deprecation of name_get in Odoo 17+ (Use _compute_display_name) |
 | Data Migration | Complex Hierarchical Excel Import | [Link](data_migration/complex-hierarchical-excel-import.md) |
+| Data Migration | [Excel Import Header Auto-Mapping and Many2one Relation Traps](data_migration/excel-import-header-mapping-and-many2one-resolution.md) | V16, V17, V18, V19 |
 | Frontend | [POS JS Missing RPCError Import](frontend/pos_js_missing_rpcerror_import.md) | V18 |
 | Frontend | [Three.js WebGL Lifecycle Management and Billboard Sprites in OWL Client Actions](frontend/threejs-webgl-lifecycle-memory-leak-owl-component.md) | V17, V18, V19 |
 | Frontend | [Unity Mobile Touch HUD: Safe Area Adaptation, Zero-GC Arabic Localization & Unidirectional Input Authority](frontend/unity-mobile-touch-hud-safearea-zero-gc-arabic-localization.md) | Mobile/Unity |
