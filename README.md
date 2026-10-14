@@ -449,6 +449,8 @@
 | 17 | [pos_outstanding_receipts_clearing_and_reconciliation.md](Best%20Practices/pos_outstanding_receipts_clearing_and_reconciliation.md) | 🔴 Critical | 16, 17, 18 | `pos`, `accounting`, `reconciliation`, `outstanding-receipts`, `odoo18` | POS Outstanding Receipts manual clearing vs internal reconciliation mechanics and zero-balance settlement |
 | 18 | [warehouse-vs-location-custodianship-principle.md](Best%20Practices/warehouse-vs-location-custodianship-principle.md) | 🔴 Critical | All | `inventory`, `warehouse`, `location`, `operation_types`, `custodianship`, `storekeeper`, `architecture` | Warehouse vs Location topology: decisions governed strictly by storekeeper custodianship & operational registers, not physical area or room count |
 | 19 | [construction-work-order-strict-cost-control-subitem-cascade.md](Best%20Practices/construction-work-order-strict-cost-control-subitem-cascade.md) | 🔴 Critical | 17, 18, 19 | `construction`, `work_order`, `cost_control`, `strict_mode`, `boq_subitem`, `cbs` | Strict cost-control Work Order sub-item cascade, in-plan cost leaf validation, and automated subcontractor billing rollup |
+| 20 | [construction-civil-engineering-execution-cpm-precedence.md](Best%20Practices/construction-civil-engineering-execution-cpm-precedence.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `boq`, `work-order`, `cpm`, `civil-engineering`, `fast-tracking`, `data-seeding`, `precedence` | Civil engineering execution precedence, Critical Path Method (CPM) fast-tracking, and prevention of premature finishes in demo seeding |
+
 
 
 
