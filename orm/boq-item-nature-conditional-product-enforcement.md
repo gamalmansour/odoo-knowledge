@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 16, 17, 18, 19                             |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-10-03                                 |
+| Last Verified | 2026-10-14                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `orm`, `views`, `boq`, `item_nature`, `product_id`, `related-field`, `constrains`, `data-integrity`
@@ -126,6 +126,7 @@ Add dynamic `required` and `invisible` attributes in the XML list/tree views, al
 3. **Existing Stored Data:** When changing `related=` to computed, ensure default empty strings (`""`) rather than `False` to prevent UI serialization warnings.
 4. **`widget="badge"` in Editable List Views Disables Dropdowns:** Never use `widget="badge"` on a field inside an editable list view (`<list editable="bottom">`). In Odoo's OWL web framework, `BadgeField` is a display-only formatter without an editable input template. Adding `widget="badge"` turns the field into a static pill and completely disables the dropdown menu from appearing when clicked. Use a plain `<field name="item_nature"/>` for editable selection fields.
 5. **Never Hide Child Drilldown Buttons on Parent Lines Based on `item_nature`:** Do not add `invisible="... or item_nature == 'direct'"` to the Sub-items action button (`action_open_sub_items`). Any existing parent lines whose nature defaulted to `'direct'` (or any user wishing to break down an existing line) will have their navigation button hidden. In Level 2 list views, the button must strictly be conditioned only on `invisible="parent_id != False"`.
+6. **Tender to Contract BOQ Hand-off Trap (`contract.boq.breakdown.product_id` NOT NULL violation):** When transferring BOQ items from tender to owner contract (`_import_boq_to_contract`), if `contract.boq.breakdown.product_id` is defined with `required=True` (or has a Postgres NOT NULL constraint), copying composite packages where `product_id=False` will crash contract creation with `The operation cannot be completed: Create/update: a mandatory field is not set. Field: Product (product_id)`. Ensure `contract.boq.breakdown.product_id` is `required=False`, drop the DB not-null constraint if it existed, and synchronize `item_nature` from `tender.boq.breakdown` to `contract.boq.breakdown`.
 
 ---
 
@@ -138,6 +139,7 @@ Run test cases verifying:
 4. Level 2 Composite without product -> Created successfully with custom name preserved.
 5. Level 3 without product -> ValidationError.
 6. Level 3 with product -> Created successfully.
+7. Tender to Contract BOQ hand-off with composite packages creates owner contract without error (`tests/test_tender_boq_breakdown_transfer.py`).
 
 ---
 
@@ -145,3 +147,4 @@ Run test cases verifying:
 
 - Related file: `orm/boq-three-level-breakdown-domain-actions.md`
 - Module implementation: `construction_tender/models/tender_boq_breakdown.py`
+- Module implementation: `construction_contract/models/contract_boq_breakdown.py`, `construction_contract/models/tender_opportunity.py`
