@@ -112,6 +112,7 @@ def _compute_progress_from_qty(self):
 - **Do NOT put `@api.depends('parent_id.progress_percentage')` on `progress_percentage`**: Since `progress_percentage` already depends on `child_ids.progress_percentage`, adding `parent_id.progress_percentage` creates a cyclic graph in Odoo's dependency resolver and will raise an ORM recursion error.
 - **`recursive=True` Flag**: When a computed field reads its own field on `parent_id`, mark `qty_executed = fields.Float(..., recursive=True)` so Odoo optimizes cache invalidation across arbitrary tree depths.
 - **Capping Ratio at 1.0**: Always use `min(parent_ratio, 1.0)` so potential over-execution on a parent does not inadvertently blow out sub-package quantities beyond 100% without explicit change orders.
+- **UI Exposure in Breakdown Lists (`view_project_boq_breakdown_tree`)**: Always expose `<field name="qty_executed" readonly="1"/>` right next to `<field name="quantity"/>` and `<field name="uom_id"/>`. Displaying only `progress_percentage` leaves project estimators and cost controllers blind to the underlying physical quantities (e.g. 50 m³ vs 100 m³) forcing unnecessary drill-downs into individual work orders.
 
 ## Verification
 
@@ -125,3 +126,5 @@ Run Odoo unit tests verifying both bottom-up EVM and top-down breakdown tree inh
 - Related file: `orm/boq-three-level-breakdown-domain-actions.md`
 - Related file: `orm/boq-item-nature-conditional-product-enforcement.md`
 - Source module: `construction_project/models/project_boq_item.py`
+- Source views: `construction_project/views/project_boq_views.xml` (`view_project_boq_breakdown_tree`)
+
