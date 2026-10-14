@@ -538,3 +538,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | Frontend | [Three.js WebGL Lifecycle Management and Billboard Sprites in OWL Client Actions](frontend/threejs-webgl-lifecycle-memory-leak-owl-component.md) | V17, V18, V19 |
 | Frontend | [Unity Mobile Touch HUD: Safe Area Adaptation, Zero-GC Arabic Localization & Unidirectional Input Authority](frontend/unity-mobile-touch-hud-safearea-zero-gc-arabic-localization.md) | Mobile/Unity |
 - [Odoo 19 Stock Valuation Changes](upgrades/odoo19_stock_valuation.md) - Changes from stock.valuation.layer to product.value
+| ORM | [Hierarchical BOQ Items Linked to a WBS Node Double-Counting Budgets & Per-Unit Breakdown Scaling](orm/hierarchical-boq-wbs-double-counting-and-per-unit-scaling.md) | V16, V17, V18, V19 |
+
