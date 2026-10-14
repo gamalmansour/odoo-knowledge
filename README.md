@@ -269,6 +269,7 @@
 | 118 | [odoo19-jsonrpc-dispatch-and-composite-domains.md](backend/odoo19-jsonrpc-dispatch-and-composite-domains.md) | 🔴 Critical | 19 | `odoo19`, `jsonrpc`, `dispatcher`, `domain`, `search`, `api`, `flutter` | Odoo 19 HTTP JSON-RPC controller parameter extraction from dispatcher and safe multi-attribute search domain composition via Domain.and_ |
 | 119 | [v18-analytic-distribution-search-limitation.md](orm/v18-analytic-distribution-search-limitation.md) | 🟡 Medium | 16, 17, 18, 19 | `analytic_distribution`, `account.move.line`, `search`, `orm`, `v18` | Searching or filtering account.move/line by analytic_distribution JSON field raises UserError: Operation not supported — query account.analytic.line directly |
 | 120 | [product-costing-multi-warehouse-avco-fifo.md](orm/product-costing-multi-warehouse-avco-fifo.md) | 🟡 Medium | All | `orm`, `stock`, `costing`, `avco`, `fifo` | Under AVCO, landed costs on internal transfers distort global product valuation; change to FIFO or use custom modules |
+| 121 | [boq-hierarchical-progress-and-cbs-breakdown-roll-down.md](orm/boq-hierarchical-progress-and-cbs-breakdown-roll-down.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `boq`, `cbs`, `wbs`, `progress_percentage`, `qty_executed`, `hierarchy`, `dag`, `circular-dependency` | Multi-level BOQ progress computation decoupling top-down physical execution roll-down for CBS sub-packages and leaf lines from bottom-up earned-value percentage rollup, preventing 0% display and ORM DAG cycles |
 ### Views
 
 | # | File | Severity | Versions | Tags | Description |
