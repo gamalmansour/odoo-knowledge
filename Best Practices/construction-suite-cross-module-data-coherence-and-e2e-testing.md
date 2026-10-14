@@ -66,6 +66,7 @@ Follow a **Single-Narrative End-to-End Master Seed Pipeline** where every projec
 - **Do NOT pass `project.project` ID to `construction.project` Many2one fields.** Always check `field.comodel_name` on the model before seeding.
 - **Computed Fields Without Inverse:** Setting `project_id` on `project.labor.record` directly will be overwritten by `_compute_project_id()`. Always supply `boq_target_id` or `work_order_id`.
 - **Scorecard Range Validation:** `subcontractor.evaluation` strictly enforces scores between 1 and 5 (`score_quality`, `score_safety`, etc.). Passing percentages (e.g., 90) will trigger a `ValidationError`.
+- **DPR Cross-Module Sub-Model Enums:** In `project.daily.report` integrations, `construction.concrete.pour` requires specific `curing_method` keys (`water_ponding`, `wet_burlap_hessian`, `curing_compound_chemical`), `construction.concrete.truck` requires `status = 'accepted'` for volume rollup to take effect, and `construction.site.photo` requires valid `balady_stage` keys (`excavation`, `structural_foundations`, `structural_skeleton`, `insulation_sbc`, `mep_finishes`).
 
 ## Verification
 
