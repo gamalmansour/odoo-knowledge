@@ -15,8 +15,9 @@ In Odoo 17/18 (`web.ListRenderer`), having 14–16 visible columns in an inline 
 
 ## Solution ✅
 
-1. **Limit Default Visible Columns to 7–8 Core Operational Fields:**
-   - Keep only the primary data-entry fields visible by default (`boq_item_id`, `product_id`, `stock_availability`, `qty`, `uom`, `requisition_type`, `unit_price`, `price_subtotal`).
+1. **Limit Default Visible Columns to 6 Core Operational Fields:**
+   - Keep only the primary data-entry fields visible by default (`boq_item_id`, `product_id`, `stock_availability`, `qty`, `uom`, `requisition_type`).
+   - Hide background financial fields (`unit_price`, `price_subtotal`) using `column_invisible="1"` when the document is a site-level quantity request, while populating `unit_price` silently in the background from `boq_item_id.unit_price` or `product_id.standard_price`.
    - Move all secondary, compliance, audit, and redundant stock-breakdown fields (`description`, `cost_code_id`, `qty_on_hand`, `shortfall_qty`, `is_over_qty`, `is_over_budget`, `is_lcgpa_mandatory`, `is_national_product`, `lcgpa_exemption_reason`, `lcgpa_exemption_ref`) to `optional="hide"`. Users can still toggle them on via the `⋮` optional-columns menu (which **is** persisted in browser `localStorage`).
 2. **Use Concise Column Labels (`string="UoM"`):**
    - Override verbose field labels on narrow numeric/unit columns in the `<list>` view (e.g., `<field name="uom" string="UoM"/>`, `<field name="qty_on_hand" string="On Hand" optional="hide"/>`).
@@ -30,5 +31,7 @@ In Odoo 17/18 (`web.ListRenderer`), having 14–16 visible columns in an inline 
 
 ## ⚠️ Pitfalls
 
+- **Never delete `<field>` nodes from a base `<list>` view if downstream modules anchor XPaths on them** (e.g., `<xpath expr="//field[@name='requisition_line_ids']/list/field[@name='price_subtotal']" position="after">`). Removing the `<field>` tag breaks view inheritance (`ValueError: Element '<xpath>' cannot be located in parent view`). Always use `column_invisible="1"` instead so the DOM node stays intact for XPath resolution and client evaluation.
 - Never leave fields referenced in `<list decoration-danger="...">` out of the `<list>` children; use `optional="hide"` or `column_invisible="1"` so the web client still fetches their values for row evaluation.
 - Note that if a user previously toggled optional columns in their browser for that specific view, Odoo's `localStorage` remembers their manual selection until reset from the `⋮` dropdown.
+
