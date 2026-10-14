@@ -83,6 +83,10 @@ def _check_national_id_number(self):
    Supervisors often attempt to set `post_work_fire_watch_minutes` to 0 or 15 mins to close permits before shift end. SBC 801 mandates 60 minutes minimum; enforce this at the model level in `action_submit()`.
 3. **Scaffolding Inspection Expiry**:
    Scaffolding tags must be re-inspected after adverse weather (e.g. sandstorms or rain common in KSA) or every 7 days. Ensure red tags strictly abort permit activation.
+4. **Closed Work Order Lock & BOQ Actual Cost Preservation (`_check_sheet_line_work_order_open`)**:
+   `project.labor.record` blocks attaching new labor sheet lines to a `completed` or `cancelled` work order (`_check_sheet_line_work_order_open`), and `employee_id` lines strictly require `count == 1` (`_check_employee_count`). When seeding or decomposing historical labor sheets for completed work orders, temporarily transition the work order to `in_progress`, replace the bulk line with multi-trade crew lines summing to the exact same `total_cost`, and restore `completed` so BOQ `actual_cost` and `progress_percentage` remain 100% unchanged.
+5. **Distributed Line Currency Resolution**:
+   Relate `project.labor.record.currency_id` to `project_id.currency_id` (rather than `work_order_id.currency_id`) and include `labor_sheet_id.project_id` in `_compute_project_id` so distributed labor sheet lines without a work order always resolve their monetary currency.
 
 ---
 
