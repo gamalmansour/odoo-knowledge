@@ -5,10 +5,10 @@
 | Category      | setup                                      |
 | Odoo Versions | 16, 17, 18, 19                             |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-10-04                                 |
+| Last Verified | 2026-10-14                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `setup`, `hse`, `safety`, `kpi`, `dashboard`, `cron`, `ltifr`, `trir`, `safe-man-hours`, `search-view`
+**Tags:** `setup`, `hse`, `safety`, `kpi`, `dashboard`, `cron`, `ltifr`, `trir`, `safe-man-hours`, `search-view`, `empty-recordset`, `entry-date`
 
 ---
 
@@ -20,6 +20,8 @@ When navigating to **Safety > Dashboard** or **Safety > Reporting > KPI Engine**
 3. Reading `ir.config_parameter` for `ltifr_base` did not use `.sudo()`, risking `AccessError` for standard safety users.
 4. Man-hours computation only inspected `project.work.order` labor lines and omitted distributed `construction.labor.sheet` records.
 5. Safety managers had no tracking for **Safe Man-Hours** (hours worked without LTI) or leading indicators (BBS safe act ratios and site inspections).
+6. **Empty Recordset Truthiness Trap (`if Observation:`):** Assigning `Observation = self.env['hse.observation'] if 'hse.observation' in self.env else None` returns an empty recordset `hse.observation()`, whose truthiness `bool(Observation)` is `False` in Odoo ORM. Checking `if Observation:` or `if Inspection:` always evaluated to `False`, leaving `observation_count` and `inspection_count` permanently at `0`.
+7. **Historical Man-Hours Clustering in Current Month (`entry_date` Default Override):** When `project.labor.record.entry_date` overrides a base field (which had `default=fields.Date.context_today`) with `compute='_compute_entry_date', store=True, readonly=False`, leaving the inherited default (or setting `default=False`) causes Odoo's `add_default_values()` to inject `'entry_date'` into `vals_list` during `create()`, bypassing `_compute_entry_date` and stamping historical labor lines with today's date.
 
 ## Root Cause
 
@@ -29,10 +31,14 @@ When navigating to **Safety > Dashboard** or **Safety > Reporting > KPI Engine**
    Odoo window actions with `search_default_*` require a matching filter `name="..."` inside an explicit search view. Without it, the search bar defaults to generic name search.
 3. **Un-sudoed Config Parameter:**
    `ir.config_parameter` is restricted to administrative groups. Any compute method evaluated in the session of a standard employee will crash without `.sudo()`.
+4. **Empty Recordset Evaluates to `False`:**
+   In Odoo ORM, `bool(env['model.name'])` is `False` because `len(recordset) == 0`. Checking `if Model:` instead of `if Model is not None:` silently skips the block.
+5. **`default=None` Required on Editable Computed Field Overrides:**
+   In Odoo's `fields.py`, `default=False` is treated as a literal default value (`False`), whereas `default=None` is the sentinel for "no default". Only `default=None` prevents `add_default_values()` from pre-populating a `readonly=False` computed field on `create()`.
 
 ## Solution ✅
 
-### 1. Fix Cron Query and Add Safe Man-Hours / Leading Indicators
+### 1. Fix Cron Query, Empty Recordset Check, and Add Safe Man-Hours / Leading Indicators
 In `construction_hse/models/hse_kpi.py`:
 
 ```python
@@ -45,34 +51,29 @@ class HseKpi(models.Model):
     safe_act_ratio = fields.Float(string='Safe Behavior Ratio (%)', compute='_compute_kpis', store=True)
     inspection_count = fields.Integer(string='Inspections Conducted', compute='_compute_kpis', store=True)
 
-    @api.model
-    def action_generate_current_month(self) -> None:
-        """Ensure current month KPI records exist for active projects."""
-        today = fields.Date.context_today(self)
-        y = today.year
-        m = str(today.month)
-
-        # FIX: query 'state', not 'status'
-        projects = self.env['construction.project'].search([('state', '=', 'active')])
-        for p in projects:
-            existing = self.search([('project_id', '=', p.id), ('year', '=', y), ('month', '=', m)], limit=1)
-            if not existing:
-                existing = self.create({'project_id': p.id, 'year': y, 'month': m})
-            existing.action_recalculate()
-
-    @api.depends('man_hours', 'lti_count', 'recordable_count')
-    def _compute_rates(self) -> None:
-        base_rate = float(self.env['ir.config_parameter'].sudo().get_param('construction_hse.ltifr_base', '1000000.0'))
-        for rec in self:
-            if rec.man_hours and rec.man_hours > 0:
-                rec.ltifr = round((rec.lti_count * base_rate) / rec.man_hours, 2)
-                rec.trir = round((rec.recordable_count * 200000.0) / rec.man_hours, 2)
-            else:
-                rec.ltifr = 0.0
-                rec.trir = 0.0
+    # Inside _compute_kpis():
+    # FIX: Use 'is not None' because self.env['hse.observation'] is an empty recordset (bool == False)
+    if Observation is not None:
+        obs = Observation.search([
+            ('project_id', '=', rec.project_id.id),
+            ('observation_date', '>=', date_start),
+            ('observation_date', '<', date_end)
+        ])
+        rec.observation_count = len(obs)
 ```
 
-### 2. Add Dedicated Search View in XML
+### 2. Clear Inherited Default on `project.labor.record.entry_date`
+In `construction_labor/models/labor_sheet.py`:
+
+```python
+    entry_date = fields.Date(
+        compute='_compute_entry_date', store=True, readonly=False,
+        default=None,
+        help="Date this labor was incurred — from the labor sheet, else the work order."
+    )
+```
+
+### 3. Add Dedicated Search View in XML
 In `construction_hse/views/hse_kpi_views.xml`:
 
 ```xml
@@ -100,10 +101,12 @@ In `construction_hse/views/hse_kpi_views.xml`:
 
 ## ⚠️ Pitfalls
 
-- **Do Not Trust Field Names Across Modules:**
-  Never assume a foreign model has `status` vs `state`. Always check the definition or `_fields` dictionary before writing domain filters.
-- **Config Parameters Require Sudo:**
-  Any user evaluating compute methods that read `ir.config_parameter` will hit permissions barriers unless `env['ir.config_parameter'].sudo()` is used.
+- **Never Use `if Model:` on `self.env['model']`:**
+  Always use `if Model is not None:` when checking optional models resolved from `self.env`, because an empty Odoo recordset is falsy (`bool(recordset) is False`).
+- **Use `default=None` (Not `default=False`) to Clear Inherited Field Defaults:**
+  When overriding a field that had a `default` in the parent model with `compute='...', store=True, readonly=False`, set `default=None` so Odoo does not pre-fill the field during `create()` and skip the compute method.
+- **Avoid `widget="percentage"` on Pre-Scaled `0..100` Fields:**
+  In Odoo 16+, `widget="percentage"` multiplies the stored float by `100`. Only use `widget="percentage"` on `0.0..1.0` ratio fields (like `training_compliance`), not on `0.0..100.0` fields (like `safe_act_ratio`).
 
 ## Verification
 
@@ -112,7 +115,7 @@ In `construction_hse/views/hse_kpi_views.xml`:
 python -c "
 import odoo
 from odoo import api, SUPERUSER_ID
-with odoo.registry('hadhoud_demo').cursor() as cr:
+with odoo.registry('cons_demo').cursor() as cr:
     env = api.Environment(cr, SUPERUSER_ID, {})
     print('HSE KPIs count:', env['hse.kpi'].search_count([]))
 "
@@ -120,6 +123,6 @@ with odoo.registry('hadhoud_demo').cursor() as cr:
 
 ## References
 
-- Related models: `construction_hse/models/hse_kpi.py`
+- Related models: `construction_hse/models/hse_kpi.py`, `construction_labor/models/labor_sheet.py`
 - Related views: `construction_hse/views/hse_kpi_views.xml`
 - Cron job: `construction_hse/data/hse_cron.xml`
