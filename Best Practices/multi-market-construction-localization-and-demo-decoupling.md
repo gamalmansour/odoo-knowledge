@@ -5,7 +5,7 @@
 | Category      | Best Practices                             |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                 |
-| Last Verified | 2026-10-02                                 |
+| Last Verified | 2026-10-15                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `localization`, `multi-market`, `construction`, `egypt`, `saudi`, `fidic`, `demo-data`, `res_company`, `res_config_settings`
@@ -98,14 +98,26 @@ Create isolated, standalone demo seeders (e.g. `seed_egypt_hadhoud.py` for Egypt
    ```bash
    python3 -c "import xml.etree.ElementTree as ET, glob; [ET.parse(f) for f in glob.glob('**/*.xml', recursive=True)]"
    ```
+4. **Shared Records (`res.partner`, `product.template`) Have `company_id = False`:** A simple `fields.Boolean(related='company_id.is_saudi_market')` evaluates to `False` on shared multi-company records even when the active company is Saudi, or fails to recompute when switching companies. Always use a computed field with `@api.depends_context('company')` that falls back to `self.env.company`:
+   ```python
+   @api.depends_context('company')
+   @api.depends('company_id.is_saudi_market')
+   def _compute_is_saudi_market(self) -> None:
+       for rec in self:
+           company = rec.company_id or self.env.company
+           rec.is_saudi_market = bool(getattr(company, 'is_saudi_market', False))
+   ```
+5. **Top-Level `<list>` Views vs. One2many Sub-Lists (`column_invisible` vs `invisible`):** In Odoo 17/18 top-level `<list>` views, `column_invisible` only evaluates against `context` (not record fields), whereas `invisible="not is_saudi_market"` (with `<field name="is_saudi_market" column_invisible="1"/>` present in the `<list>`) hides the cell value per row without raising JS `EvalError`. In One2many sub-lists inside a form, `column_invisible="not parent.is_saudi_market"` works cleanly.
+6. **Mixing Generic Engineering Features into Jurisdiction-Specific Tabs:** Never bury generic engineering tabs (e.g., Time Impact Analysis TIA & Committee Evaluation, Consultant Rejection Reason, Cost Allocation Method) inside a tab or group gated by `invisible="not is_saudi_market"`. Split generic engineering tabs from statutory tabs (`Saudi GTPL`, `Saudi Clearances & LCGPA`, `Saudi MWAN Manifest`).
 
 ## Verification
 
 1. Set `company.construction_market = 'eg'` in Odoo shell.
 2. Confirm `company.is_saudi_market == False` and `company.is_egypt_market == True`.
-3. Open Daily Labor Sheet form: verify Saudization rate progress bar and Nitaqat badges are completely hidden.
-4. Open Owner Progress Invoice (IPC): verify Etimad compliance page and Saudi Public Works print buttons are hidden.
-5. Verify projects, contracts, and tenders are 100% denominated in local currency (e.g. EGP).
+3. Open Subcontractor Contract (`contract.subcontractor`), Subcontractor IPC (`contract.subcontractor.invoice`), Partner (`res.partner`), EOT Claim (`claim.record`), Submittal/RFI (`dcc.submittal`, `dcc.rfi`), Equipment (`construction.equipment`), HSE Permit (`hse.permit`), QA/QC Inspection/NCR (`qc.inspection.request`, `qc.ncr`), Site Photo (`construction.site.photo`), Waste Record (`construction.waste.record`), Material Requisition (`construction.material.requisition`), and Real Estate Project (`construction.project`): verify all Saudi banners, tabs, fields, and statutory blocks are hidden when `is_saudi_market == False`.
+4. Open Daily Labor Sheet form: verify Saudization rate progress bar and Nitaqat badges are completely hidden.
+5. Open Owner Progress Invoice (IPC): verify Etimad compliance page and Saudi Public Works print buttons are hidden.
+6. Verify projects, contracts, and tenders are 100% denominated in local currency (e.g. EGP).
 
 ## References
 
