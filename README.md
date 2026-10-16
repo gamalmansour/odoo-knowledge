@@ -549,3 +549,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 - [Odoo 19 Stock Valuation Changes](upgrades/odoo19_stock_valuation.md) - Changes from stock.valuation.layer to product.value
 | ORM | [Hierarchical BOQ Items Linked to a WBS Node Double-Counting Budgets & Per-Unit Breakdown Scaling](orm/hierarchical-boq-wbs-double-counting-and-per-unit-scaling.md) | V16, V17, V18, V19 |
 | Views | [One2many List Column Overcrowding Across Inherited Modules](views/one2many-list-column-overcrowding-across-inherited-modules.md) | V17, V18, V19 |
+| [Odoo Apps Store (`apps.odoo.com`) HTML Sanitizer & Standalone Module Decoupling](Best%20Practices/odoo-apps-store-publishing-sanitizer-and-decoupling.md) | Best Practices | All | 🔴 Critical | 2026-10-16 |
