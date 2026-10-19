@@ -5,10 +5,10 @@
 | Category      | orm / models                               |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-10-07                                 |
+| Last Verified | 2026-10-19                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `sale.visit`, `account.payment`, `account.move`, `reopen`, `idempotency`, `field-sales`, `atomic`
+**Tags:** `sale.visit`, `account.payment`, `account.move`, `reopen`, `idempotency`, `field-sales`, `atomic`, `shortfall_credit_note_id`
 
 ---
 
@@ -78,9 +78,11 @@ def action_reopen_visit(self):
 - **Do NOT use raw SQL deletion:** Calling `self.env.cr.execute("DELETE FROM account_payment WHERE ...")` bypasses ORM constraints, leaving orphaned relational records and invalid payment state caches.
 - **Relational Field Reset:** Ensure that when unlinking draft credit notes, any One2many / Many2one pointer on the visit (e.g. `shortfall_credit_note_id`, `return_invoice_id`) is properly cleared to avoid `MissingError`.
 - **Permission Boundaries:** Reopening should only be granted to authorized supervisors (`supervisor` or `sales_manager`), never to general van drivers without supervisor approval.
+- **Never assign newly created Quotations (`sale_order_ids`) to the Delivery Order field (`sale_order_id`) or generate Shortfall Credit Notes on unconfirmed/uninvoiced orders:** In `action_create_sale_order()`, only append the new quotation to `sale_order_ids` (`[(4, order.id)]`) — setting `sale_order_id = order.id` triggers `_sync_delivered_product_lines_from_order()` with `done_qty = 0.0`, which causes `action_end_visit()` to treat 100% of the quotation as an undelivered shortfall! Furthermore, `_create_shortfall_credit_note()` MUST check `order.state == 'sale'` AND `bool(order.invoice_ids.filtered(lambda m: m.move_type == 'out_invoice' and m.state != 'cancel'))` before creating an `out_refund`.
 
 ## Verification
 
 1. Create and complete a field visit with a 500 EGP cash collection line -> System generates draft `account.payment` ID X.
 2. Reopen the visit prior to cashier posting -> Payment ID X is cleanly unlinked; no duplicate exists upon re-closing.
 3. Complete visit and have cashier post payment ID Y -> Reopen visit -> Payment ID Y remains posted and untouched in accounting; visit state reverts cleanly to `in_progress`.
+
