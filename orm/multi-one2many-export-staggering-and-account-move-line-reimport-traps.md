@@ -22,7 +22,11 @@ When exporting `account.move` records from Odoo with columns from **two differen
    - **Rows 2 .. $N$ of the move:** `invoice_line_ids[1..N-1]` in Columns E–H, while `line_ids/*` (Columns I–L, including `Journal Items/External ID`) are **completely blank (`None`)**.
    - **Rows $N+1$ .. $2N$ of the move:** `line_ids[1..M-1]` in Columns I–L, while `invoice_line_ids/*` (Columns E–H) are **completely blank (`None`)**.
 
-2. **Two Re-Import Failures if Mapped Row-by-Row in Excel:**
+2. **Three Re-Import Failures if Not Sanitized:**
+   - **Empty Move `TypeError: 'bool' object is not iterable` in `_stolen_move`:** If any exported `account.move` header row has `External ID` populated in Column A but **zero** `line_ids` rows (e.g., an empty draft invoice), `_extract_records` yields `record['line_ids'] = []`, which `ir.fields.converter.for_model` converts to `converted['line_ids'] = False`. When `account.move.write({'line_ids': False})` calls `_stolen_move(vals)` (`for command in vals.get('line_ids', ()):`), `vals.get('line_ids', ())` returns `False` and crashes with:
+     ```
+     Unknown error during import: <class 'TypeError'>: 'bool' object is not iterable at multiple rows
+     ```
    - **Spurious Line Creation (`Command.create`):** Putting an account value in `New Journal Items/Account` on rows $2..N$ (where `Journal Items/External ID` is `None`) causes `ir.fields.converter._str_to_one2many` to treat those rows as new sub-records (`id = None`) and emit `Command.create({'account_id': ...})` with zero debit/credit and no label.
    - **Nullified Receivable Account (`converted['account_id'] = False`):** Leaving `New Journal Items/Account` blank on the Receivable/Payable `line_ids` rows (which *do* have `Journal Items/External ID` populated) causes `ir.fields.converter.for_model` (`if not value: converted[field] = False`) to emit `Command.update(ar_line_id, {'account_id': False})`, crashing the import with:
      ```
