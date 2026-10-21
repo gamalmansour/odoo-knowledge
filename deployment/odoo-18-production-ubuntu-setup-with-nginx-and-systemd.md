@@ -3,12 +3,12 @@
 | Field         | Value                                                              |
 |---------------|--------------------------------------------------------------------|
 | Category      | deployment                                                         |
-| Odoo Versions | 18                                                                 |
+| Odoo Versions | 17, 18                                                             |
 | Severity      | 🔴 Critical                                                        |
-| Last Verified | 2026-09-26                                                         |
+| Last Verified | 2026-10-21                                                         |
 | Author        | ENG/Gamal Mansour                                                  |
 
-**Tags:** `odoo18`, `deployment`, `ubuntu`, `nginx`, `systemd`, `postgresql`, `wkhtmltopdf`, `rtlcss`, `websocket`, `production`
+**Tags:** `odoo17`, `odoo18`, `deployment`, `ubuntu`, `lxc`, `lxd`, `nginx`, `systemd`, `postgresql`, `wkhtmltopdf`, `rtlcss`, `websocket`, `production`
 
 ---
 
@@ -155,9 +155,17 @@ server {
 ## ⚠️ Pitfalls
 
 1. **Missing `proxy_mode = True`:** If missing from `odoo.conf`, client IP addresses recorded in logs and audit trails will always be `127.0.0.1`, breaking session cookies and geo-restrictions.
-2. **Websocket Upstream:** Directing `/websocket` to 8069 instead of 8072 in multi-worker mode breaks instant messaging notifications.
+2. **Websocket Upstream:** Directing `/websocket` to 8069 instead of 8072 in multi-worker mode breaks instant messaging notifications. (For Odoo 17, also proxy `/longpolling` to 8072).
 3. **Log Rotation:** Missing `/etc/logrotate.d/odoo18` can cause disk exhaustion within 3-6 months. Always use `copytruncate`.
-4. **Port Exposure:** Leaving ports 8069 and 8072 open to the public internet allows bypassing Nginx protections. Close them with UFW and expose only 80 and 443.
+4. **Port Exposure:** Leaving ports 8069 and 8072 open to the public internet allows bypassing Nginx protections. Close them with UFW and expose only 80 and 443 (or LXD proxy ports to the container's Nginx port 80).
+5. **Running Multiple Odoo Versions (17 & 18) via LXC Containers on the Same Host IP:**
+   - Launch each version in its own isolated LXC container (`lxc launch ubuntu:24.04 odoo17 -c boot.autostart=1`).
+   - Inside the container's Nginx config, use `proxy_set_header X-Forwarded-Host $http_host;` (NOT `$host`) so non-80 external LXD proxy ports (e.g., `:8017` and `:8069`) preserve the port number in redirects and `web.base.url`.
+   - When installing Odoo 17 on Ubuntu 24.04 (Python 3.12), run `pip install --upgrade pip wheel "setuptools<80"` and `pip install --prefer-binary -r requirements.txt` + `lxml-html-clean` to use prebuilt wheels cleanly.
+   - Map distinct external ports on the host via LXD Proxy Devices:
+     - `odoo18`: `8069 -> 10.x.x.100:80` and `8072 -> 10.x.x.100:8072`
+     - `odoo17`: `8017 -> 10.x.x.11:80` and `8074 -> 10.x.x.11:8072`
+   - To avoid browser `session_id` cookie collisions when opening both instances simultaneously in the same browser without a custom domain, use wildcard DNS (`http://odoo17.<SERVER_IP>.sslip.io:8017` vs `http://odoo18.<SERVER_IP>.sslip.io:8069`).
 
 ---
 
