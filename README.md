@@ -560,3 +560,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | Views | [One2many List Column Overcrowding Across Inherited Modules](views/one2many-list-column-overcrowding-across-inherited-modules.md) | V17, V18, V19 |
 | [Odoo Apps Store (`apps.odoo.com`) HTML Sanitizer & Standalone Module Decoupling](Best%20Practices/odoo-apps-store-publishing-sanitizer-and-decoupling.md) | Best Practices | All | 🔴 Critical | 2026-10-16 |
 | [Sliding Flexible Check-In Window vs Odoo 19 Native `flexible_hours` on `resource.calendar`](orm/sliding-flexible-checkin-window-vs-native-flexible-hours.md) | ORM | V17, V18, V19 | 🔴 Critical | 2026-10-19 |
+| [Upgrading Custom Multi-Invoice `account.payment` Modules from Odoo 15/16 to Odoo 19](upgrade/account-payment-multi-line-migration-odoo19.md) | Upgrade | V18, V19 | 🔴 Critical | 2026-10-28 |
