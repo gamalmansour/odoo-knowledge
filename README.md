@@ -561,3 +561,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new entries.
 | [Odoo Apps Store (`apps.odoo.com`) HTML Sanitizer & Standalone Module Decoupling](Best%20Practices/odoo-apps-store-publishing-sanitizer-and-decoupling.md) | Best Practices | All | 🔴 Critical | 2026-10-16 |
 | [Sliding Flexible Check-In Window vs Odoo 19 Native `flexible_hours` on `resource.calendar`](orm/sliding-flexible-checkin-window-vs-native-flexible-hours.md) | ORM | V17, V18, V19 | 🔴 Critical | 2026-10-19 |
 | [Upgrading Custom Multi-Invoice `account.payment` Modules from Odoo 15/16 to Odoo 19](upgrade/account-payment-multi-line-migration-odoo19.md) | Upgrade | V18, V19 | 🔴 Critical | 2026-10-28 |
+| [External Bot / JSON-RPC User-Scoped Execution (`with_user`) & Triple-Fallback Identity Linking](security/odoo-external-bot-jsonrpc-user-scoped-execution-and-pin-linking.md) | Security | V15-V19 | 🔴 Critical | 2026-10-28 |
