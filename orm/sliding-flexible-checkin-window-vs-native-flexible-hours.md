@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-10-19                                 |
+| Last Verified | 2026-11-01                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `resource.calendar`, `hr_attendance`, `flexible_hours`, `schedule_type`, `lateness`, `early_out`, `sliding_window`, `allowance`
@@ -54,6 +54,7 @@ if evaluate_early and self.check_out:
 - **Never enable `flexible_hours = True` (`schedule_type = 'flexible'`)** when HR still requires fixed working days (Sun–Thu), automated absence scanning (`hr.absence`), and a hard morning cutoff (e.g. `09:00 AM`).
 - **Clamp `effective_start_dt` at `latest_start_dt` (`09:00`)**: If an employee arrives at `09:20`, they are already penalized `20` minutes for late check-in after `09:00`; clamping `effective_start_dt` to `09:00` sets required check-out to `17:00` instead of `17:20`, preventing double-penalizing the same 20 minutes on departure.
 - **Check-out `write()` Idempotency**: Biometric/kiosk attendance creates the record on check-in (`create`) and updates it on check-out (`write({'check_out': ...})`). Only run `_evaluate_late_check_in` when `check_in` is created or modified.
+- **Re-evaluate Penalties When Contract Schedule (`resource_calendar_id`) or Public Holidays Change**: If attendance sheets are imported before HR assigns the employee's true shift on `hr.version` (or before a Public Holiday is added to `resource.calendar.leaves`), stale `late_in`/`early_out` penalties and `unjustified` `hr.absence` records remain on draft payslips. Always trigger `action_recalculate_attendance_policy()` when `hr.version.resource_calendar_id` or `resource.calendar` hours change, clean up `unjustified` absences when `resource.calendar.leaves` (`resource_id=False`) are added, and recompute draft payslip sheets (`_refresh_draft_payslip_sheets()`).
 
 ## Verification
 
