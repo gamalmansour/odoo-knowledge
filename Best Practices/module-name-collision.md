@@ -1,5 +1,7 @@
 # 📝 Module Name Collision in addons_path
 
+**Severity:** 🟡 Medium
+
 **Category**: Best Practices
 **Tags**: #addons #collision #missing_column #view_error
 **Odoo Versions**: All

@@ -1,5 +1,8 @@
 # portal_record_layout Deprecated in Odoo 19
 
+**Severity:** 🟡 Medium
+**Tags:** `portal`, `record`, `layout`, `deprecated`, `odoo19`
+
 ## Problem
 When migrating or building portal views in Odoo 19, using the `<t t-call="portal.portal_record_layout">` template will throw a 500 Internal Server Error: `Template not found: 'portal.portal_record_layout'`.
 

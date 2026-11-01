@@ -1,5 +1,8 @@
 # ⚠️ Domain Pitfall: Date Equality Constraints on Relational Fields
 
+**Severity:** 🟡 Medium
+**Tags:** `domain`, `date`, `restriction`, `pitfall`
+
 ## Context
 When filtering records in a relational field (e.g., `delivery_vehicle_id` on `stock.picking.batch`), a domain was applied to only show available vehicles for *today*: `[('operation_date', '=', context_today())]`.
 

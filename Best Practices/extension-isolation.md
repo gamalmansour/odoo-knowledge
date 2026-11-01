@@ -1,5 +1,8 @@
 # Module Extension Isolation (Degrade to No-op)
 
+**Severity:** 🟡 Medium
+**Tags:** `extension`, `isolation`
+
 ## Scenario
 You need to trigger logic in an extension module during a core process (like `action_start_visit`), but the core process MUST NOT break if the extension logic fails (e.g., due to missing fields, bad data, or removed dependencies).
 

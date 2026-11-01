@@ -1,5 +1,8 @@
 # Exposing Internal HR Models to Portal Users
 
+**Severity:** 🟡 Medium
+**Tags:** `portal`, `module`, `architecture`
+
 ## Problem
 Internal HR models (like `hr.employee`, `hr.leave`, `hr.payslip`) are designed for internal users (`base.group_user`). Sometimes, companies want to expose self-service HR functionalities (Time Off requests, Payslips, Attendance, Loans) to external/portal users (`base.group_portal`) without assigning them paid internal licenses. 
 

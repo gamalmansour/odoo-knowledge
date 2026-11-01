@@ -7,6 +7,8 @@ odoo_version: "19.0"
 
 # Handling Complex Hierarchical Excel Imports with Pandas and Odoo Shell
 
+**Severity:** 🟡 Medium
+
 ## Problem Definition
 When importing Master Data for Customers and Suppliers from an Excel file, the structure may list Parent Companies (HQ) and Branches on separate rows but group them by a common identifier (e.g., `CODE`). Also, some rows act purely as "Contacts" (e.g., `branch responsible`). Standard Odoo XML-RPC or import tools might fail to accurately map translations (`jsonb` in Odoo 19) or properly structure the `is_company`, `parent_id`, and `type` fields.
 

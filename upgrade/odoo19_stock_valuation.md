@@ -1,5 +1,8 @@
 # Odoo 19 Upgrade: stock.valuation.layer to product.value
 
+**Severity:** 🟡 Medium
+**Tags:** `odoo19`, `stock`, `valuation`
+
 ## Overview
 In Odoo 19, the `stock.valuation.layer` model has been extensively refactored/removed in favor of `product.value` and different valuation mechanisms within `stock_account`.
 

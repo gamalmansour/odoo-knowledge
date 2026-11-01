@@ -5,6 +5,8 @@ versions: [18]
 
 # POS JS Missing RPCError Import
 
+**Severity:** 🔴 Critical
+
 ## 🚨 Problem
 
 When extending or patching POS screens (e.g., `PaymentScreen`), you might encounter a runtime error during payment validation:

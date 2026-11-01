@@ -1,5 +1,8 @@
 # Changing Search Fields in Target Models
 
+**Severity:** 🟡 Medium
+**Tags:** `changing`, `search`, `fields`
+
 ## Problem
 When migrating a model (like `sale.target`) from using specific `month` and `year` fields to generic `date_from` and `date_to` fields, dependent models (like `commission_settlement`) that query targets based on `month` and `year` will break and throw programming errors.
 

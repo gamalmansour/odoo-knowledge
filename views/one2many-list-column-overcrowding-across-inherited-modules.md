@@ -1,5 +1,8 @@
 # One2many List Column Overcrowding Across Inherited Modules
 
+**Severity:** 🟡 Medium
+**Tags:** `one2many`, `list`, `column`, `overcrowding`, `across`
+
 - **Category:** Views / UI Ergonomics
 - **Odoo Versions:** 17.0, 18.0, 19.0
 - **Last Verified:** 2026-10-14

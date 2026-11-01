@@ -1,5 +1,7 @@
 # HR Employee address_home_id Deprecation
 
+**Severity:** 🟡 Medium
+
 **Category:** Upgrade  
 **Tags:** upgrade, migration, hr.employee, address_home_id, work_contact_id, accounting, expenses  
 **Odoo Versions:** 17, 18, 19  

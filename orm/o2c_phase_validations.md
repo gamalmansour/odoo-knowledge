@@ -1,5 +1,7 @@
 # O2C Framework: Centralized State Machine Validation
 
+**Severity:** 🟡 Medium
+
 **Tags:** `#architecture`, `#o2c`, `#validation`, `#state-machine`
 **Odoo Versions:** `17.0`, `18.0`, `19.0`
 **Last Verified:** 2026-05-21

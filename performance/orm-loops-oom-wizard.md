@@ -1,5 +1,7 @@
 # OOM and Performance Bottlenecks with Massive ORM Loops in Wizards
 
+**Severity:** 🟡 Medium
+
 **Category:** Performance
 **Tags:** #orm #performance #oom #sql #wizard
 **Odoo Versions:** 15.0, 16.0, 17.0, 18.0

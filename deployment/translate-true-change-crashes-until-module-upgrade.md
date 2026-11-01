@@ -1,5 +1,8 @@
 # Flipping a field to translate=True crashes ALL reads until the module is upgraded
 
+**Severity:** 🔴 Critical
+**Tags:** `translate`, `true`, `change`, `crashes`, `until`
+
 **Category:** Deployment / ORM
 **Date:** 2026-07-22
 **Project:** activity (store, category name translation — client test server RPC_ERROR)

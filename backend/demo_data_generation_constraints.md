@@ -1,5 +1,7 @@
 # Demo Data Generation Constraints
 
+**Severity:** 🟡 Medium
+
 **Category:** Backend  
 **Tags:** Demo Data, Constraints, ValueErrors, Idempotent Generation, Construction  
 **Odoo Versions:** V17, V18  

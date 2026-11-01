@@ -7,6 +7,8 @@ last_verified: 2026-07-02
 ---
 
 # Problem
+
+**Severity:** 🟡 Medium
 You need to warn users immediately in the UI when their input violates a company policy (like quantity limits or budget limits), but the actual blocking/enforcement is done later in the workflow (e.g., upon confirmation).
 
 # Solution ✅

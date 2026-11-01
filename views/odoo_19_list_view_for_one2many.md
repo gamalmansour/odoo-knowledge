@@ -1,5 +1,8 @@
 # Using `<list>` instead of `<tree>` for One2many inline views in Odoo 19+
 
+**Severity:** 🟡 Medium
+**Tags:** `odoo`, `list`, `view`, `one2many`
+
 **Category:** Backend / Views
 **Odoo Versions:** 17.0, 18.0, 19.0+
 **Last Verified:** 2026-07-01

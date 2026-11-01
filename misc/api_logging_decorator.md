@@ -1,5 +1,7 @@
 # API Request Logging via Decorator
 
+**Severity:** 🟡 Medium
+
 **Date Added:** 2026-05-24  
 **Last Verified:** 2026-05-24  
 **Odoo Versions:** 16.0, 17.0, 18.0, 19.0  

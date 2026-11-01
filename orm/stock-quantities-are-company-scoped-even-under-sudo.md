@@ -1,5 +1,8 @@
 # Stock quantities are env.companies-scoped even under sudo()
 
+**Severity:** 🟡 Medium
+**Tags:** `stock`, `quantities`, `are`, `company`, `scoped`
+
 **Category:** ORM / Inventory / Multi-company
 **Date:** 2026-07-22
 **Project:** activity (store API — "backend shows 10, API shows 0" on the client's test server)

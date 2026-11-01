@@ -1,5 +1,8 @@
 # Bypassing Record Rules for Duplicate Validation via sudo().search_read()
 
+**Severity:** 🟡 Medium
+**Tags:** `bypass`, `record`, `rules`, `duplicate`, `validation`
+
 ## 📝 Context
 When computing duplicate warnings (e.g., duplicate phone or email on `res.partner`), standard `search_count()` or `search()` will fail to detect duplicates if the existing records are hidden from the current user via Record Rules (e.g., private partners). 
 

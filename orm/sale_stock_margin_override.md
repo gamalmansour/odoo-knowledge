@@ -1,5 +1,7 @@
 # 📝 sale_stock_margin overriding purchase_price
 
+**Severity:** 🟡 Medium
+
 **Category**: ORM / Computes
 **Tags**: #sale_margin #sale_stock_margin #purchase_price #override
 **Odoo Versions**: All (15+)

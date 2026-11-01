@@ -7,6 +7,8 @@ odoo_versions: [15.0, 16.0, 17.0, 18.0, 19.0]
 ---
 
 # Problem ❌
+
+**Severity:** 🔴 Critical
 When installing or upgrading a module, Odoo throws a `ParseError` with `ValueError: External ID not found in the system`. 
 This typically occurs when an XML file (like a form view or a menu item) references an `action` or another `view` using `%(action_id)d` or `ref="module.view_id"`, but Odoo hasn't parsed that target ID yet.
 

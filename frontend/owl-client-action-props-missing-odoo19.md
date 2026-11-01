@@ -6,6 +6,8 @@ last_verified: "2026-07-01"
 ---
 
 # 📝 Problem
+
+**Severity:** 🟡 Medium
 When defining a custom OWL component as a Client Action in Odoo 19, the view renders completely blank or crashes silently, even though data is being fetched and the template exists. This often happens after upgrading an Odoo 15/16 module.
 
 # ❌ Incorrect Approach

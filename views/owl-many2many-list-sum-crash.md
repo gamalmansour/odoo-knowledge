@@ -8,6 +8,8 @@ versions: 17, 18, 19
 
 # ⚠️ OWL ListRenderer Crash with `sum` Attribute on Many2many Fields
 
+**Severity:** 🔴 Critical
+
 ## ❌ The Problem
 When displaying a `Many2many` field as a list inside a form view, adding the `sum="..."` attribute to any column (e.g., `amount_total`) causes a fatal crash in the frontend:
 ```text

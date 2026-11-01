@@ -13,6 +13,8 @@ tags:
 
 # Odoo 19 Upgrade: res.groups and ir.actions.server xml field changes
 
+**Severity:** 🟡 Medium
+
 ## Problem Description
 When upgrading custom modules to Odoo 19, parsing errors occur in XML files that define `res.groups` and `ir.actions.server` records:
 

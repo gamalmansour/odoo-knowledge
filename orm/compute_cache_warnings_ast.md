@@ -1,5 +1,8 @@
 # Odoo 17 & 19 Compute Field Caching Issue
 
+**Severity:** 🟡 Medium
+**Tags:** `compute`, `cache`, `warnings`, `ast`
+
 ## Problem
 In Odoo 17 and Odoo 19, when multiple fields share the same `compute="some_method"` method, they must have exactly the same parameters for `store` and `compute_sudo`. If one field has `store=True` and another has `store=False`, or if `compute_sudo=False` is set on one but omitted on the other, Odoo will throw caching warnings during registry loading and might result in unpredictable recalculations.
 

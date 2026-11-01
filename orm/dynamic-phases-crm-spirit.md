@@ -1,5 +1,7 @@
 # Dynamic Phases Workflow Pattern (CRM Spirit)
 
+**Severity:** 🟡 Medium
+
 **Category:** ORM / Workflow
 **Tags:** #crm, #workflow, #phases, #architecture
 **Odoo Versions:** V15, V16, V17, V18, V19

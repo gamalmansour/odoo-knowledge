@@ -1,5 +1,7 @@
 # Changing company_dependent=True to Regular Field in Odoo 17+
 
+**Severity:** 🟡 Medium
+
 **Tags:** `#orm`, `#database`, `#migration`, `#jsonb`, `#company_dependent`
 **Odoo Versions:** 17.0, 18.0
 **Category:** Database & Migrations

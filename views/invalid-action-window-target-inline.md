@@ -11,6 +11,8 @@ odoo_version: "19.0"
 ---
 
 # Problem Context
+
+**Severity:** 🟡 Medium
 When defining a menu item and window action for `res.config.settings` (Configuration -> Settings), using `<field name="target">inline</field>` in Odoo 19 causes an `RPC_ERROR` / `ValueError` during module installation or upgrade.
 
 ```python

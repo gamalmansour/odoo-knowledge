@@ -1,5 +1,7 @@
 # POS Single-Screen Checkout (Quick Pay) in OWL
 
+**Severity:** 🟡 Medium
+
 **Category:** Point of Sale (UI Customization)  
 **Odoo Versions:** 17, 18  
 **Tags:** `pos`, `owl`, `quick-checkout`, `payment`, `numpad`

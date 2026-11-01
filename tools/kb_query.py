@@ -388,6 +388,7 @@ def search(
         WHERE (:target_ver IS NULL OR matches_version(e.versions, :target_ver) = 1)
           AND (:cat_param IS NULL OR LOWER(e.category) LIKE :cat_param)
         ORDER BY
+          (CASE WHEN :target_ver IS NOT NULL AND e.category = 'cross_platform' THEN 1 ELSE 0 END) ASC,
           (CASE WHEN :target_ver IS NOT NULL AND (e.versions LIKE :ver_pat OR e.tags LIKE :tag_pat) THEN 0 ELSE 1 END) ASC,
           e.id ASC
         LIMIT :limit
@@ -418,6 +419,7 @@ def search(
           AND (:target_ver IS NULL OR matches_version(e.versions, :target_ver) = 1)
           AND (:cat_param IS NULL OR LOWER(e.category) LIKE :cat_param)
         ORDER BY
+          (CASE WHEN :target_ver IS NOT NULL AND e.category = 'cross_platform' THEN 1 ELSE 0 END) ASC,
           (CASE WHEN :target_ver IS NOT NULL AND (e.versions LIKE :ver_pat OR e.tags LIKE :tag_pat) THEN 0 ELSE 1 END) ASC,
           bm_rank ASC
         LIMIT :limit

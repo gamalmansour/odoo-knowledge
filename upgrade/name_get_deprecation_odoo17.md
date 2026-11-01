@@ -12,6 +12,8 @@ tags:
 
 # ⚠️ Deprecation of name_get in Odoo 17+
 
+**Severity:** 🟡 Medium
+
 ## 📝 Context
 In Odoo 16 and below, developers commonly used the `name_get()` method to customize the display format of a record (e.g., in `Many2one` dropdowns), returning a list of `(id, name)` tuples.
 

@@ -1,5 +1,8 @@
 # Translated Name Searches and Database schema issues in `res.partner`
 
+**Severity:** 🟡 Medium
+**Tags:** `translated`, `many2one`, `search`
+
 ## Problem
 In Odoo, standard text fields like `name` on core models like `res.partner` are used heavily in search logic across the entire ORM. Setting `translate=True` on an existing core `name` field via `_inherit` converts the underlying database column from `VARCHAR` to `JSONB` in newer Odoo versions. This will often cause the ORM to generate mismatched SQL queries where it tries to use the JSONB `->>` operator on a column that Postgres still perceives as `character varying`, leading to:
 `psycopg2.errors.UndefinedFunction: operator does not exist: character varying ->> unknown`

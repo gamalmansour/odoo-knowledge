@@ -1,5 +1,8 @@
 # Selection-label Arabic translations need ir.model.fields.selection occurrence lines in the .po
 
+**Severity:** 🟡 Medium
+**Tags:** `selection`, `label`, `translations`, `need`, `occurrence`
+
 **Category:** ORM / i18n
 **Date:** 2026-07-26
 **Project:** activity (Batch-3: event status labels "same for both languages")

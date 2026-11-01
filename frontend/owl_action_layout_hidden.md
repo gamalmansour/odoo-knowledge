@@ -9,6 +9,8 @@ tags:
 
 # OWL Action Component Hidden Under Navbar (Odoo 17+)
 
+**Severity:** 🟡 Medium
+
 ## Problem
 When creating a custom client action component in OWL (Odoo 17+), the component renders, but the screen appears completely blank or missing. Elements are actually rendered but are hidden underneath the Odoo top navbar because they start at `top: 0` in the DOM.
 

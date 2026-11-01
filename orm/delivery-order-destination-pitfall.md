@@ -1,5 +1,8 @@
 # ⚠️ Delivery Pitfall: Changing `location_dest_id` of Customer Delivery Order
 
+**Severity:** 🟡 Medium
+**Tags:** `delivery`, `order`, `destination`, `pitfall`
+
 ## Context
 When loading goods into a delivery vehicle using a `stock.picking.batch`, there is a temptation to dynamically change the `location_dest_id` of all the pickings in the batch to match the vehicle's `location_id` (Staging/Transit location).
 

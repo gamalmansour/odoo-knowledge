@@ -1,5 +1,8 @@
 # Route caller money/stock by the contact's company_id, not by country
 
+**Severity:** 🟡 Medium
+**Tags:** `route`, `money`, `partner`, `company`, `link`
+
 **Category:** ORM / Multi-company / Money-routing
 **Date:** 2026-07-22
 **Project:** activity (client DB has 22+ companies, ALL in Saudi Arabia)

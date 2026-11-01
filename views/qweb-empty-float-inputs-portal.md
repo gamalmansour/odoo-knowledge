@@ -7,6 +7,8 @@ date: "2026-06-28"
 
 # QWeb Float Inputs and Python Portal Controllers - Handling Empty Values
 
+**Severity:** 🟡 Medium
+
 ## ⚠️ Problem Context
 
 In portal views, Odoo developers often use HTML `<input type="number">` fields for numeric data like quantities, prices, etc. 

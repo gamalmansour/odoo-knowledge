@@ -1,5 +1,7 @@
 # Architecture: Circular Dependencies with Base Mixins
 
+**Severity:** 🟡 Medium
+
 **Date:** 2026-06-14
 **Author:** ENG/Gamal Mansour
 **Tags:** `#architecture`, `#dependencies`, `#mixin`, `#best-practices`

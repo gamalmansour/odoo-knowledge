@@ -6,6 +6,9 @@ last_verified: "2026-07-06"
 ---
 
 # 📝 Problem
+
+**Severity:** 🔴 Critical
+**Tags:** `portal`, `counter`, `null`, `error`
 When creating a custom portal entry and implementing the `_prepare_home_portal_values(self, counters)` method in the portal controller, you might encounter a javascript crash in the Odoo frontend (`web.assets_frontend_lazy.min.js`):
 
 ```javascript

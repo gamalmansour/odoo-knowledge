@@ -251,28 +251,34 @@ def parse_markdown_file(path: Path, repo_root: Optional[Path] = None) -> Dict[st
         # H1 title
         if not title and re.match(r"^#\s+[^#]", line):
             cand = re.sub(r"^#\s+", "", line).strip()
-            # Clean possible markdown bold/quotes
-            cand = cand.strip("*_`\"'").strip()
-            # Remove leading emojis if present
-            cleaned_cand = re.sub(r"^[^\w\s]+\s*", "", cand).strip()
-            title = cleaned_cand if cleaned_cand else cand
+            # Remove leading emojis / decorative symbols while preserving ASCII punctuation and Arabic text
+            cand = re.sub(r"^[^\x20-\x7E\u0600-\u06FF]+\s*", "", cand).strip()
+            # Only unwrap balanced outer wrappers (**...**, "...", '...', `...`, [...])
+            for open_w, close_w in (("**", "**"), ("\"", "\""), ("'", "'"), ("`", "`"), ("[", "]")):
+                if cand.startswith(open_w) and cand.endswith(close_w) and len(cand) > len(open_w) + len(close_w):
+                    inner = cand[len(open_w):-len(close_w)].strip()
+                    if open_w not in inner:
+                        cand = inner
+            title = cand
 
-        # Table rows (| Key | Value |)
+        # Table rows (| Key | Value | or | **Key** | Value |)
         if "|" in line:
             parts = [p.strip() for p in line.split("|") if p.strip()]
             if len(parts) >= 2:
-                k_clean = parts[0].lower().replace(":", "").strip()
-                v_clean = parts[1].strip()
+                k_clean = parts[0].strip("*_` ").lower().replace(":", "").strip()
+                v_clean = parts[1].strip("*_` ").strip()
                 if k_clean == "category" and not category_raw:
                     category_raw = v_clean
-                elif k_clean in ("odoo versions", "versions") and not versions:
+                elif k_clean in ("odoo versions", "versions", "version") and not versions:
                     versions = v_clean
                 elif k_clean == "severity" and not severity:
                     severity = v_clean
                 elif k_clean == "author" and not author:
                     author = v_clean
-                elif k_clean in ("last verified", "last_verified") and not last_verified:
+                elif k_clean in ("last verified", "last_verified", "date") and not last_verified:
                     last_verified = v_clean
+                elif k_clean == "tags" and not tags:
+                    tags = parts[1].replace("`", "").strip()
 
         # Bold KV lines (- **Key:** Value or **Key**: Value)
         kv_m = re.match(r"^\s*[-*]?\s*\*\*([^*]+)\*\*:?\s*(.+)$", line)
@@ -294,15 +300,36 @@ def parse_markdown_file(path: Path, repo_root: Optional[Path] = None) -> Dict[st
 
     # Fallback for tags if not found
     if not tags:
-        m_tags = re.search(r"\*\*Tags:\*\*\s*(.+)", raw_content, re.IGNORECASE)
+        m_tags = re.search(r"\*\*Tags:?\*\*:?\s*(.+)", raw_content, re.IGNORECASE)
         if m_tags:
             tags = m_tags.group(1).strip().replace("`", "")
+
+    # Normalize #hashtag style tags (e.g. '#addons #collision' -> 'addons, collision')
+    if tags and "#" in tags and "," not in tags:
+        hash_tokens = [t.lstrip("#").strip() for t in tags.split() if t.lstrip("#").strip()]
+        if hash_tokens:
+            tags = ", ".join(hash_tokens)
 
     # Normalization & fallbacks
     category = normalize_category(category_raw, parent_dir)
 
     if not title:
         title = path.stem.replace("-", " ").replace("_", " ").title()
+
+    if not tags:
+        stop_words = {"and", "the", "for", "with", "from", "into", "when", "not", "all", "via", "how", "use", "using"}
+        stem_tokens = [
+            w for w in re.split(r"[-_]+", path.stem.lower())
+            if len(w) >= 3 and w not in stop_words
+        ]
+        tags = ", ".join(stem_tokens[:5]) if stem_tokens else category
+
+    if not severity:
+        crit_keywords = ("crash", "error", "deadlock", "violation", "loss", "security", "wipes", "blocks", "500", "critical")
+        if any(k in f"{title} {path.stem}".lower() for k in crit_keywords):
+            severity = "🔴 Critical"
+        else:
+            severity = "🟡 Medium"
 
     if not versions:
         # Fallback: scan relative path and title for version hints (e.g. odoo19, v20)

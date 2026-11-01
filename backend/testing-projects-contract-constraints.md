@@ -1,5 +1,7 @@
 # Testing Projects with Contract Constraints
 
+**Severity:** 🟡 Medium
+
 **Category:** Backend  
 **Tags:** Testing, Constraints, Construction Project, Contract Owner  
 **Last Verified:** 2026-06-15  

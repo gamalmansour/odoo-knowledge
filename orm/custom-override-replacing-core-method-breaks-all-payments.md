@@ -1,5 +1,8 @@
 # A custom override that REPLACES a core money method breaks everything the method serves
 
+**Severity:** 🟡 Medium
+**Tags:** `custom`, `override`, `replacing`, `core`, `method`
+
 **Category:** ORM / Accounting / Third-party customs
 **Date:** 2026-08-10
 **Project:** activity (client's `vz_bankcharges` on the restored production-shaped DB)

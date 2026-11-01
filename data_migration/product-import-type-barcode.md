@@ -5,6 +5,9 @@ description: "Handles ValueError on product.template.type for storable products 
 
 # Product Import Gotchas in Odoo 19
 
+**Severity:** 🟡 Medium
+**Tags:** `product`, `import`, `type`, `barcode`
+
 ## Context
 When importing product masters from Excel/CSV into `product.template` in Odoo 19, you might run into two major issues:
 1. `ValueError: Wrong value for product.template.type: 'product'`

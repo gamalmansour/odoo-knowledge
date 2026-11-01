@@ -1,5 +1,8 @@
 # Odoo 19 res.groups category_id Deprecation
 
+**Severity:** 🟡 Medium
+**Tags:** `odoo`, `res`, `groups`, `category`, `deprecation`
+
 ## Problem 🔴
 When creating a custom security group (`res.groups`) in Odoo 19 and assigning an `ir.module.category` using the `category_id` field in XML, an installation error occurs:
 `ValueError: Invalid field 'category_id' in 'res.groups'`

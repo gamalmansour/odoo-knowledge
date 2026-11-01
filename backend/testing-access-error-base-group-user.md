@@ -1,5 +1,7 @@
 # Testing Access Errors: Missing base.group_user
 
+**Severity:** 🔴 Critical
+
 **Category:** Backend  
 **Tags:** Testing, Security, Groups, AccessError, Users  
 **Last Verified:** 2026-06-15  

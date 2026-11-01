@@ -9,6 +9,8 @@ versions: [15, 16, 17, 18, 19]
 
 # Foreign Key Violation During Module Upgrade due to ondelete='restrict'
 
+**Severity:** 🔴 Critical
+
 ## 🚨 Problem
 During a module upgrade (e.g., `-u module_name`), the Odoo server crashes with a `psycopg2.errors.ForeignKeyViolation` error, and subsequently you might see `SerializationFailure` or `KeyError` on the database registry. 
 

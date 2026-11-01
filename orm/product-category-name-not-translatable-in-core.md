@@ -1,5 +1,8 @@
 # product.category.name is NOT translate=True in core Odoo 17
 
+**Severity:** 🟡 Medium
+**Tags:** `product`, `category`, `name`, `translatable`, `core`
+
 **Category:** ORM / i18n
 **Date:** 2026-07-22
 **Project:** activity (store API, Batch 2)

@@ -1,5 +1,8 @@
 # Odoo 19 Common Installation Warnings
 
+**Severity:** 🟡 Medium
+**Tags:** `odoo`, `warnings`
+
 ## 1. `_sql_constraints` Deprecation
 **Warning:** `Model attribute '_sql_constraints' is no longer supported, please define model.Constraint on the model.`
 

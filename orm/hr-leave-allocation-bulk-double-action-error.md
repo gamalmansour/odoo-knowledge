@@ -9,6 +9,8 @@ versions: ["16", "17", "18", "19"]
 
 # HR Leave Allocation: 'You can't do the same action twice' on bulk approval
 
+**Severity:** 🔴 Critical
+
 ## 🔴 Problem
 When implementing custom bulk approvals for `hr.leave.allocation` (e.g., allocating to a department or company), overriding `action_approve` to automatically advance the state to `'validate'` can cause a `UserError: "You can't do the same action twice."` if the state is already validated.
 

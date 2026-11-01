@@ -1,5 +1,7 @@
 # Prevent Manual Editing via One2many Modal Form
 
+**Severity:** 🟡 Medium
+
 **Tags:** `views`, `one2many`, `readonly`, `ui`, `modal`
 
 ## 📝 Background Context

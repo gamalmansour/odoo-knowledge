@@ -1,5 +1,8 @@
 # Adding attributes to a stocked product archives the original variant WITH its stock
 
+**Severity:** 🟡 Medium
+**Tags:** `adding`, `attributes`, `archives`, `variant`, `strands`
+
 **Category:** ORM / Inventory
 **Date:** 2026-07-22
 **Project:** activity (store, client Batch-2 "free_qty always 0")

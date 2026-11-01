@@ -1,5 +1,7 @@
 # Import Hierarchical One2many Data
 
+**Severity:** 🟡 Medium
+
 **Category:** Models
 **Tags:** #one2many, #hierarchy, #boq, #import
 **Last Verified:** 2026-07-02

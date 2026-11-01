@@ -1,4 +1,6 @@
 # Portal Workflow Rule Bypassing for Supervisors/Viewers
+
+**Severity:** 🟡 Medium
 **Category:** Portal/Views  
 **Odoo Versions:** 17, 18, 19  
 **Tags:** `portal`, `controller`, `workflow`, `redirect`, `supervisor`

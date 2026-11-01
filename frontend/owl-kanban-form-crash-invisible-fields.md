@@ -1,5 +1,8 @@
 # OWL Form View Crash on Kanban Navigation
 
+**Severity:** 🔴 Critical
+**Tags:** `owl`, `kanban`, `form`, `crash`, `invisible`
+
 **Category:** Frontend / Views
 **Odoo Versions:** V16, V17, V18, V19
 **Last Verified:** 2026-05-21

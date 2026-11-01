@@ -1,5 +1,7 @@
 # 📝 OWL Client Action Scrolling Issue
 
+**Severity:** 🟡 Medium
+
 **Category**: Frontend / OWL  
 **Odoo Versions**: 16.0, 17.0, 18.0  
 **Tags**: `#owl`, `#client-action`, `#dashboard`, `#css`, `#scrolling`, `#o_content`  

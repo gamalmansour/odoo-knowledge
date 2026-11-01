@@ -1,5 +1,8 @@
 # Translated Many2one Field Search in Odoo
 
+**Severity:** 🟡 Medium
+**Tags:** `translated`, `many2one`, `search`
+
 ## Problem
 When a user sets their language to Arabic and searches for a customer by Arabic name in a standard `Many2one` field, the search may fail to find the customer if the field lacks the `res_partner_many2one` widget. The user is forced to enter the English name instead.
 

@@ -1,5 +1,8 @@
 # Partner-Level vs Company-Level Constraints in Visits
 
+**Severity:** 🟡 Medium
+**Tags:** `partner`, `level`, `visit`, `constraints`
+
 ## Context
 When designing sales or merchandising visit constraints (such as `max_zero_shelf_lines` or `max_zero_warehouse_lines`), the initial instinct is often to place these settings at the `res.company` or `res.config.settings` level. 
 

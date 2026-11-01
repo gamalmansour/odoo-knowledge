@@ -1,5 +1,8 @@
 # A noupdate security file silently skips EXISTING records on upgrade
 
+**Severity:** 🔴 Critical
+**Tags:** `noupdate`, `security`, `file`, `skips`, `existing`
+
 **Category:** Deployment / Security
 **Date:** 2026-08-10
 **Project:** activity (five per-app groups, night before go-live)

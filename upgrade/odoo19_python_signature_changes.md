@@ -6,6 +6,8 @@ description: Python method signature changes in Odoo 19 (e.g. _prepare_procureme
 
 # 📝 Python Method Signature Changes in Odoo 19
 
+**Severity:** 🟡 Medium
+
 **Date:** 2026-07-05
 **Author:** ENG/Gamal Mansour
 **Odoo Versions:** 19.0
