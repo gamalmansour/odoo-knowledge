@@ -88,7 +88,7 @@ class HrLeave(models.Model):
 
 ## ⚠️ Pitfalls
 
-- **Declare `HrLeaveType` before `HrLeave`:** Because `HrLeave._compute_duration` depends on `holiday_status_id.include_weekends_in_duration`, `HrLeaveType` must be imported/defined before `HrLeave` (see `orm/api-depends-on-a-field-declared-in-a-later-module.md`).
+- **Declare `HrLeaveType` before ALL `HrLeave` inheritances in `models/__init__.py`:** Because `HrLeave._compute_duration` depends on `holiday_status_id.include_weekends_in_duration` AND `HrLeave.init()` queries `hr.leave.type`, if another file in `models/__init__.py` (such as `hr_leave_overtime.py`) inherits `hr.leave` earlier than the file defining `HrLeaveType`, Odoo executes `hr.leave._auto_init()` and `hr.leave.init()` BEFORE `hr.leave.type._auto_init()` creates the `include_weekends_in_duration` column (`UndefinedColumn: column hr_leave_type.include_weekends_in_duration does not exist`). Always import the file defining `HrLeaveType` first, guard column existence with `column_exists` / `create_column` in `HrLeaveType._register_hook()` and `HrLeave.init()`, and queue data migrations via `self.pool.post_init(...)`.
 - **Stored `duration_display`:** When recomputing existing `hr.leave` records in `init()` or a migration script, call both `_compute_duration()` and `_compute_duration_display()`, and invalidate `hr.leave.allocation` (`['leaves_taken', 'max_leaves']`).
 - **Never fake a 7-day `resource.calendar`:** Changing an employee's working schedule to 7 days/week to make Sick Leave count weekends breaks Annual/Casual leave durations and marks employees absent on Friday/Saturday.
 
