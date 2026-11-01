@@ -2,8 +2,8 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | misc                                       |
-| Odoo Versions | All                                        |
+| Category      | cross_platform                                       |
+| Odoo Versions | N/A (Unity 6 / Cross-Platform)                                        |
 | Severity      | 🔴 Critical                                |
 | Last Verified | 2026-09-25                                 |
 | Author        | ENG/Gamal Mansour                          |

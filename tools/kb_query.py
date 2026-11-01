@@ -776,13 +776,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.reindex:
         try:
             from tools import kb_indexer
-            res = kb_indexer.index_all(repo_root=repo_root, db_path=db_path, force=True, quiet=False)
+            kb_indexer.index_all(repo_root=repo_root, db_path=db_path, force=True, quiet=False)
+            kb_indexer.generate_readme(repo_root=repo_root)
             if not args.info and not args.query:
                 return 0
         except ImportError:
             sys.path.insert(0, str(repo_root))
             from tools import kb_indexer
             kb_indexer.index_all(repo_root=repo_root, db_path=db_path, force=True, quiet=False)
+            kb_indexer.generate_readme(repo_root=repo_root)
             if not args.info and not args.query:
                 return 0
 

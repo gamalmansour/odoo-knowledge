@@ -2,7 +2,7 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | misc                                       |
+| Category      | cross_platform                                       |
 | Odoo Versions | All (Unity 6 / Unity 2022+ Hybrid Projects) |
 | Severity      | 🔴 Critical                                |
 | Last Verified | 2026-09-20                                 |

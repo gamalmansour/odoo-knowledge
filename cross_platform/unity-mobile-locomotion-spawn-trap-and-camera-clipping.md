@@ -2,7 +2,7 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | misc                                       |
+| Category      | cross_platform                                       |
 | Odoo Versions | Unity 6 / URP / iOS / Android             |
 | Severity      | 🔴 Critical                                |
 | Last Verified | 2026-09-22                                 |

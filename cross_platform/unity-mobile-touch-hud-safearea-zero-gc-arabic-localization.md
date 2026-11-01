@@ -2,7 +2,7 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | frontend                                   |
+| Category      | cross_platform                                   |
 | Odoo Versions | N/A (Unity Mobile Game Architecture)       |
 | Severity      | 🔴 Critical                                |
 | Last Verified | 2026-09-25                                 |

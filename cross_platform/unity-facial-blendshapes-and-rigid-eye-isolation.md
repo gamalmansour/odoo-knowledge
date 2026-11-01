@@ -2,7 +2,7 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | misc                                       |
+| Category      | cross_platform                                       |
 | Odoo Versions | All (Game Engine / Pipeline)               |
 | Severity      | 🟡 Medium                                  |
 | Last Verified | 2026-09-24                                 |

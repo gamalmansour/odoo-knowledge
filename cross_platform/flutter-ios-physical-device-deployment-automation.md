@@ -2,7 +2,7 @@
 
 | Field         | Value                                      |
 |---------------|--------------------------------------------|
-| Category      | deployment                                 |
+| Category      | cross_platform                                 |
 | Odoo Versions | All (Mobile Client)                        |
 | Severity      | 🟡 Medium                                  |
 | Last Verified | 2026-10-07                                 |

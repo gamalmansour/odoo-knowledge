@@ -1,53 +1,67 @@
-# Contributing to Odoo Knowledge Base
+# Contributing to Odoo & Enterprise Engineering Knowledge Base
 
-## How to Add a New Entry
+## ⚡ For AI Agents (Antigravity / Gemini / Claude) — Mandatory Workflow
 
-1. **Choose the right category folder:**
-   - `setup/` — Installation, configuration, environment, dependencies
-   - `orm/` — Models, fields, ORM methods, computed fields, constraints
-   - `views/` — XML views, OWL components, QWeb, JS widgets
-   - `security/` — Access rights, record rules, groups, multi-company
-   - `performance/` — Query optimization, caching, indexing, profiling
-   - `deployment/` — Server config, Nginx, SSL, Docker, production
-   - `upgrade/` — Version migration, data migration, breaking changes
-   - `misc/` — Anything that doesn't fit above
+> **CRITICAL CONTEXT RULE:** Do **NOT** read the full `README.md` into your context window. Always use the local sub-20ms **SQLite FTS5 BM25** query CLI (`./kb`) to search and filter by Odoo version.
 
-2. **Use the template:**
-   - Copy `TEMPLATE.md` into the appropriate category folder
-   - Rename it with a descriptive kebab-case name (e.g., `lxml-build-failure-python314.md`)
+1. **Step 1 — Pull Latest (Before Starting Any Task):**
+   ```bash
+   git -C {workspace}/odoo-knowledge pull origin main
+   ```
+2. **Step 2 — Query via `./kb` Local Search Engine:**
+   ```bash
+   ./odoo-knowledge/kb "<model_name_or_keyword_or_error>" -v <detected_odoo_version>
+   ```
+   - Supports boolean queries (`AND`, `OR`, `NOT`), category filters (`-c orm`), tag filters (`-t odoo18`), and output formats (`-f text|markdown|compact|json`).
+3. **Step 3 — Read Matching Entries:**
+   Read only the matching `.md` files returned by `./kb`. Pay strict attention to **Solution ✅**, **⚠️ Pitfalls**, and **Odoo Versions**.
+4. **Step 4 — Contribute Back & Auto-Regenerate Index:**
+   - **Existing accurate entry:** No changes needed.
+   - **Improved fix or new pitfall found:** Update the `.md` file and bump `Last Verified`.
+   - **New problem solved:** Create a new `.md` file from `TEMPLATE.md` in the appropriate category folder.
+   - **Rebuild Index & README automatically:**
+     ```bash
+     python3 {workspace}/odoo-knowledge/tools/kb_indexer.py --force --update-readme
+     ```
+5. **Step 5 — Commit & Push:**
+   ```bash
+   git -C {workspace}/odoo-knowledge add -A
+   git -C {workspace}/odoo-knowledge commit -m "📝 [CATEGORY] Brief description of what was added/updated"
+   git -C {workspace}/odoo-knowledge push origin main
+   ```
 
-3. **Fill in ALL fields:**
-   - Especially: Odoo Versions, Severity, Tags, Last Verified
-   - The more specific, the more useful
+---
 
-4. **Update the index:**
-   - Add your entry to the table in `README.md`
-   - Keep entries sorted by category
+## 📂 Category Directory Structure
 
-## Naming Convention
+### Part I — Odoo ERP Core & Enterprise Architecture
+- `setup/` — Installation, configuration, environment, OS dependencies, multi-instance setups, pre-sales seeding
+- `database/` — PostgreSQL administration, `datdba` ownership, `unaccent_schema`, safe truncation, DB lifecycle
+- `orm/` — Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, domain business logic
+- `views/` — XML views (Form, List, Kanban, Search, Gantt), QWeb PDF reports, actions, XPath
+- `frontend/` — OWL 2/3 components, JS widgets, POS screens, Portal JS, WebGL/Canvas client actions
+- `backend/` — HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, hardware bridges
+- `security/` — Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, multi-company
+- `performance/` — Query optimization, N+1 prevention, batch engines, PostgreSQL window functions, caching
+- `upgrade/` — Version migrations (Odoo 15 → 20), breaking API changes, code replacement cookbooks
+- `data_migration/` — Complex Excel/CSV imports, header auto-mapping, relational resolution, ETL pipelines
+- `deployment/` — Server provisioning (Ubuntu/Nginx/Systemd), SSL, Docker, zero-downtime upgrade safety
+- `Best Practices/` — ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, audit protocols
+- `misc/` — Localization (`i18n`/`.po`), e-invoicing (ZATCA/SdI), Salla webhooks, SEO sitemaps, Odoo Apps Store assets
 
-- Use `kebab-case` for file names
-- Be descriptive but concise
-- Include the key technology/component in the name
+### Part II — Cross-Platform, Mobile & Game Engine R&D
+- `cross_platform/` — Isolated non-Odoo R&D: Unity 6 (URP, IL2CPP, Mecanim, Action-RPG), Flutter iOS physical device deployment, Mobile Arabic BiDi, and media pipelines
 
-**Good:** `lxml-build-failure-python314.md`, `computed-field-stored-performance.md`
-**Bad:** `fix1.md`, `issue.md`, `temp-solution.md`
+---
 
-## When to Update an Existing Entry
+## 🏷️ Naming & Metadata Conventions
 
-- You found an **additional pitfall** or edge case
-- The solution **changed** in a newer Odoo version
-- You found a **better/simpler** solution
-- The **verification steps** need updating
-
-When updating, always update the `Last Verified` date.
-
-## For AI Agents (Antigravity / Gemini)
-
-When working on a task:
-1. **FIRST** — Read `README.md` to scan for relevant entries
-2. **SECOND** — Read any matching entry files before writing code
-3. **THIRD** — After solving a problem:
-   - If it matches an existing entry → Update it if needed
-   - If it's a new problem → Create a new entry + update README.md index
-4. **ALWAYS** — Follow the `TEMPLATE.md` format exactly
+- Use descriptive `kebab-case.md` filenames (e.g., `odoo18-product-type-storable-migration-silent-zero-stock-trap.md`).
+- Fill in all metadata fields from `TEMPLATE.md`:
+  - `Category`: Must match the folder name.
+  - `Odoo Versions`: Explicit version list (`16, 17, 18, 19`, `19, 20`, `All`, or `N/A (Unity 6 / Cross-Platform)` for `cross_platform/` entries).
+  - `Severity`: `🔴 Critical`, `🟡 Medium`, or `🟢 Low`.
+  - `Last Verified`: `YYYY-MM-DD`.
+  - `Author`: `ENG/Gamal Mansour`.
+  - `Tags`: Comma-separated backtick tags.
+- Never manually hand-number rows in `README.md` — always run `python3 tools/kb_indexer.py --force --update-readme` so numbering stays 100% sequential (`1..N`) and synchronized with disk.

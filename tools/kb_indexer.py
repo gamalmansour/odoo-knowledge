@@ -28,22 +28,32 @@ DEFAULT_DB_PATH: Path = DEFAULT_REPO_ROOT / ".kb_cache.db"
 
 def normalize_category(cat_raw: str, fallback_dir: str) -> str:
     """
-    Normalizes category names:
-    - Strips leading/trailing whitespace.
+    Normalizes category names into canonical categories:
+    - Strips leading/trailing whitespace and parenthetical/compound qualifiers.
     - If empty or template placeholder, falls back to directory name.
     - Takes primary category before slash '/'.
-    - Replaces spaces with underscores.
-    - Normalizes plural 'upgrades' to 'upgrade'.
+    - Replaces spaces with underscores and lowercases.
+    - Maps legacy/synonym categories ('upgrades', 'models', 'architecture', etc.)
+      to their canonical equivalents.
     """
     if not cat_raw or cat_raw.strip().startswith("setup / orm"):
         cat = fallback_dir if fallback_dir != "_root" else "misc"
     else:
-        cat = cat_raw.split("/")[0].strip().lower()
+        cat = cat_raw.split("/")[0].strip()
 
-    cat = cat.replace(" ", "_")
-    if cat == "upgrades":
-        cat = "upgrade"
-    return cat
+    cat = cat.split("(")[0].split("&")[0].strip().lower()
+    cat = re.sub(r"[\s-]+", "_", cat).strip("_")
+
+    synonyms = {
+        "upgrades": "upgrade",
+        "models": "orm",
+        "accounting": "orm",
+        "sale": "orm",
+        "architecture": "best_practices",
+        "portal": "views",
+        "point_of_sale": "views",
+    }
+    return synonyms.get(cat, cat or "misc")
 
 
 def classify_heading(htext: str) -> str:
@@ -707,12 +717,226 @@ def get_db_stats(db_path: Path) -> Dict[str, Any]:
     }
 
 
+def generate_readme(repo_root: Optional[Path] = None) -> Path:
+    """
+    Generates a clean, sequentially numbered, and fully synchronized README.md
+    from all markdown documents on disk, grouped into Part I (Odoo ERP Core)
+    and Part II (Cross-Platform, Mobile & Game Engine R&D).
+    """
+    if repo_root is None:
+        repo_root = DEFAULT_REPO_ROOT
+    repo_root = repo_root.resolve()
+
+    odoo_sections = [
+        ("setup", "Setup & Environment", "setup/", "Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding"),
+        ("database", "Database & PostgreSQL", "database/", "PostgreSQL administration, ownership (`datdba`), schema privileges, safe truncation, and DB lifecycle"),
+        ("orm", "ORM, Models & Business Logic", "orm/", "Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic"),
+        ("views", "Views, QWeb Reports & Actions", "views/", "XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath"),
+        ("frontend", "Frontend, OWL & POS UI", "frontend/", "OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions"),
+        ("backend", "Backend, Controllers, APIs & Testing", "backend/", "HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges"),
+        ("security", "Security, ACLs & Multi-Company", "security/", "Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation"),
+        ("performance", "Performance & Query Optimization", "performance/", "SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching"),
+        ("upgrade", "Upgrades & Version Migrations", "upgrade/", "Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks"),
+        ("data_migration", "Data Migration & ETL Imports", "data_migration/", "Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL"),
+        ("deployment", "Deployment & Production DevOps", "deployment/", "Ubuntu production provisioning, Nginx, Systemd, SSL, and zero-downtime upgrade safety"),
+        ("Best Practices", "Enterprise Best Practices & Compliance", "Best Practices/", "ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols"),
+        ("misc", "Localization, Integrations & Misc", "misc/", "Arabic `i18n`/`.po` mechanics, ZATCA/SdI e-invoicing, Salla webhooks, SEO sitemaps, and Odoo Apps Store standards"),
+    ]
+
+    cp_sections = [
+        ("cross_platform", "Cross-Platform, Unity 6, Mobile & Media R&D", "cross_platform/", "Unity 6 (URP, IL2CPP, Mecanim, Action-RPG), Flutter iOS physical device deployment, Mobile Arabic BiDi, and media pipelines"),
+    ]
+
+    files = get_valid_markdown_files(repo_root)
+    by_folder: Dict[str, List[Dict[str, Any]]] = {}
+    for f in files:
+        rel = f.relative_to(repo_root)
+        folder = rel.parts[0] if len(rel.parts) > 1 else "misc"
+        rec = parse_markdown_file(f, repo_root)
+        rec["_rel_path"] = str(rel)
+        rec["_file_name"] = f.name
+        by_folder.setdefault(folder, []).append(rec)
+
+    for folder in by_folder:
+        by_folder[folder].sort(key=lambda r: r["_file_name"].lower())
+
+    total_entries = len(files)
+    odoo_count = sum(len(by_folder.get(k, [])) for k, _, _, _ in odoo_sections)
+    cp_count = sum(len(by_folder.get(k, [])) for k, _, _, _ in cp_sections)
+    today_str = time.strftime("%Y-%m-%d", time.gmtime())
+
+    lines: List[str] = [
+        "# 🧠 Odoo & Enterprise Engineering Knowledge Base",
+        "",
+        "> A production-grade, version-aware institutional memory for solving recurring **Odoo ERP (v14 → v20)**, **DevOps**, and **Cross-Platform** engineering challenges.",
+        "> Maintained by **ENG/Gamal Mansour** and team — built for both **Senior Engineers** and **AI Agents** (Antigravity / Gemini / Claude).",
+        "",
+        "---",
+        "",
+        "## ⚡ Fast Local Search Engine (`./kb`) — Start Here",
+        "",
+        "**Do NOT read this entire `README.md` into an AI Agent's context window.**",
+        "This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query CLI (`./kb`) with strict **Odoo Version Ontology** filtering:",
+        "",
+        "```bash",
+        "# 1. Search by model, field, error message, or keyword filtered to your target Odoo version:",
+        "./kb \"account.move\" -v 18",
+        "./kb \"models.Constraint\" -v 20 -c upgrade",
+        "./kb \"ir.rule\" -v 19 -f compact",
+        "",
+        "# 2. View index statistics or rebuild the SQLite FTS5 cache + README index:",
+        "./kb --info",
+        "./kb --reindex",
+        "```",
+        "",
+        "- **For AI Agents:** Always query `./kb \"<keyword>\" -v <detected_odoo_version>` first (see [CONTRIBUTING.md](CONTRIBUTING.md)).",
+        "- **For Developers:** Use `./kb` in your terminal or browse the categorized tables below.",
+        "",
+        "---",
+        "",
+        "## 📂 Repository Architecture & Categories",
+        "",
+        f"### Part I — Odoo ERP Core & Enterprise Architecture ({odoo_count} Entries)",
+        "",
+        "| Category | Folder | Entries | Scope |",
+        "|---|---|---:|---|",
+    ]
+
+    for folder_key, title, folder_disp, desc in odoo_sections:
+        cnt = len(by_folder.get(folder_key, []))
+        anchor = title.lower().replace("&", "").replace(",", "").replace("/", "").replace("(", "").replace(")", "")
+        anchor = "-".join(anchor.split())
+        lines.append(f"| **[{title}](#{anchor})** | `{folder_disp}` | **{cnt}** | {desc} |")
+
+    lines.extend([
+        "",
+        f"### Part II — Cross-Platform, Mobile & Game Engine R&D ({cp_count} Entries)",
+        "",
+        "| Category | Folder | Entries | Scope |",
+        "|---|---|---:|---|",
+    ])
+
+    for folder_key, title, folder_disp, desc in cp_sections:
+        cnt = len(by_folder.get(folder_key, []))
+        lines.append(f"| **[{title}](#cross-platform-unity-6-mobile--media-rd)** | `{folder_disp}` | **{cnt}** | {desc} |")
+
+    lines.extend([
+        "",
+        "---",
+        "",
+        "## 📋 Part I — Odoo ERP Knowledge Index",
+        "",
+    ])
+
+    def _render_table(entries: List[Dict[str, Any]]) -> List[str]:
+        t_lines = [
+            "| # | File | Severity | Versions | Tags | Summary |",
+            "|---:|---|---|---|---|---|",
+        ]
+        for idx, r in enumerate(entries, 1):
+            fname = r["_file_name"]
+            rel_link = r["_rel_path"].replace(" ", "%20")
+            sev = (r.get("severity") or "🟡 Medium").replace("|", "/").strip()
+            vers = (r.get("versions") or "All").replace("|", "/").strip()
+            if len(vers) > 28:
+                vers = vers[:25].rstrip(", ") + "..."
+
+            raw_tags = [t.strip() for t in (r.get("tags") or "").split(",") if t.strip()][:5]
+            tags_fmt = ", ".join(f"`{t}`" for t in raw_tags) if raw_tags else "`odoo`"
+
+            title_clean = (r.get("title") or fname).replace("|", "-").replace("\n", " ").strip()
+            if len(title_clean) > 130:
+                title_clean = title_clean[:127] + "..."
+
+            t_lines.append(
+                f"| {idx} | [{fname}]({rel_link}) | {sev} | {vers} | {tags_fmt} | {title_clean} |"
+            )
+        return t_lines
+
+    for folder_key, title, folder_disp, desc in odoo_sections:
+        entries = by_folder.get(folder_key, [])
+        lines.append(f"### {title}")
+        lines.append("")
+        lines.append(f"> **Folder:** `{folder_disp}` · **Entries:** {len(entries)} · {desc}")
+        lines.append("")
+        lines.extend(_render_table(entries))
+        lines.append("")
+
+    lines.extend([
+        "---",
+        "",
+        "## 🎮 Part II — Cross-Platform, Mobile & Game Engine R&D Index",
+        "",
+        "> Isolated in `cross_platform/` so non-Odoo R&D (Unity 6, Flutter iOS, Mobile BiDi, and Media pipelines) never pollutes Odoo ERP categories.",
+        "",
+    ])
+
+    for folder_key, title, folder_disp, desc in cp_sections:
+        entries = by_folder.get(folder_key, [])
+        lines.append(f"### {title}")
+        lines.append("")
+        lines.append(f"> **Folder:** `{folder_disp}` · **Entries:** {len(entries)} · {desc}")
+        lines.append("")
+        lines.extend(_render_table(entries))
+        lines.append("")
+
+    lines.extend([
+        "---",
+        "",
+        "## 🔧 Quick Reference & Repository Stats",
+        "",
+        "```text",
+        "odoo-knowledge/",
+        "├── kb                      ← Sub-20ms CLI search launcher (SQLite FTS5 + BM25)",
+        "├── tools/                  ← Indexer (kb_indexer.py) & Query Engine (kb_query.py)",
+        "├── tests/                  ← Automated 66-test verification suite (run_tests.py)",
+        "├── README.md               ← Auto-generated categorized index",
+        "├── CONTRIBUTING.md         ← Workflow for Engineers & AI Agents",
+        "├── TEMPLATE.md             ← Standard entry template",
+    ])
+
+    all_sections = odoo_sections + cp_sections
+    for i, (folder_key, _, folder_disp, _) in enumerate(all_sections):
+        cnt = len(by_folder.get(folder_key, []))
+        branch = "└──" if i == len(all_sections) - 1 else "├──"
+        pad = " " * max(1, 24 - len(folder_disp))
+        lines.append(f"{branch} {folder_disp}{pad}← {cnt} entries")
+
+    lines.extend([
+        "```",
+        "",
+        f"- **Total Indexed Entries:** {total_entries} ({odoo_count} Odoo ERP + {cp_count} Cross-Platform R&D)",
+        f"- **Last Synchronized:** {today_str}",
+        "- **Lead Author & Maintainer:** ENG/Gamal Mansour",
+        "- **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy",
+        "",
+        "---",
+        "",
+        "## 🤝 Contributing",
+        "",
+        "See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete contribution workflow.",
+        "",
+        "1. Copy `TEMPLATE.md` into the appropriate category folder.",
+        "2. Fill in all metadata fields (`Category`, `Odoo Versions`, `Severity`, `Last Verified`, `Author`, `Tags`).",
+        "3. Run `python3 tools/kb_indexer.py --force --update-readme` (or `./kb --reindex`) to rebuild the FTS5 cache and regenerate `README.md`.",
+        "4. Commit and push to `origin main`.",
+        "",
+    ])
+
+    readme_path = repo_root / "README.md"
+    readme_path.write_text("\n".join(lines), encoding="utf-8")
+    return readme_path
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="High-Performance SQLite FTS5 Indexer for odoo-knowledge."
     )
     parser.add_argument(
         "--force", "-f", action="store_true", help="Force complete re-indexing of all documents"
+    )
+    parser.add_argument(
+        "--update-readme", "-u", action="store_true", help="Regenerate README.md from all indexed files"
     )
     parser.add_argument(
         "--db-path", type=str, default=str(DEFAULT_DB_PATH), help="Path to SQLite cache DB"
@@ -745,11 +969,15 @@ def main():
         print(f"Database Size:   {stats['db_size_mb']} MB ({stats['db_size_bytes']} bytes)")
         print(f"Last Indexed:    {stats['metadata'].get('last_indexed', 'N/A')}")
         print("\nTop Categories:")
-        for cat, cnt in list(stats["categories"].items())[:10]:
+        for cat, cnt in list(stats["categories"].items())[:15]:
             print(f"  - {cat:20s}: {cnt}")
         sys.exit(0)
 
     index_all(repo_root=repo_root, db_path=db_path, force=args.force, quiet=args.quiet)
+    if args.update_readme:
+        readme_p = generate_readme(repo_root=repo_root)
+        if not args.quiet:
+            print(f"[README updated] Regenerated {readme_p}")
 
 
 if __name__ == "__main__":
