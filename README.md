@@ -28,7 +28,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (456 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (457 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
@@ -43,7 +43,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **28** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
 | **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **3** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
 | **[Deployment & Production DevOps](#deployment-production-devops)** | `deployment/` | **3** | Ubuntu production provisioning, Nginx, Systemd, SSL, and zero-downtime upgrade safety |
-| **[Enterprise Best Practices & Compliance](#enterprise-best-practices-compliance)** | `Best Practices/` | **25** | ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols |
+| **[Enterprise Best Practices & Compliance](#enterprise-best-practices-compliance)** | `Best Practices/` | **26** | ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols |
 | **[Localization, Integrations & Misc](#localization-integrations-misc)** | `misc/` | **22** | Arabic `i18n`/`.po` mechanics, ZATCA/SdI e-invoicing, Salla webhooks, SEO sitemaps, and Odoo Apps Store standards |
 
 ### Part II — Cross-Platform, Mobile & Game Engine R&D (20 Entries)
@@ -544,7 +544,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Enterprise Best Practices & Compliance
 
-> **Folder:** `Best Practices/` · **Entries:** 25 · ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols
+> **Folder:** `Best Practices/` · **Entries:** 26 · ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -559,20 +559,21 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 9 | [multi-market-construction-localization-and-demo-decoupling.md](Best%20Practices/multi-market-construction-localization-and-demo-decoupling.md) | 🔴 Critical | 17, 18, 19 | `localization`, `multi-market`, `construction`, `egypt`, `saudi` | Multi-Market Jurisdiction Switching & Localization Decoupling (Saudi / Egypt / Global) |
 | 10 | [odoo-19-warnings.md](Best%20Practices/odoo-19-warnings.md) | 🟡 Medium | 19 | `odoo`, `warnings` | Odoo 19 Common Installation Warnings |
 | 11 | [odoo-apps-store-publishing-sanitizer-and-decoupling.md](Best%20Practices/odoo-apps-store-publishing-sanitizer-and-decoupling.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `apps.odoo.com`, `index.html`, `sanitizer`, `post_init_hook`, `standalone` | Odoo Apps Store (`apps.odoo.com`) HTML Sanitizer & Standalone Module Decoupling |
-| 12 | [pos_outstanding_receipts_clearing_and_reconciliation.md](Best%20Practices/pos_outstanding_receipts_clearing_and_reconciliation.md) | 🟡 Medium | 16.0, 17.0, 18.0 | `pos`, `accounting`, `reconciliation`, `outstanding-receipts`, `odoo18` | تسوية وتصفير حساب المقبوضات المعلقة (POS Outstanding Receipts Clearing & Reconciliation) |
-| 13 | [saudi-construction-labor-saudization-and-sbc-ptw.md](Best%20Practices/saudi-construction-labor-saudization-and-sbc-ptw.md) | 🔴 Critical | All | `saudi-arabia`, `saudization`, `nitaqat`, `qiwa`, `sbc` | Saudi Construction Labor Saudization & SBC Civil Defense PTW Compliance |
-| 14 | [saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md](Best%20Practices/saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `dcc`, `submittals`, `rfi`, `consultant-sla` | Saudi DCC Consultant Review SLA and Balady/Wafi Geotagged Site Evidence |
-| 15 | [saudi-gtpl-bank-guarantees-advance-amortization.md](Best%20Practices/saudi-gtpl-bank-guarantees-advance-amortization.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-gtpl`, `bank-guarantee`, `amortization`, `advance-payment`, `performance-bond` | Saudi GTPL Bank Guarantees, Performance Handover Gates, and Advance Auto-Amortization |
-| 16 | [saudi-gtpl-claims-eot-and-time-bar-defense.md](Best%20Practices/saudi-gtpl-claims-eot-and-time-bar-defense.md) | 🔴 Critical | All | `saudi-arabia`, `gtpl`, `claims`, `eot`, `time-bar` | Saudi Public Works GTPL Claims, EOT & Statutory Time-Bar Defense |
-| 17 | [saudi-gtpl-etimad-tendering-and-equipment-safety.md](Best%20Practices/saudi-gtpl-etimad-tendering-and-equipment-safety.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `gtpl`, `etimad`, `tender`, `bid-bond` | Saudi GTPL Etimad Tendering (Article 36 Bid Bonds & LCGPA Article 59) & Third-Party Equipment Safety Compliance (TÜV/SASO & Meg... |
-| 18 | [saudi-gtpl-variation-orders-and-contract-amendments-governance.md](Best%20Practices/saudi-gtpl-variation-orders-and-contract-amendments-governance.md) | 🔴 Critical | 17, 18, 19 | `gtpl`, `contract_amendment`, `variation_order`, `value_engineering`, `eot` | Saudi GTPL Variation Orders, Contract Amendments & EOT Governance |
-| 19 | [saudi-public-works-etimad-ipc-governance.md](Best%20Practices/saudi-public-works-etimad-ipc-governance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `etimad`, `gtpl`, `ipc`, `contracting` | Saudi Public Works Contracting: Etimad Platform IPC Workflow, GTPL Delay Penalties (10% Cap), and Statutory Clearances |
-| 20 | [saudi-realestate-rett-vs-zatca-phase2-compliance.md](Best%20Practices/saudi-realestate-rett-vs-zatca-phase2-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `zatca`, `rett`, `real-estate`, `e-invoicing` | Saudi Real Estate Taxation: Handling RETT (5%) & First-Home Subsidy alongside ZATCA Phase 2 E-Invoicing |
-| 21 | [saudi-saber-lcgpa-and-mwan-waste-compliance.md](Best%20Practices/saudi-saber-lcgpa-and-mwan-waste-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `saber`, `saso`, `lcgpa`, `mandatory-list` | Saudi SASO/SABER Conformity, LCGPA Mandatory National Products List & MWAN C&D Waste Manifest Compliance |
-| 22 | [saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md](Best%20Practices/saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md) | 🔴 Critical | All | `saudi-arabia`, `sbc`, `qaqc`, `concrete-testing`, `slump` | Saudi Building Code QA/QC & Statutory Decennial Warranty DLP Compliance |
-| 23 | [saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md](Best%20Practices/saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md) | 🔴 Critical | 17, 18, 19 | `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa` | Saudi Subcontractor Governance: GTPL Articles 71-72 (30% Cap), Statutory Clearances & LCGPA Portal |
-| 24 | [subcontractor-boq-scope-filtering-and-four-field-cascade.md](Best%20Practices/subcontractor-boq-scope-filtering-and-four-field-cascade.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `subcontractor`, `boq`, `cost-code`, `cbs` | Subcontractor BOQ Scope Filtering, 4-Field Cascade (`boq_item_id`, `name`, `owner_boq_line_id`, `cost_code_id`), and Upstream C... |
-| 25 | [warehouse-vs-location-custodianship-principle.md](Best%20Practices/warehouse-vs-location-custodianship-principle.md) | 🔴 Critical Architectural Decision | 14, 15, 16, 17, 18, 19, All | `inventory`, `warehouse`, `location`, `operation_types`, `picking_type` | Warehouse vs. Location Architecture: The Storekeeper Custodianship & Operation Types Principle |
+| 12 | [out-of-order-retroactive-event-convergence-and-live-config-audit.md](Best%20Practices/out-of-order-retroactive-event-convergence-and-live-config-audit.md) | 🔴 Critical | All (15, 16, 17, 18, 19, 20) | `best-practices`, `pre-mortem`, `e2e-testing`, `retroactive`, `idempotency` | Out-of-Order (Retroactive) Event Convergence, Live Master-Data Inspection, and Cross-Table Invariant Audits in Odoo ERP |
+| 13 | [pos_outstanding_receipts_clearing_and_reconciliation.md](Best%20Practices/pos_outstanding_receipts_clearing_and_reconciliation.md) | 🟡 Medium | 16.0, 17.0, 18.0 | `pos`, `accounting`, `reconciliation`, `outstanding-receipts`, `odoo18` | تسوية وتصفير حساب المقبوضات المعلقة (POS Outstanding Receipts Clearing & Reconciliation) |
+| 14 | [saudi-construction-labor-saudization-and-sbc-ptw.md](Best%20Practices/saudi-construction-labor-saudization-and-sbc-ptw.md) | 🔴 Critical | All | `saudi-arabia`, `saudization`, `nitaqat`, `qiwa`, `sbc` | Saudi Construction Labor Saudization & SBC Civil Defense PTW Compliance |
+| 15 | [saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md](Best%20Practices/saudi-dcc-consultant-sla-and-balady-wafi-geotagged-photos.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `dcc`, `submittals`, `rfi`, `consultant-sla` | Saudi DCC Consultant Review SLA and Balady/Wafi Geotagged Site Evidence |
+| 16 | [saudi-gtpl-bank-guarantees-advance-amortization.md](Best%20Practices/saudi-gtpl-bank-guarantees-advance-amortization.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-gtpl`, `bank-guarantee`, `amortization`, `advance-payment`, `performance-bond` | Saudi GTPL Bank Guarantees, Performance Handover Gates, and Advance Auto-Amortization |
+| 17 | [saudi-gtpl-claims-eot-and-time-bar-defense.md](Best%20Practices/saudi-gtpl-claims-eot-and-time-bar-defense.md) | 🔴 Critical | All | `saudi-arabia`, `gtpl`, `claims`, `eot`, `time-bar` | Saudi Public Works GTPL Claims, EOT & Statutory Time-Bar Defense |
+| 18 | [saudi-gtpl-etimad-tendering-and-equipment-safety.md](Best%20Practices/saudi-gtpl-etimad-tendering-and-equipment-safety.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `gtpl`, `etimad`, `tender`, `bid-bond` | Saudi GTPL Etimad Tendering (Article 36 Bid Bonds & LCGPA Article 59) & Third-Party Equipment Safety Compliance (TÜV/SASO & Meg... |
+| 19 | [saudi-gtpl-variation-orders-and-contract-amendments-governance.md](Best%20Practices/saudi-gtpl-variation-orders-and-contract-amendments-governance.md) | 🔴 Critical | 17, 18, 19 | `gtpl`, `contract_amendment`, `variation_order`, `value_engineering`, `eot` | Saudi GTPL Variation Orders, Contract Amendments & EOT Governance |
+| 20 | [saudi-public-works-etimad-ipc-governance.md](Best%20Practices/saudi-public-works-etimad-ipc-governance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `etimad`, `gtpl`, `ipc`, `contracting` | Saudi Public Works Contracting: Etimad Platform IPC Workflow, GTPL Delay Penalties (10% Cap), and Statutory Clearances |
+| 21 | [saudi-realestate-rett-vs-zatca-phase2-compliance.md](Best%20Practices/saudi-realestate-rett-vs-zatca-phase2-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `zatca`, `rett`, `real-estate`, `e-invoicing` | Saudi Real Estate Taxation: Handling RETT (5%) & First-Home Subsidy alongside ZATCA Phase 2 E-Invoicing |
+| 22 | [saudi-saber-lcgpa-and-mwan-waste-compliance.md](Best%20Practices/saudi-saber-lcgpa-and-mwan-waste-compliance.md) | 🔴 Critical | 16, 17, 18, 19 | `saudi-arabia`, `saber`, `saso`, `lcgpa`, `mandatory-list` | Saudi SASO/SABER Conformity, LCGPA Mandatory National Products List & MWAN C&D Waste Manifest Compliance |
+| 23 | [saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md](Best%20Practices/saudi-sbc-qaqc-concrete-testing-and-decennial-warranty-dlp.md) | 🔴 Critical | All | `saudi-arabia`, `sbc`, `qaqc`, `concrete-testing`, `slump` | Saudi Building Code QA/QC & Statutory Decennial Warranty DLP Compliance |
+| 24 | [saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md](Best%20Practices/saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md) | 🔴 Critical | 17, 18, 19 | `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa` | Saudi Subcontractor Governance: GTPL Articles 71-72 (30% Cap), Statutory Clearances & LCGPA Portal |
+| 25 | [subcontractor-boq-scope-filtering-and-four-field-cascade.md](Best%20Practices/subcontractor-boq-scope-filtering-and-four-field-cascade.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `subcontractor`, `boq`, `cost-code`, `cbs` | Subcontractor BOQ Scope Filtering, 4-Field Cascade (`boq_item_id`, `name`, `owner_boq_line_id`, `cost_code_id`), and Upstream C... |
+| 26 | [warehouse-vs-location-custodianship-principle.md](Best%20Practices/warehouse-vs-location-custodianship-principle.md) | 🔴 Critical Architectural Decision | 14, 15, 16, 17, 18, 19, All | `inventory`, `warehouse`, `location`, `operation_types`, `picking_type` | Warehouse vs. Location Architecture: The Storekeeper Custodianship & Operation Types Principle |
 
 ### Localization, Integrations & Misc
 
@@ -659,12 +660,12 @@ odoo-knowledge/
 ├── upgrade/                ← 28 entries
 ├── data_migration/         ← 3 entries
 ├── deployment/             ← 3 entries
-├── Best Practices/         ← 25 entries
+├── Best Practices/         ← 26 entries
 ├── misc/                   ← 22 entries
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 476 (456 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 477 (457 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-02
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
