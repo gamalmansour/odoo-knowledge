@@ -5,10 +5,10 @@
 | Category      | performance                                |
 | Odoo Versions | 16, 17, 18, 19                             |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-09-29                                 |
+| Last Verified | 2026-11-02                                 |
 | Author        | ENG/Gamal Mansour                          |
 
-**Tags:** `hr`, `absence`, `attendance`, `resource-calendar`, `performance`, `n-plus-one`, `batch-processing`, `egypt-calendar`
+**Tags:** `hr`, `absence`, `attendance`, `resource-calendar`, `performance`, `n-plus-one`, `batch-processing`, `egypt-calendar`, `hr.leave`, `missions`
 
 ---
 
@@ -124,6 +124,8 @@ class HrAttendance(models.Model):
 2. **Timezone Boundary Punches**: Always add a 12-hour buffer on UTC search boundaries when pre-fetching `hr.attendance` records to safely capture punches on day edges.
 3. **Unique Constraints**: Always define `models.Constraint('unique(employee_id, date)', ...)` on `hr.absence` to prevent race conditions during concurrent cron or wizard executions.
 4. **Search View RNG in Odoo 19**: Do not add `expand="0"` or `string="Group By"` to `<group>` inside search views in Odoo 19.
+5. **Hourly `Missions` vs Short Hourly `Excuses` (`request_unit_hours = True`)**: Never blindly filter `('request_unit_hours', '=', False)` when pre-fetching `hr.leave` records for absence detection. External `Missions` (`time_type = 'other'` or `'mission'` in leave type name) are frequently configured with `request_unit = 'hour'` so employees can log either partial or full-day missions (`8:00 hours`). Filtering out all `request_unit_hours = True` leaves causes employees on approved external missions to be falsely penalized for `unjustified_absence`. Instead, use a helper `_is_absence_covering_leave()` that includes all full/half-day leaves and all `Missions` while excluding only short hourly `Excuses` (`< 7h`).
+6. **Retroactive Leave Approvals After Daily Cron Execution**: Because the daily absence cron only scans `yesterday`, approving a leave or mission retroactively (e.g., 2 weeks later) will leave the already-created `hr.absence` (`state = 'unjustified'`) and its `2x` `hr.attendance.penalty` on the employee's payslip unless `hr.leave.create()`, `write()`, and `unlink()` actively synchronize `hr.absence` records (`_sync_absences_for_employee_dates`) and refresh open draft payslips (`_refresh_draft_payslip_sheets()`). Never run full `_detect_and_create_absences` on future leave dates (`date >= today`) when a future leave is refused, or future workdays will be prematurely flagged as `unjustified` absences.
 
 ---
 
