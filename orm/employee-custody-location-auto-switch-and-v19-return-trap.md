@@ -5,7 +5,7 @@
 | Category      | orm                                        |
 | Odoo Versions | 17, 18, 19                                 |
 | Severity      | 🔴 Critical                                |
-| Last Verified | 2026-11-03                                 |
+| Last Verified | 2026-11-05                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `stock.picking`, `stock.return.picking`, `repair.order`, `hr.employee`, `custody-location`, `web_read`
@@ -39,14 +39,17 @@ When field engineers or van sales/maintenance technicians are assigned a dedicat
 2. **Auto-Switch & Re-Reserve on Single-Record Form Open (`web_read` when `len(self) == 1`) and `button_validate`:**
    - When a restricted engineer opens an open (`state not in ('done', 'cancel')`) outgoing delivery in Form view (`len(self) == 1` in `web_read`), unreserve any moves reserved on `WH/Stock` (`moves_wrong_loc.sudo()._do_unreserve()`), update `picking.location_id`, `move_ids.location_id`, and `move_line_ids.location_id` to `user_loc`, and call `action_assign()` to reserve from the engineer's custody location.
    - Lock `location_id`, `location_dest_id`, and `picking_type_id` as `readonly` in the UI using a non-stored computed boolean `is_user_location_locked`, backed by `write()` and `button_validate()` checks.
-3. **Override `stock.return.picking._prepare_picking_default_values_based_on` Conditionally:**
-   - If the current user has a restricted `user_loc`, force `vals['location_dest_id'] = user_loc.id` on returns of outgoing pickings and lock `location_dest_id` on the resulting return picking.
+3. **Override `stock.return.picking` lifecycle (`default_get`, `create`, and `_prepare_picking_default_values_based_on`):**
+   - In `default_get` and `create`, immediately block restricted custody engineers from opening or creating a return wizard on Internal Transfers (`picking_type_id.code == 'internal'`) with `UserError`.
+   - In `_prepare_picking_default_values_based_on`, if the current user has a restricted `user_loc`, force `vals['location_dest_id'] = user_loc.id` on returns of outgoing pickings and lock `location_dest_id` on the resulting return picking.
    - If the current user is an unrestricted user (Accounting / Warehouse manager), leave `vals` untouched and `is_user_location_locked = False` so they can freely choose or correct the return destination.
 4. **Enforce and Expose `location_id` & `recycle_location_id` on `repair.order`:**
    - Override `_compute_location_id`, `_compute_recycle_location_id`, `_compute_product_location_src_id`, `_compute_product_location_dest_id`, `web_read`, `create`, `write`, and `_action_repair_confirm` / `action_repair_done` on `repair.order` so `add` moves consume from `user_loc` and `recycle` moves return to `user_loc`.
 
 ## ⚠️ Pitfalls
 
+- **Core Odoo 19 `move.picked` Pitfall in `_do_unreserve()`:** In Odoo 19, `stock.move._do_unreserve()` skips any move where `move.picked == True`. When unreserving wrong-location moves before switching to a custody location, you MUST explicitly execute `moves_wrong_loc.write({'picked': False})` before calling `_do_unreserve()`, and use `preserve_demand_qty=True` to restore the entered quantity and picked status on the new custody location.
+- **Wizard Bypass Pitfall in `stock.return.picking`:** In Odoo 19, `_prepare_picking_default_values_based_on()` is called ONLY when `_create_returns()` is executed, NOT during wizard initialization. If you only check restrictions in `_prepare_picking_default_values_based_on`, restricted users can still instantiate the wizard via `create({})` and open the dialog via `default_get()`. You must override both `default_get()` and `create()` to raise `UserError` immediately.
 - **Never run auto-switch when `len(self) > 1` in `web_read` or `read`:** List views read batches of records; auto-switching on batch read would steal every open delivery order in the company as soon as an engineer opens the Delivery Orders list view. Restrict `web_read` auto-switching strictly to `len(self) == 1`.
 - **Always call `_do_unreserve()` before changing `move.location_id`:** Changing `stock.move.location_id` without unreserving existing `stock.move.line` records leaves `stock.quant.reserved_quantity` stranded in `WH/Stock`.
 
