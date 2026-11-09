@@ -34,7 +34,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 |---|---|---:|---|
 | **[Setup & Environment](#setup-environment)** | `setup/` | **46** | Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding |
 | **[Database & PostgreSQL](#database-postgresql)** | `database/` | **5** | PostgreSQL administration, ownership (`datdba`), schema privileges, safe truncation, and DB lifecycle |
-| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **183** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
+| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **184** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **74** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **20** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
@@ -123,7 +123,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### ORM, Models & Business Logic
 
-> **Folder:** `orm/` · **Entries:** 183 · Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic
+> **Folder:** `orm/` · **Entries:** 184 · Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -310,6 +310,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 181 | [web-read-empty-recordset-cleanup-attributeerror-bool-origin.md](orm/web-read-empty-recordset-cleanup-attributeerror-bool-origin.md) | 🔴 Critical | 17, 18, 19 | `orm`, `web_read`, `cleanup`, `many2one`, `empty-recordset` | web_read() Override Returning Dummy Row with id=False Crashes UI with AttributeError: 'bool' object has no attribute 'origin' |
 | 182 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
 | 183 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
+| 184 | [openeducat-admission-register-null-constraint-auto-fallback.md](orm/openeducat-admission-register-null-constraint-auto-fallback.md) | 🔴 Critical | 16, 17, 18 | `openeducat`, `op.admission`, `register_id`, `not-null`, `public-registration` | OpenEduCat Admission Register Not-Null Constraint on Headless/Public Submissions |
 
 ### Views, QWeb Reports & Actions
 
