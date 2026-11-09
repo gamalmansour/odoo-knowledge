@@ -311,6 +311,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 182 | [web-read-empty-recordset-cleanup-attributeerror-bool-origin.md](orm/web-read-empty-recordset-cleanup-attributeerror-bool-origin.md) | 🔴 Critical | 17, 18, 19 | `orm`, `web_read`, `cleanup`, `many2one`, `empty-recordset` | web_read() Override Returning Dummy Row with id=False Crashes UI with AttributeError: 'bool' object has no attribute 'origin' |
 | 183 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
 | 184 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
+| 185 | [hr-payroll-odoo19-midperiod-renewal-work-entry-gaps-and-worked-leaves-singleton.md](orm/hr-payroll-odoo19-midperiod-renewal-work-entry-gaps-and-worked-leaves-singleton.md) | 🔴 Critical | 19 | `hr_payroll`, `hr_work_entry`, `hr.version`, `l10n_eg_hr_payroll`, `out-of-contract` | Odoo 19 Payroll: Mid-Period Contract Renewal False `OUT` Days, Calendar Gap Errors, and `worked_leaves` Singleton Crash |
 
 ### Views, QWeb Reports & Actions
 
