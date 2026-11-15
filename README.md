@@ -438,6 +438,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 18 | [wht_progress_invoices.md](backend/wht_progress_invoices.md) | 🟢 Low | 15, 16, 17 | `WHT`, `Progress Invoices`, `Construction`, `Taxes` | Withholding Tax (WHT) on Subcontractor Progress Invoices |
 | 19 | [zkteco-adms-push-biometric-attendance-integration.md](backend/zkteco-adms-push-biometric-attendance-integration.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `adms`, `iclock`, `attendance` | ZKTeco Native ADMS / IClock Push Protocol Direct Integration with Odoo Attendance |
 | 20 | [zkteco-offline-excel-usb-attendance-import.md](backend/zkteco-offline-excel-usb-attendance-import.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `excel-import`, `usb-attendance`, `hr_attendance` | ZKTeco Offline USB Excel & DAT Attendance Import with Auto-Linking and Open-Session Safety |
+| 21 | [zkteco-biotime-central-rest-api-cloud-odoo.md](backend/zkteco-biotime-central-rest-api-cloud-odoo.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biotime`, `hr_attendance`, `odoo.sh`, `biometric` | Cloud Odoo.sh Biometric Attendance Sync via Central ZKTeco BioTime REST API vs Direct TCP 4370 |
 
 ### Security, ACLs & Multi-Company
 
