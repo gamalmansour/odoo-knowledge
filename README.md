@@ -28,16 +28,16 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (463 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (465 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
-| **[Setup & Environment](#setup-environment)** | `setup/` | **47** | Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding |
+| **[Setup & Environment](#setup-environment)** | `setup/` | **48** | Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding |
 | **[Database & PostgreSQL](#database-postgresql)** | `database/` | **5** | PostgreSQL administration, ownership (`datdba`), schema privileges, safe truncation, and DB lifecycle |
 | **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **185** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **74** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
-| **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **20** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
+| **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **21** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
 | **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **32** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **28** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
@@ -58,7 +58,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Setup & Environment
 
-> **Folder:** `setup/` · **Entries:** 47 · Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding
+> **Folder:** `setup/` · **Entries:** 48 · Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -97,18 +97,19 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 33 | [odoo-setup-automator-risks.md](setup/odoo-setup-automator-risks.md) | 🔴 Critical | All | `automation`, `setup`, `ssh`, `database`, `rsync` | Odoo.sh Setup Automator GUI Risks & Pre-mortem |
 | 34 | [odoo-silent-db-autocreate-masks-wrong-cluster.md](setup/odoo-silent-db-autocreate-masks-wrong-cluster.md) | 🟡 Medium | All | `setup`, `postgres`, `db_port`, `upgrade`, `-u` | Odoo Silently Auto-Creates a Missing `-d` Database — Masking a Wrong db_port/Cluster |
 | 35 | [odoo19-alias-domain-catchall-bounce-resolution.md](setup/odoo19-alias-domain-catchall-bounce-resolution.md) | 🔴 Critical | 17, 18, 19 | `email`, `mail.alias.domain`, `catchall`, `reply-to`, `bounce` | Odoo 19 Alias Domain Stale Catchall Causes 'Address Not Found' Mail Bounce |
-| 36 | [odoo20-installation-and-environment-setup-macos.md](setup/odoo20-installation-and-environment-setup-macos.md) | 🔴 Critical | 20.0 | `odoo20`, `setup`, `macos`, `apple-silicon`, `python3.12` | Odoo 20.0 Environment Setup and Enterprise Installation on macOS (Apple Silicon) |
-| 37 | [pgvector-postgresql-extension-required-for-ai-module.md](setup/pgvector-postgresql-extension-required-for-ai-module.md) | 🔴 Critical | 17, 18, 19 | `pgvector`, `postgresql`, `ai`, `enterprise`, `vector` | pgvector PostgreSQL Extension Required for Odoo Enterprise AI Module |
-| 38 | [pip-helper-package-upgrades-lxml-breaks-odoo-shell.md](setup/pip-helper-package-upgrades-lxml-breaks-odoo-shell.md) | 🟡 Medium | All (hit on 19, Python 3.11) | `pip`, `lxml`, `lxml_html_clean`, `dependencies`, `venv` | pip Installing a Helper Package into the Odoo venv Silently Upgrades lxml and Breaks odoo-bin |
-| 39 | [pos_default_receivable_account_misconfiguration.md](setup/pos_default_receivable_account_misconfiguration.md) | 🔴 Critical | 16, 17, 18, 19 | `pos`, `accounting`, `receivable`, `reconciliation`, `zatca` | POS Default Receivable Misconfiguration Hanging POS Accounts Receivable and Corrupting Tax Lines |
-| 40 | [postgresql-port-conflict-and-db-version-mismatch.md](setup/postgresql-port-conflict-and-db-version-mismatch.md) | 🔴 Critical | 17, 18, 19 | `postgresql`, `port-conflict`, `startup`, `database`, `version-mismatch` | PostgreSQL Port Conflict & Database Version Mismatch on Odoo Startup |
-| 41 | [python-version-compatibility.md](setup/python-version-compatibility.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `python`, `version`, `venv`, `compatibility`, `release.py` | Python Version Compatibility Per Odoo Version |
-| 42 | [qaqc-itp-approval-deadlock-and-capa-lifecycle.md](setup/qaqc-itp-approval-deadlock-and-capa-lifecycle.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `qaqc`, `quality`, `itp`, `approval-mixin` | QA/QC Inspection & Test Plans (ITP) Approval Deadlock, Empty Screen, & CAPA Lifecycle |
-| 43 | [subcontractor_penalties_ipc_coupling.md](setup/subcontractor_penalties_ipc_coupling.md) | 🟡 Medium | 17, 18, 19 | `hse`, `subcontractor`, `penalty`, `ipc`, `deductions` | HSE Subcontractor Penalties and IPC Billing Coupling |
-| 44 | [system-dependencies-ubuntu.md](setup/system-dependencies-ubuntu.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `apt`, `dependencies`, `ubuntu`, `libpq`, `libldap` | System Dependencies for Odoo on Ubuntu |
-| 45 | [upgrade-odoo-com-dump-has-no-filestore.md](setup/upgrade-odoo-com-dump-has-no-filestore.md) | 🔴 Critical | All | `filestore`, `ir.attachment`, `upgrade.odoo.com`, `backup`, `migration` | upgrade.odoo.com dumps ship WITHOUT the filestore — audit before promising attachments |
-| 46 | [vscode-auto-activate-venv.md](setup/vscode-auto-activate-venv.md) | 🟢 Low | All (15, 16, 17, 18, 19) | `vscode`, `antigravity`, `terminal`, `venv`, `auto-activate` | VS Code / Antigravity Auto-Activate venv in Terminal |
-| 47 | [wkhtmltopdf-not-in-ubuntu-repos.md](setup/wkhtmltopdf-not-in-ubuntu-repos.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `wkhtmltopdf`, `pdf`, `reports`, `ubuntu`, `apt` | wkhtmltopdf Not Available in Ubuntu 24.04+ Repos (nor Homebrew on macOS) |
+| 36 | [odoo19-cli-db-load-nofs-filestore-and-admin-reset.md](setup/odoo19-cli-db-load-nofs-filestore-and-admin-reset.md) | 🟡 Medium | 18, 19 | `db load`, `nofs`, `filestore`, `neutralize`, `res.users` | Odoo 19 CLI `db load -f -n` Wipes Local Filestore on `_nofs.zip` Restores & Shell Password Verification |
+| 37 | [odoo20-installation-and-environment-setup-macos.md](setup/odoo20-installation-and-environment-setup-macos.md) | 🔴 Critical | 20.0 | `odoo20`, `setup`, `macos`, `apple-silicon`, `python3.12` | Odoo 20.0 Environment Setup and Enterprise Installation on macOS (Apple Silicon) |
+| 38 | [pgvector-postgresql-extension-required-for-ai-module.md](setup/pgvector-postgresql-extension-required-for-ai-module.md) | 🔴 Critical | 17, 18, 19 | `pgvector`, `postgresql`, `ai`, `enterprise`, `vector` | pgvector PostgreSQL Extension Required for Odoo Enterprise AI Module |
+| 39 | [pip-helper-package-upgrades-lxml-breaks-odoo-shell.md](setup/pip-helper-package-upgrades-lxml-breaks-odoo-shell.md) | 🟡 Medium | All (hit on 19, Python 3.11) | `pip`, `lxml`, `lxml_html_clean`, `dependencies`, `venv` | pip Installing a Helper Package into the Odoo venv Silently Upgrades lxml and Breaks odoo-bin |
+| 40 | [pos_default_receivable_account_misconfiguration.md](setup/pos_default_receivable_account_misconfiguration.md) | 🔴 Critical | 16, 17, 18, 19 | `pos`, `accounting`, `receivable`, `reconciliation`, `zatca` | POS Default Receivable Misconfiguration Hanging POS Accounts Receivable and Corrupting Tax Lines |
+| 41 | [postgresql-port-conflict-and-db-version-mismatch.md](setup/postgresql-port-conflict-and-db-version-mismatch.md) | 🔴 Critical | 17, 18, 19 | `postgresql`, `port-conflict`, `startup`, `database`, `version-mismatch` | PostgreSQL Port Conflict & Database Version Mismatch on Odoo Startup |
+| 42 | [python-version-compatibility.md](setup/python-version-compatibility.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `python`, `version`, `venv`, `compatibility`, `release.py` | Python Version Compatibility Per Odoo Version |
+| 43 | [qaqc-itp-approval-deadlock-and-capa-lifecycle.md](setup/qaqc-itp-approval-deadlock-and-capa-lifecycle.md) | 🔴 Critical | 16, 17, 18, 19 | `setup`, `qaqc`, `quality`, `itp`, `approval-mixin` | QA/QC Inspection & Test Plans (ITP) Approval Deadlock, Empty Screen, & CAPA Lifecycle |
+| 44 | [subcontractor_penalties_ipc_coupling.md](setup/subcontractor_penalties_ipc_coupling.md) | 🟡 Medium | 17, 18, 19 | `hse`, `subcontractor`, `penalty`, `ipc`, `deductions` | HSE Subcontractor Penalties and IPC Billing Coupling |
+| 45 | [system-dependencies-ubuntu.md](setup/system-dependencies-ubuntu.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `apt`, `dependencies`, `ubuntu`, `libpq`, `libldap` | System Dependencies for Odoo on Ubuntu |
+| 46 | [upgrade-odoo-com-dump-has-no-filestore.md](setup/upgrade-odoo-com-dump-has-no-filestore.md) | 🔴 Critical | All | `filestore`, `ir.attachment`, `upgrade.odoo.com`, `backup`, `migration` | upgrade.odoo.com dumps ship WITHOUT the filestore — audit before promising attachments |
+| 47 | [vscode-auto-activate-venv.md](setup/vscode-auto-activate-venv.md) | 🟢 Low | All (15, 16, 17, 18, 19) | `vscode`, `antigravity`, `terminal`, `venv`, `auto-activate` | VS Code / Antigravity Auto-Activate venv in Terminal |
+| 48 | [wkhtmltopdf-not-in-ubuntu-repos.md](setup/wkhtmltopdf-not-in-ubuntu-repos.md) | 🔴 Critical | All (15, 16, 17, 18, 19) | `wkhtmltopdf`, `pdf`, `reports`, `ubuntu`, `apt` | wkhtmltopdf Not Available in Ubuntu 24.04+ Repos (nor Homebrew on macOS) |
 
 ### Database & PostgreSQL
 
@@ -414,7 +415,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Backend, Controllers, APIs & Testing
 
-> **Folder:** `backend/` · **Entries:** 20 · HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges
+> **Folder:** `backend/` · **Entries:** 21 · HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -437,8 +438,8 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 17 | [unity-offline-queue-persistence-and-idempotency.md](backend/unity-offline-queue-persistence-and-idempotency.md) | 🔴 Critical | 18, 19 | `unity`, `odoo19`, `rest-api`, `offline-persistence`, `idempotency` | Unity-to-Odoo Offline Queue Persistence and Idempotency Architecture |
 | 18 | [wht_progress_invoices.md](backend/wht_progress_invoices.md) | 🟢 Low | 15, 16, 17 | `WHT`, `Progress Invoices`, `Construction`, `Taxes` | Withholding Tax (WHT) on Subcontractor Progress Invoices |
 | 19 | [zkteco-adms-push-biometric-attendance-integration.md](backend/zkteco-adms-push-biometric-attendance-integration.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `adms`, `iclock`, `attendance` | ZKTeco Native ADMS / IClock Push Protocol Direct Integration with Odoo Attendance |
-| 20 | [zkteco-offline-excel-usb-attendance-import.md](backend/zkteco-offline-excel-usb-attendance-import.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `excel-import`, `usb-attendance`, `hr_attendance` | ZKTeco Offline USB Excel & DAT Attendance Import with Auto-Linking and Open-Session Safety |
-| 21 | [zkteco-biotime-central-rest-api-cloud-odoo.md](backend/zkteco-biotime-central-rest-api-cloud-odoo.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biotime`, `hr_attendance`, `odoo.sh`, `biometric` | Cloud Odoo.sh Biometric Attendance Sync via Central ZKTeco BioTime REST API vs Direct TCP 4370 |
+| 20 | [zkteco-biotime-central-rest-api-cloud-odoo.md](backend/zkteco-biotime-central-rest-api-cloud-odoo.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biotime`, `hr_attendance`, `odoo.sh`, `biometric` | Cloud Odoo.sh Biometric Attendance Sync via Central ZKTeco BioTime REST API vs Direct TCP 4370 |
+| 21 | [zkteco-offline-excel-usb-attendance-import.md](backend/zkteco-offline-excel-usb-attendance-import.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `excel-import`, `usb-attendance`, `hr_attendance` | ZKTeco Offline USB Excel & DAT Attendance Import with Auto-Linking and Open-Session Safety |
 
 ### Security, ACLs & Multi-Company
 
@@ -656,12 +657,12 @@ odoo-knowledge/
 ├── README.md               ← Auto-generated categorized index
 ├── CONTRIBUTING.md         ← Workflow for Engineers & AI Agents
 ├── TEMPLATE.md             ← Standard entry template
-├── setup/                  ← 47 entries
+├── setup/                  ← 48 entries
 ├── database/               ← 5 entries
 ├── orm/                    ← 185 entries
 ├── views/                  ← 74 entries
 ├── frontend/               ← 10 entries
-├── backend/                ← 20 entries
+├── backend/                ← 21 entries
 ├── security/               ← 32 entries
 ├── performance/            ← 7 entries
 ├── upgrade/                ← 28 entries
@@ -672,7 +673,7 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 483 (463 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 485 (465 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-15
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
