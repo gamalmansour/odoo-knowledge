@@ -28,7 +28,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (462 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (463 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
@@ -41,7 +41,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **32** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **28** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
-| **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **3** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
+| **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **4** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
 | **[Deployment & Production DevOps](#deployment-production-devops)** | `deployment/` | **3** | Ubuntu production provisioning, Nginx, Systemd, SSL, and zero-downtime upgrade safety |
 | **[Enterprise Best Practices & Compliance](#enterprise-best-practices-compliance)** | `Best Practices/` | **26** | ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols |
 | **[Localization, Integrations & Misc](#localization-integrations-misc)** | `misc/` | **22** | Arabic `i18n`/`.po` mechanics, ZATCA/SdI e-invoicing, Salla webhooks, SEO sitemaps, and Odoo Apps Store standards |
@@ -529,13 +529,14 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Data Migration & ETL Imports
 
-> **Folder:** `data_migration/` · **Entries:** 3 · Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL
+> **Folder:** `data_migration/` · **Entries:** 4 · Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
 | 1 | [complex-hierarchical-excel-import.md](data_migration/complex-hierarchical-excel-import.md) | 🟡 Medium | 19.0 | `import`, `data migration`, `hierarchical data`, `odoo shell`, `pandas` | Handling Complex Hierarchical Excel Imports with Pandas and Odoo Shell |
 | 2 | [excel-import-header-mapping-and-many2one-resolution.md](data_migration/excel-import-header-mapping-and-many2one-resolution.md) | 🟡 Medium | 16, 17, 18, 19 | `excel_import`, `base_import`, `many2one`, `header_mapping`, `uom` | Excel Import Header Auto-Mapping and Many2one Relation Traps in Odoo 18 |
-| 3 | [product-import-type-barcode.md](data_migration/product-import-type-barcode.md) | 🟡 Medium | 19 | `product`, `import`, `type`, `barcode` | Product Import Gotchas: Type, is_storable, and Duplicate Barcodes (Odoo 19) |
+| 3 | [odoo19-ksa-hr-employee-contract-etl-traps-company-country-and-badge-sequence.md](data_migration/odoo19-ksa-hr-employee-contract-etl-traps-company-country-and-badge-sequence.md) | 🔴 Critical | 18, 19 | `hr.employee`, `hr.version`, `l10n_sa_hr_payroll`, `hr.payroll.structure.type`, `bank_account_ids` | Odoo 19 KSA HR & Payroll ETL Migration Traps: Hidden Country Structure Types, Badge Sequence Overwrite, & `bank_account_ids` M2M |
+| 4 | [product-import-type-barcode.md](data_migration/product-import-type-barcode.md) | 🟡 Medium | 19 | `product`, `import`, `type`, `barcode` | Product Import Gotchas: Type, is_storable, and Duplicate Barcodes (Odoo 19) |
 
 ### Deployment & Production DevOps
 
@@ -663,15 +664,15 @@ odoo-knowledge/
 ├── security/               ← 32 entries
 ├── performance/            ← 7 entries
 ├── upgrade/                ← 28 entries
-├── data_migration/         ← 3 entries
+├── data_migration/         ← 4 entries
 ├── deployment/             ← 3 entries
 ├── Best Practices/         ← 26 entries
 ├── misc/                   ← 22 entries
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 482 (462 Odoo ERP + 20 Cross-Platform R&D)
-- **Last Synchronized:** 2026-11-11
+- **Total Indexed Entries:** 483 (463 Odoo ERP + 20 Cross-Platform R&D)
+- **Last Synchronized:** 2026-11-15
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
 
