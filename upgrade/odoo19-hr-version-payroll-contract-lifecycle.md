@@ -5,7 +5,7 @@
 | Category      | upgrade                                    |
 | Odoo Versions | 19.0                                       |
 | Severity      | 🔴 Critical                                 |
-| Last Verified | 2026-10-06                                 |
+| Last Verified | 2026-11-15                                 |
 | Author        | ENG/Gamal Mansour                          |
 
 **Tags:** `odoo19`, `payroll`, `hr.version`, `hr.contract`, `payslip`, `attendance`, `penalties`
@@ -104,6 +104,9 @@ def action_payslip_cancel(self):
 - **Do NOT pass `'state': 'open'` to `hr.version`:** Unlike `hr.contract` in Odoo 18 and earlier, `hr.version` in Odoo 19 does not have a `state` field. Passing `state` raises `ValueError: Invalid field 'state' in 'hr.version'`.
 - **Always specify `contract_date_start`:** Omitting `contract_date_start` leaves the employee considered "out of contract" during payslip validation.
 - **Hourly rate calculation:** Ensure the calendar's `hours_per_day` is used (fallback to 8.0) when calculating overtime rate: `hourly_rate = (wage / 30.0 / hours_per_day)`. Standard Egyptian labor law overtime is evaluated at `1.5 * hourly_rate`.
+- **`gender` field removed from `hr.employee`:** In Odoo 19 core, `gender` is no longer a direct field on `hr.employee`. Passing `gender` to `hr.employee.create()` raises `ValueError: Invalid field 'gender' in 'hr.employee'`.
+- **`hr.leave.allocation.action_validate` replaced by `action_approve`:** Calling `action_validate` on `hr.leave.allocation` raises `AttributeError: The method 'hr.leave.allocation.action_validate' does not exist`. Use `action_approve` in Odoo 19.
+- **XML-RPC void method dumps None:** Custom models whose action methods do not explicitly return a value (`return True`) return `None`. Odoo's XML-RPC controller runs `OdooMarshaller(allow_none=False).dumps(params)` which raises `TypeError: cannot marshal None unless allow_none is enabled` after the database transaction has committed. Ensure action methods end with `return True`.
 
 ## Verification
 
