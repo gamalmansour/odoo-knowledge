@@ -28,13 +28,13 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (466 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (467 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
 | **[Setup & Environment](#setup-environment)** | `setup/` | **48** | Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding |
 | **[Database & PostgreSQL](#database-postgresql)** | `database/` | **5** | PostgreSQL administration, ownership (`datdba`), schema privileges, safe truncation, and DB lifecycle |
-| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **185** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
+| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **186** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **74** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
@@ -314,6 +314,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 183 | [web-read-empty-recordset-cleanup-attributeerror-bool-origin.md](orm/web-read-empty-recordset-cleanup-attributeerror-bool-origin.md) | 🔴 Critical | 17, 18, 19 | `orm`, `web_read`, `cleanup`, `many2one`, `empty-recordset` | web_read() Override Returning Dummy Row with id=False Crashes UI with AttributeError: 'bool' object has no attribute 'origin' |
 | 184 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
 | 185 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
+| 186 | [multiple-inheritance-missing-name-attribute-error.md](orm/multiple-inheritance-missing-name-attribute-error.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `inheritance`, `_inherit`, `_name`, `mail.activity.mixin`, `ValueError` | Multiple Model Inheritance Missing `_name` Attribute Causes `ValueError: The _name attribute ClassName is not valid` |
 
 ### Views, QWeb Reports & Actions
 
