@@ -28,7 +28,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (465 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (466 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
@@ -37,7 +37,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **185** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **74** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
-| **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **21** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
+| **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
 | **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **32** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **28** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
@@ -415,7 +415,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Backend, Controllers, APIs & Testing
 
-> **Folder:** `backend/` · **Entries:** 21 · HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges
+> **Folder:** `backend/` · **Entries:** 22 · HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -424,22 +424,23 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 3 | [demo_data_generation_constraints.md](backend/demo_data_generation_constraints.md) | 🟡 Medium | V17, V18 | `Demo Data`, `Constraints`, `ValueErrors`, `Idempotent Generation`, `Construction` | Demo Data Generation Constraints |
 | 4 | [env-su-guard-silently-passes-in-transactioncase.md](backend/env-su-guard-silently-passes-in-transactioncase.md) | 🔴 Critical | All | `testing`, `TransactionCase`, `with_user`, `superuser`, `env.su` | A Guard With an `env.su` Bypass Silently Passes Every Test — `TransactionCase` Runs as the Superuser |
 | 5 | [int-cast-on-config-parameter-crashes-on-human-input.md](backend/int-cast-on-config-parameter-crashes-on-human-input.md) | 🔴 Critical | All | `ir.config_parameter`, `settings`, `robustness`, `valueerror`, `defensive-coding` | A bare int() on an ir.config_parameter Crashes the Whole Feature on Human-Typed Input |
-| 6 | [leave-probation-policy-multicontract-and-timezone.md](backend/leave-probation-policy-multicontract-and-timezone.md) | 🟡 Medium | 16, 17, 18, 19 | `hr_holidays`, `leave_policy`, `probation`, `hr_version`, `timezone` | Leave Probation Policy — False Positives from Contract Renewals, Migrated Data and UTC Shift |
-| 7 | [new-constraint-breaking-demo-silently-disables-it-then-upgrade-mass-deletes.md](backend/new-constraint-breaking-demo-silently-disables-it-then-upgrade-mass-deletes.md) | 🔴 Critical | 16, 17, 18 | `api.constrains`, `demo-data`, `_process_end`, `ir.model.data`, `upgrade` | A New Constraint That Breaks Demo Data Silently Disables It — Then the Next Upgrade Mass-Deletes |
-| 8 | [odoo19-jsonrpc-dispatch-and-composite-domains.md](backend/odoo19-jsonrpc-dispatch-and-composite-domains.md) | 🔴 Critical | 19 | `odoo19`, `jsonrpc`, `dispatcher`, `domain`, `search` | Odoo 19 JSON-RPC Dispatcher Param Extraction & Multi-Attribute Composite Domain Normalization |
-| 9 | [public-token-api-must-grade-and-score-server-side.md](backend/public-token-api-must-grade-and-score-server-side.md) | 🔴 Critical | All | `controllers`, `rest-api`, `auth`, `public`, `token` | A Public-Token REST API Must Grade and Score Server-Side — the Client Number Is Never a Fact |
-| 10 | [scoped-device-tokens-for-mobile-api-native-bearer-needs-global-keys.md](backend/scoped-device-tokens-for-mobile-api-native-bearer-needs-global-keys.md) | 🟡 Medium | 19 (bearer method); apike... | `auth`, `bearer`, `res.users.apikeys`, `mobile`, `rest-api` | Mobile-API device tokens: Odoo 19's native bearer auth only accepts GLOBAL api keys — build a scoped auth method instead |
-| 11 | [server-action-code-forbids-attribute-assignment.md](backend/server-action-code-forbids-attribute-assignment.md) | 🟡 Medium | All | `ir.actions.server`, `safe_eval`, `data-files`, `install-failure` | `safe_eval` in a Server Action Forbids Attribute Assignment (`STORE_ATTR`) |
-| 12 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `Testing`, `Security`, `Groups`, `AccessError`, `Users` | Testing Access Errors: Missing base.group_user |
-| 13 | [testing-custom-accounting-with-accounttestinvoicingcommon.md](backend/testing-custom-accounting-with-accounttestinvoicingcommon.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `account`, `AccountTestInvoicingCommon`, `payment_state`, `message_post` | Testing custom accounting code: `AccountTestInvoicingCommon` gotchas (groups, author email, payment_state) |
-| 14 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🟡 Medium | 17.0+ | `Testing`, `Constraints`, `Construction Project`, `Contract Owner` | Testing Projects with Contract Constraints |
-| 15 | [tests-that-assume-an-empty-database-cannot-run-at-the-client.md](backend/tests-that-assume-an-empty-database-cannot-run-at-the-client.md) | 🟡 Medium | All | `testing`, `TransactionCase`, `constraints`, `deployment` | Tests That Assume an Empty Database Cannot Be Run Where They Matter |
-| 16 | [unity-odoo-rest-auth-and-timescale-deadlock.md](backend/unity-odoo-rest-auth-and-timescale-deadlock.md) | 🟡 Medium | 18, 19 | `unity`, `rest-api`, `authentication`, `timescale`, `mobile` | Unity-Odoo REST API Auth Contract & TimeScale Freeze Prevention |
-| 17 | [unity-offline-queue-persistence-and-idempotency.md](backend/unity-offline-queue-persistence-and-idempotency.md) | 🔴 Critical | 18, 19 | `unity`, `odoo19`, `rest-api`, `offline-persistence`, `idempotency` | Unity-to-Odoo Offline Queue Persistence and Idempotency Architecture |
-| 18 | [wht_progress_invoices.md](backend/wht_progress_invoices.md) | 🟢 Low | 15, 16, 17 | `WHT`, `Progress Invoices`, `Construction`, `Taxes` | Withholding Tax (WHT) on Subcontractor Progress Invoices |
-| 19 | [zkteco-adms-push-biometric-attendance-integration.md](backend/zkteco-adms-push-biometric-attendance-integration.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `adms`, `iclock`, `attendance` | ZKTeco Native ADMS / IClock Push Protocol Direct Integration with Odoo Attendance |
-| 20 | [zkteco-biotime-central-rest-api-cloud-odoo.md](backend/zkteco-biotime-central-rest-api-cloud-odoo.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biotime`, `hr_attendance`, `odoo.sh`, `biometric` | Cloud Odoo.sh Biometric Attendance Sync via Central ZKTeco BioTime REST API vs Direct TCP 4370 |
-| 21 | [zkteco-offline-excel-usb-attendance-import.md](backend/zkteco-offline-excel-usb-attendance-import.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `excel-import`, `usb-attendance`, `hr_attendance` | ZKTeco Offline USB Excel & DAT Attendance Import with Auto-Linking and Open-Session Safety |
+| 6 | [l10n-sa-zatca-qr-empty-on-existing-company-fiscal-country.md](backend/l10n-sa-zatca-qr-empty-on-existing-company-fiscal-country.md) | 🔴 Critical | 16, 17, 18, 19 | `l10n_sa`, `zatca`, `qr_code`, `account_fiscal_country_id`, `account.move` | ZATCA QR Code (`l10n_sa_qr_code_str`) Empty When Retrofitting `l10n_sa` onto Existing Company with Posted Entries |
+| 7 | [leave-probation-policy-multicontract-and-timezone.md](backend/leave-probation-policy-multicontract-and-timezone.md) | 🟡 Medium | 16, 17, 18, 19 | `hr_holidays`, `leave_policy`, `probation`, `hr_version`, `timezone` | Leave Probation Policy — False Positives from Contract Renewals, Migrated Data and UTC Shift |
+| 8 | [new-constraint-breaking-demo-silently-disables-it-then-upgrade-mass-deletes.md](backend/new-constraint-breaking-demo-silently-disables-it-then-upgrade-mass-deletes.md) | 🔴 Critical | 16, 17, 18 | `api.constrains`, `demo-data`, `_process_end`, `ir.model.data`, `upgrade` | A New Constraint That Breaks Demo Data Silently Disables It — Then the Next Upgrade Mass-Deletes |
+| 9 | [odoo19-jsonrpc-dispatch-and-composite-domains.md](backend/odoo19-jsonrpc-dispatch-and-composite-domains.md) | 🔴 Critical | 19 | `odoo19`, `jsonrpc`, `dispatcher`, `domain`, `search` | Odoo 19 JSON-RPC Dispatcher Param Extraction & Multi-Attribute Composite Domain Normalization |
+| 10 | [public-token-api-must-grade-and-score-server-side.md](backend/public-token-api-must-grade-and-score-server-side.md) | 🔴 Critical | All | `controllers`, `rest-api`, `auth`, `public`, `token` | A Public-Token REST API Must Grade and Score Server-Side — the Client Number Is Never a Fact |
+| 11 | [scoped-device-tokens-for-mobile-api-native-bearer-needs-global-keys.md](backend/scoped-device-tokens-for-mobile-api-native-bearer-needs-global-keys.md) | 🟡 Medium | 19 (bearer method); apike... | `auth`, `bearer`, `res.users.apikeys`, `mobile`, `rest-api` | Mobile-API device tokens: Odoo 19's native bearer auth only accepts GLOBAL api keys — build a scoped auth method instead |
+| 12 | [server-action-code-forbids-attribute-assignment.md](backend/server-action-code-forbids-attribute-assignment.md) | 🟡 Medium | All | `ir.actions.server`, `safe_eval`, `data-files`, `install-failure` | `safe_eval` in a Server Action Forbids Attribute Assignment (`STORE_ATTR`) |
+| 13 | [testing-access-error-base-group-user.md](backend/testing-access-error-base-group-user.md) | 🔴 Critical | All | `Testing`, `Security`, `Groups`, `AccessError`, `Users` | Testing Access Errors: Missing base.group_user |
+| 14 | [testing-custom-accounting-with-accounttestinvoicingcommon.md](backend/testing-custom-accounting-with-accounttestinvoicingcommon.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `account`, `AccountTestInvoicingCommon`, `payment_state`, `message_post` | Testing custom accounting code: `AccountTestInvoicingCommon` gotchas (groups, author email, payment_state) |
+| 15 | [testing-projects-contract-constraints.md](backend/testing-projects-contract-constraints.md) | 🟡 Medium | 17.0+ | `Testing`, `Constraints`, `Construction Project`, `Contract Owner` | Testing Projects with Contract Constraints |
+| 16 | [tests-that-assume-an-empty-database-cannot-run-at-the-client.md](backend/tests-that-assume-an-empty-database-cannot-run-at-the-client.md) | 🟡 Medium | All | `testing`, `TransactionCase`, `constraints`, `deployment` | Tests That Assume an Empty Database Cannot Be Run Where They Matter |
+| 17 | [unity-odoo-rest-auth-and-timescale-deadlock.md](backend/unity-odoo-rest-auth-and-timescale-deadlock.md) | 🟡 Medium | 18, 19 | `unity`, `rest-api`, `authentication`, `timescale`, `mobile` | Unity-Odoo REST API Auth Contract & TimeScale Freeze Prevention |
+| 18 | [unity-offline-queue-persistence-and-idempotency.md](backend/unity-offline-queue-persistence-and-idempotency.md) | 🔴 Critical | 18, 19 | `unity`, `odoo19`, `rest-api`, `offline-persistence`, `idempotency` | Unity-to-Odoo Offline Queue Persistence and Idempotency Architecture |
+| 19 | [wht_progress_invoices.md](backend/wht_progress_invoices.md) | 🟢 Low | 15, 16, 17 | `WHT`, `Progress Invoices`, `Construction`, `Taxes` | Withholding Tax (WHT) on Subcontractor Progress Invoices |
+| 20 | [zkteco-adms-push-biometric-attendance-integration.md](backend/zkteco-adms-push-biometric-attendance-integration.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `adms`, `iclock`, `attendance` | ZKTeco Native ADMS / IClock Push Protocol Direct Integration with Odoo Attendance |
+| 21 | [zkteco-biotime-central-rest-api-cloud-odoo.md](backend/zkteco-biotime-central-rest-api-cloud-odoo.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biotime`, `hr_attendance`, `odoo.sh`, `biometric` | Cloud Odoo.sh Biometric Attendance Sync via Central ZKTeco BioTime REST API vs Direct TCP 4370 |
+| 22 | [zkteco-offline-excel-usb-attendance-import.md](backend/zkteco-offline-excel-usb-attendance-import.md) | 🔴 Critical | 16, 17, 18, 19 | `zkteco`, `biometric`, `excel-import`, `usb-attendance`, `hr_attendance` | ZKTeco Offline USB Excel & DAT Attendance Import with Auto-Linking and Open-Session Safety |
 
 ### Security, ACLs & Multi-Company
 
@@ -662,7 +663,7 @@ odoo-knowledge/
 ├── orm/                    ← 185 entries
 ├── views/                  ← 74 entries
 ├── frontend/               ← 10 entries
-├── backend/                ← 21 entries
+├── backend/                ← 22 entries
 ├── security/               ← 32 entries
 ├── performance/            ← 7 entries
 ├── upgrade/                ← 28 entries
@@ -673,8 +674,8 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 485 (465 Odoo ERP + 20 Cross-Platform R&D)
-- **Last Synchronized:** 2026-11-15
+- **Total Indexed Entries:** 486 (466 Odoo ERP + 20 Cross-Platform R&D)
+- **Last Synchronized:** 2026-11-16
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
 
