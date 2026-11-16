@@ -5,7 +5,7 @@
 | Category      | deployment                                                         |
 | Odoo Versions | 17, 18                                                             |
 | Severity      | 🔴 Critical                                                        |
-| Last Verified | 2026-10-21                                                         |
+| Last Verified | 2026-11-17                                                         |
 | Author        | ENG/Gamal Mansour                                                  |
 
 **Tags:** `odoo17`, `odoo18`, `deployment`, `ubuntu`, `lxc`, `lxd`, `nginx`, `systemd`, `postgresql`, `wkhtmltopdf`, `rtlcss`, `websocket`, `production`
@@ -71,12 +71,13 @@ sudo -u odoo18 /opt/odoo18/venv/bin/pip install -r /opt/odoo18/odoo/requirements
 sudo -u odoo18 /opt/odoo18/venv/bin/pip install psycopg2-binary phonenumbers pypdf cryptography pandas
 ```
 
-### 5. PostgreSQL Database User
+### 5. PostgreSQL Database User (Least Privilege — Never `-s` Superuser)
 ```bash
 sudo apt-get install -y postgresql postgresql-client
 sudo systemctl enable --now postgresql
-sudo -u postgres createuser -s odoo18
+sudo -u postgres createuser -d odoo18
 ```
+*(Use `-d` / `CREATEDB` instead of `-s` / `SUPERUSER`: PostgreSQL `SUPERUSER` grants `COPY ... PROGRAM` shell execution if any custom addon has a SQL injection flaw.)*
 
 ### 6. Production Config (`/etc/odoo18.conf`)
 ```ini
@@ -100,8 +101,9 @@ limit_time_cpu = 600
 limit_time_real = 1200
 http_port = 8069
 gevent_port = 8072
-list_db = True
+list_db = False
 ```
+*(Temporarily set `list_db = True` only during initial DB creation if not using CLI, then immediately switch to `list_db = False` and block `^/web/database/` in Nginx.)*
 
 ### 7. Nginx with Websocket Routing
 ```nginx
@@ -162,10 +164,12 @@ server {
    - Launch each version in its own isolated LXC container (`lxc launch ubuntu:24.04 odoo17 -c boot.autostart=1`).
    - Inside the container's Nginx config, use `proxy_set_header X-Forwarded-Host $http_host;` (NOT `$host`) so non-80 external LXD proxy ports (e.g., `:8017` and `:8069`) preserve the port number in redirects and `web.base.url`.
    - When installing Odoo 17 on Ubuntu 24.04 (Python 3.12), run `pip install --upgrade pip wheel "setuptools<80"` and `pip install --prefer-binary -r requirements.txt` + `lxml-html-clean` to use prebuilt wheels cleanly.
-   - Map distinct external ports on the host via LXD Proxy Devices:
-     - `odoo18`: `8069 -> 10.x.x.100:80` and `8072 -> 10.x.x.100:8072`
-     - `odoo17`: `8017 -> 10.x.x.11:80` and `8074 -> 10.x.x.11:8072`
-   - To avoid browser `session_id` cookie collisions when opening both instances simultaneously in the same browser without a custom domain, use wildcard DNS (`http://odoo17.<SERVER_IP>.sslip.io:8017` vs `http://odoo18.<SERVER_IP>.sslip.io:8069`).
+   - Map distinct external ports on the host via LXD Proxy Devices **ONLY to the container's Nginx port 80** (or better, use a single host-level Nginx reverse proxy on 443 with subdomains):
+     - `odoo18`: `8069 -> 10.x.x.100:80`
+     - `odoo17`: `8017 -> 10.x.x.11:80`
+     - ⚠️ **NEVER expose container `:8072` directly via LXD Proxy** (e.g., `8072 -> 10.x.x.100:8072` or `8074 -> 10.x.x.11:8072`). Container Nginx already proxies `/websocket` (and `/longpolling`) internally to `127.0.0.1:8072`; exposing `:8072` publicly lets attackers talk directly to Odoo's Python Gevent server and completely bypass Nginx ACLs, `/web/database` blocks, and rate limits!
+   - To avoid browser `session_id` cookie collisions when opening both instances simultaneously in the same browser without a custom domain, use wildcard DNS (`http://odoo17.<SERVER_IP>.sslip.io:8017` vs `http://odoo18.<SERVER_IP>.sslip.io:8069`) — and move to full HTTPS (`443`) on real subdomains before production go-live.
+6. **Database Manager & SSH Hardening:** Leaving `list_db = True` exposes `/web/database/manager` and unauthenticated `POST /web/database/list` to internet scanners. Always set `list_db = False`, block `location ~* ^/web/database/ { return 403; }` in Nginx, rate-limit `/web/login` and `/xmlrpc/`, disable SSH `PasswordAuthentication`, enable `fail2ban`, and configure automated encrypted off-site backups.
 
 ---
 
