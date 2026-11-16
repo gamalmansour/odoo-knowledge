@@ -58,11 +58,11 @@ class OpBatch(models.Model):
             pass
 ```
 
-2. When auto-creating `op.attendance.register`, constrain identifiers to 16 characters:
+2. When auto-creating `op.attendance.register`, constrain identifiers to 16 characters while guaranteeing uniqueness per batch:
 
 ```python
-short_name = (batch.name or "ATT-REG")[:16]
-short_code = (batch.code or f"ATT{batch.id}")[:16]
+short_name = (batch.name or f"ATT-B{batch.id}")[:16]
+short_code = f"ATT-B{batch.id}"[:16]
 register = self.env['op.attendance.register'].create({
     'name': short_name,
     'code': short_code,
@@ -75,6 +75,7 @@ register = self.env['op.attendance.register'].create({
 
 ## ⚠️ Pitfalls
 
+- **Attendance Register Code Uniqueness Collision:** In `op.attendance.register`, `code` is both `size=16` AND constrained by `unique(code)`. Truncating `batch.code[:16]` when batch codes follow hierarchical patterns (e.g., `BATCH/{course_code}/{order_ref}/{line_id}`) discards the unique suffix whenever the prefix exceeds 16 chars (e.g., `BATCH/OSHA-30-GI`), causing multiple batches of the same course to share identical 16-character codes and crash PostgreSQL with `psycopg2.errors.UniqueViolation`. Always embed `batch.id` prominently (e.g. `f"ATT-B{batch.id}"[:16]`) to guarantee global uniqueness.
 - **Core Module Updates:** If `openeducat_core` is updated, the base definition `size=16` or `size=32` might attempt to shrink the columns unless overridden in your downstream module. Overriding in `init()` guarantees column width in PostgreSQL.
 - **Attendance Register Limits:** Never pass string expressions like `f"{batch.name} Attendance Register"` directly to `op.attendance.register` without slicing or widening the column.
 
