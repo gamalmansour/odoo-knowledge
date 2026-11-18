@@ -38,7 +38,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **74** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
-| **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **32** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
+| **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **33** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **28** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
 | **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **4** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
@@ -446,7 +446,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Security, ACLs & Multi-Company
 
-> **Folder:** `security/` · **Entries:** 32 · Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation
+> **Folder:** `security/` · **Entries:** 33 · Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -482,6 +482,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 30 | [stateless-staff-token-checks-exists-not-active-and-implied-groups.md](security/stateless-staff-token-checks-exists-not-active-and-implied-groups.md) | 🔴 Critical | All | `security`, `jwt`, `rest-api`, `res.users`, `active` | A Stateless Staff Token Outlives Offboarding: `exists()` Is Not `active`, and Groups Imply Each Other |
 | 31 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode`, `access-rights` | Adding Security Group Access Rights to Stock Barcode OWL Buttons |
 | 32 | [webhook-fail-closed-without-channel-secret-disables-ecommerce.md](security/webhook-fail-closed-without-channel-secret-disables-ecommerce.md) | 🔴 Critical | All | `webhook`, `security`, `salla`, `ecommerce`, `hmac` | E-Commerce Webhook Fail-Closed Secret Enforcement Disables Live Store Subscriptions |
+| 33 | [openeducat-public-form-acl-leak-and-admission-not-null-crash.md](security/openeducat-public-form-acl-leak-and-admission-not-null-crash.md) | 🔴 Critical | 17 | `security`, `group_public`, `openeducat`, `op.admission`, `pdpl` | OpenEduCat Public Forms: group_public ACL Leaks Every Record, and op.admission NOT NULL Fields Crash the Form |
 
 ### Performance & Query Optimization
 
