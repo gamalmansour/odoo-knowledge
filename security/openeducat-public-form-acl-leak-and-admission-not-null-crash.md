@@ -61,8 +61,13 @@ access_x_op_student_course_portal,...,base.group_portal,1,0,0,0
 
 ## ⚠️ Pitfalls
 
+
 - `--test-tags /my_module` still imports tests of *all* installed modules at post_install; OpenEduCat 17 `openeducat_quiz/tests/test_quiz_common.py` has a broken `from ..controllers import onboard` that aborts the whole run. Workaround: install first, then run `--test-file=<path>` per file.
 - Models listed in `models/__init__.py` but missing from `ir.model.access.csv` block even `base.user_admin` (non-superuser) — any flow that `create()`s them (e.g. `sale.order.action_confirm`) raises AccessError in production only.
+
+- **`=ilike` on user input is a wildcard search.** `('certificate_serial', '=ilike', query)` with `query='%'` matches the first certificate → full enumeration. Validate with a strict regex and use `=` on a normalized value.
+- **Adding a token column with `default=lambda: uuid4().hex` gives every EXISTING row the SAME token** (the default is evaluated once in `_init_column`). Leave the field without default, set it in `create()`/issuance, and back-fill per row in `migrations/<ver>/post-migrate.py`. Keep the old `/verify/<serial>` route alive so already-printed QR codes still work.
+- Verified fix: 13 non-superuser regression tests (`test_security_hardening.py`), full suite 99/99 green on Odoo 17.
 
 ## References
 
