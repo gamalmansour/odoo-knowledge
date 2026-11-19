@@ -28,7 +28,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (479 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (480 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
@@ -38,7 +38,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **75** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
-| **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **33** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
+| **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **34** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
 | **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **30** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
 | **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **4** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
@@ -454,7 +454,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Security, ACLs & Multi-Company
 
-> **Folder:** `security/` · **Entries:** 33 · Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation
+> **Folder:** `security/` · **Entries:** 34 · Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -477,20 +477,21 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 17 | [odoo-external-bot-jsonrpc-user-scoped-execution-and-pin-linking.md](security/odoo-external-bot-jsonrpc-user-scoped-execution-and-pin-linking.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `security`, `jsonrpc`, `with_user`, `hr.employee`, `res.users` | Odoo: External Bot / JSON-RPC User-Scoped Execution (`with_user`) & Triple-Fallback Identity Linking |
 | 18 | [odoo-hr-employee-public-profile-access-error-custom-fields.md](security/odoo-hr-employee-public-profile-access-error-custom-fields.md) | 🔴 Critical | 13, 14, 15, 16, 17, 18, 19 | `hr`, `hr.employee`, `hr.employee.public`, `access-error`, `time-off` | Odoo: Custom Fields on hr.employee Trigger Public Profile AccessError If Missing groups |
 | 19 | [odoo19_res_groups_privilege_id.md](security/odoo19_res_groups_privilege_id.md) | 🔴 Critical | 19 | `odoo19`, `security`, `res.groups`, `category_id`, `privilege_id` | Odoo 19 `res.groups` category_id and users Fields Removed |
-| 20 | [openeducat-portal-ownership-parent-ids-defensive-check.md](security/openeducat-portal-ownership-parent-ids-defensive-check.md) | 🔴 Critical | 16, 17, 18 | `openeducat`, `portal`, `security`, `authorization`, `op.student` | OpenEduCat Portal Authorization: AttributeError on student.parent_ids vs parent_id |
-| 21 | [openeducat-public-form-acl-leak-and-admission-not-null-crash.md](security/openeducat-public-form-acl-leak-and-admission-not-null-crash.md) | 🔴 Critical | 17 (OpenEduCat 17.0; same... | `security`, `ir.model.access`, `group_public`, `group_portal`, `openeducat` | OpenEduCat Public Forms: `group_public` ACL Leaks Every Record, and `op.admission` NOT NULL Fields Crash the Form |
-| 22 | [per-stage-transition-acl-on-kanban-pipelines.md](security/per-stage-transition-acl-on-kanban-pipelines.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `security`, `stage`, `kanban`, `workflow`, `access-rights` | Restricting Who Can Move a Record Into a Kanban Pipeline Stage (Per-Stage Transition ACL) |
-| 23 | [per-user-rule-fields-need-registry-cache-invalidation.md](security/per-user-rule-fields-need-registry-cache-invalidation.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `security`, `ir.rule`, `ormcache`, `clear_cache`, `_get_invalidation_fields` | Per-User Record-Rule Fields Silently Ignore Changes Until Restart — `ir.rule._compute_domain` Is ormcached |
-| 24 | [portal-controller-sudo-browse-bypasses-record-rules-idor.md](security/portal-controller-sudo-browse-bypasses-record-rules-idor.md) | 🔴 Critical | All | `security`, `portal`, `controller`, `sudo`, `ir.rule` | Portal Controller `sudo().browse()` Bypasses Record Rules → IDOR |
-| 25 | [portal-hr-module-architecture.md](security/portal-hr-module-architecture.md) | 🟡 Medium | All | `portal`, `module`, `architecture` | Exposing Internal HR Models to Portal Users |
-| 26 | [public-binary-image-route-must-whitelist-model-and-gate-record.md](security/public-binary-image-route-must-whitelist-model-and-gate-record.md) | 🟡 Medium | 16, 17, 18, 19 | `ir.binary`, `image`, `web/image`, `public`, `auth=public` | A public (no-login) image-proxy route needs an explicit model whitelist + record gate, or `/web/image` itself, to avoid IDOR / ... |
-| 27 | [public-user-inactive-res-currency-accesserror.md](security/public-user-inactive-res-currency-accesserror.md) | 🔴 Critical | 15, 16, 17, 18, 19 (or "A... | `security`, `access-rights`, `public-user`, `portal-user`, `qweb` | AccessError: You are not allowed to access 'Currency' (res.currency) records during QWeb rendering |
-| 28 | [shipped-secret-default-plus-active-dev-gateway-is-a-payment-bypass.md](security/shipped-secret-default-plus-active-dev-gateway-is-a-payment-bypass.md) | 🔴 Critical | All | `security`, `payment`, `webhook`, `hmac`, `ir.config_parameter` | A Shipped Secret Default + an Active Dev Gateway = Full Payment Bypass |
-| 29 | [smart-button-counter-blocks-opening-the-form.md](security/smart-button-counter-blocks-opening-the-form.md) | 🔴 Critical | All | `access-rights`, `smart-button`, `computed-fields`, `search_count`, `sudo` | A Smart-Button Counter Blocks Opening the Form Entirely |
-| 30 | [sod-approval-checks.md](security/sod-approval-checks.md) | 🔴 Critical | All | `security`, `sod`, `approvals`, `workflow` | Segregation of Duties (SoD) in Custom Approval Engines |
-| 31 | [stateless-staff-token-checks-exists-not-active-and-implied-groups.md](security/stateless-staff-token-checks-exists-not-active-and-implied-groups.md) | 🔴 Critical | All | `security`, `jwt`, `rest-api`, `res.users`, `active` | A Stateless Staff Token Outlives Offboarding: `exists()` Is Not `active`, and Groups Imply Each Other |
-| 32 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode`, `access-rights` | Adding Security Group Access Rights to Stock Barcode OWL Buttons |
-| 33 | [webhook-fail-closed-without-channel-secret-disables-ecommerce.md](security/webhook-fail-closed-without-channel-secret-disables-ecommerce.md) | 🔴 Critical | All | `webhook`, `security`, `salla`, `ecommerce`, `hmac` | E-Commerce Webhook Fail-Closed Secret Enforcement Disables Live Store Subscriptions |
+| 20 | [openeducat-faculty-rule-locks-exam-admin-and-cross-model-m2o-view-groups.md](security/openeducat-faculty-rule-locks-exam-admin-and-cross-model-m2o-view-groups.md) | 🔴 Critical | 16, 17, 18, 19 | `security`, `ir.rule`, `openeducat`, `group_op_faculty`, `group_op_exam_admin` | OpenEduCat `group_op_faculty` Record Rule Locks Out `group_op_exam_admin` & `sale_order_id` View Group Sync |
+| 21 | [openeducat-portal-ownership-parent-ids-defensive-check.md](security/openeducat-portal-ownership-parent-ids-defensive-check.md) | 🔴 Critical | 16, 17, 18 | `openeducat`, `portal`, `security`, `authorization`, `op.student` | OpenEduCat Portal Authorization: AttributeError on student.parent_ids vs parent_id |
+| 22 | [openeducat-public-form-acl-leak-and-admission-not-null-crash.md](security/openeducat-public-form-acl-leak-and-admission-not-null-crash.md) | 🔴 Critical | 17 (OpenEduCat 17.0; same... | `security`, `ir.model.access`, `group_public`, `group_portal`, `openeducat` | OpenEduCat Public Forms: `group_public` ACL Leaks Every Record, and `op.admission` NOT NULL Fields Crash the Form |
+| 23 | [per-stage-transition-acl-on-kanban-pipelines.md](security/per-stage-transition-acl-on-kanban-pipelines.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `security`, `stage`, `kanban`, `workflow`, `access-rights` | Restricting Who Can Move a Record Into a Kanban Pipeline Stage (Per-Stage Transition ACL) |
+| 24 | [per-user-rule-fields-need-registry-cache-invalidation.md](security/per-user-rule-fields-need-registry-cache-invalidation.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `security`, `ir.rule`, `ormcache`, `clear_cache`, `_get_invalidation_fields` | Per-User Record-Rule Fields Silently Ignore Changes Until Restart — `ir.rule._compute_domain` Is ormcached |
+| 25 | [portal-controller-sudo-browse-bypasses-record-rules-idor.md](security/portal-controller-sudo-browse-bypasses-record-rules-idor.md) | 🔴 Critical | All | `security`, `portal`, `controller`, `sudo`, `ir.rule` | Portal Controller `sudo().browse()` Bypasses Record Rules → IDOR |
+| 26 | [portal-hr-module-architecture.md](security/portal-hr-module-architecture.md) | 🟡 Medium | All | `portal`, `module`, `architecture` | Exposing Internal HR Models to Portal Users |
+| 27 | [public-binary-image-route-must-whitelist-model-and-gate-record.md](security/public-binary-image-route-must-whitelist-model-and-gate-record.md) | 🟡 Medium | 16, 17, 18, 19 | `ir.binary`, `image`, `web/image`, `public`, `auth=public` | A public (no-login) image-proxy route needs an explicit model whitelist + record gate, or `/web/image` itself, to avoid IDOR / ... |
+| 28 | [public-user-inactive-res-currency-accesserror.md](security/public-user-inactive-res-currency-accesserror.md) | 🔴 Critical | 15, 16, 17, 18, 19 (or "A... | `security`, `access-rights`, `public-user`, `portal-user`, `qweb` | AccessError: You are not allowed to access 'Currency' (res.currency) records during QWeb rendering |
+| 29 | [shipped-secret-default-plus-active-dev-gateway-is-a-payment-bypass.md](security/shipped-secret-default-plus-active-dev-gateway-is-a-payment-bypass.md) | 🔴 Critical | All | `security`, `payment`, `webhook`, `hmac`, `ir.config_parameter` | A Shipped Secret Default + an Active Dev Gateway = Full Payment Bypass |
+| 30 | [smart-button-counter-blocks-opening-the-form.md](security/smart-button-counter-blocks-opening-the-form.md) | 🔴 Critical | All | `access-rights`, `smart-button`, `computed-fields`, `search_count`, `sudo` | A Smart-Button Counter Blocks Opening the Form Entirely |
+| 31 | [sod-approval-checks.md](security/sod-approval-checks.md) | 🔴 Critical | All | `security`, `sod`, `approvals`, `workflow` | Segregation of Duties (SoD) in Custom Approval Engines |
+| 32 | [stateless-staff-token-checks-exists-not-active-and-implied-groups.md](security/stateless-staff-token-checks-exists-not-active-and-implied-groups.md) | 🔴 Critical | All | `security`, `jwt`, `rest-api`, `res.users`, `active` | A Stateless Staff Token Outlives Offboarding: `exists()` Is Not `active`, and Groups Imply Each Other |
+| 33 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode`, `access-rights` | Adding Security Group Access Rights to Stock Barcode OWL Buttons |
+| 34 | [webhook-fail-closed-without-channel-secret-disables-ecommerce.md](security/webhook-fail-closed-without-channel-secret-disables-ecommerce.md) | 🔴 Critical | All | `webhook`, `security`, `salla`, `ecommerce`, `hmac` | E-Commerce Webhook Fail-Closed Secret Enforcement Disables Live Store Subscriptions |
 
 ### Performance & Query Optimization
 
@@ -677,7 +678,7 @@ odoo-knowledge/
 ├── views/                  ← 75 entries
 ├── frontend/               ← 10 entries
 ├── backend/                ← 22 entries
-├── security/               ← 33 entries
+├── security/               ← 34 entries
 ├── performance/            ← 7 entries
 ├── upgrade/                ← 30 entries
 ├── data_migration/         ← 4 entries
@@ -687,7 +688,7 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 499 (479 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 500 (480 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-19
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
