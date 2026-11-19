@@ -500,7 +500,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Upgrades & Version Migrations
 
-> **Folder:** `upgrade/` · **Entries:** 29 · Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks
+> **Folder:** `upgrade/` · **Entries:** 30 · Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -533,6 +533,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 27 | [qweb-report-invoice-reconciled-payments-odoo18.md](upgrade/qweb-report-invoice-reconciled-payments-odoo18.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `account.move`, `qweb`, `report` | account.move _get_reconciled_info_JSON_values Migration to Odoo 18 |
 | 28 | [sale-order-line-tax-id-renamed-tax-ids-odoo19.md](upgrade/sale-order-line-tax-id-renamed-tax-ids-odoo19.md) | 🟡 Medium | 19 | `upgrade`, `sale.order.line`, `tax_id`, `tax_ids`, `breaking-change` | `sale.order.line.tax_id` Renamed to `tax_ids` in Odoo 19 |
 | 29 | [replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md](upgrade/replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md) | 🔴 Critical | 16, 17, 18, 19 | `pdfrw`, `PyPDF2`, `pypdf`, `odoo.tools.pdf`, `AcroForm`, `ModuleNotFoundError` | Replace Legacy `pdfrw` AcroForm Filling with Native `odoo.tools.pdf` (`PyPDF2` / `pypdf`) |
+| 30 | [openeducat-enterprise-to-community-and-owl-statinfo-many2one.md](upgrade/openeducat-enterprise-to-community-and-owl-statinfo-many2one.md) | 🔴 Critical | 16, 17, 18, 19 | `openeducat_core_enterprise`, `op.category`, `statinfo`, `OWL`, `sale_crm` | Migrating Custom Modules off `openeducat_core_enterprise` (`op.course.category`) & Fixing OWL `statinfo` on `Many2one` |
 
 ### Data Migration & ETL Imports
 
@@ -670,7 +671,7 @@ odoo-knowledge/
 ├── backend/                ← 22 entries
 ├── security/               ← 32 entries
 ├── performance/            ← 7 entries
-├── upgrade/                ← 29 entries
+├── upgrade/                ← 30 entries
 ├── data_migration/         ← 4 entries
 ├── deployment/             ← 3 entries
 ├── Best Practices/         ← 26 entries
@@ -678,7 +679,7 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 489 (469 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 490 (470 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-19
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
