@@ -29,7 +29,8 @@ Conversely, naively crediting morning excuses onto the flexible shift start with
 ## Solution ✅
 
 1. Add `_get_approved_excuse_breakdown(local_date, penalty_type)` returning `(total_excuse_mins, perm, details, overlap_mins)` (with `_get_approved_excuse_details()` and `_get_approved_excuse_minutes()` delegating to it for backward compatibility):
-   - Track `overlap_mins += mins` for hourly leaves where `applies_late and applies_early` (`h_from <= 12.0 and midpoint < 13.5` **and** `h_to >= 13.0 and midpoint >= 12.5`, excluding full-day `mins >= 420` leaves), plus non-interval fallback hourly leaves (`elif leave.number_of_hours > 0:`).
+   - Track `overlap_mins += mins` for hourly leaves where `applies_late and applies_early` (`h_from <= 12.0 and midpoint < 13.5` **and** `h_to >= 13.0 and midpoint >= 12.5`, excluding full-day `mins >= 420` leaves), plus partial (`0 < mins < 420`) non-interval fallback hourly leaves (`elif leave.number_of_hours > 0:`).
+   - Treat 7+ hour (`mins >= 420`) non-interval fallback hourly leaves (`request_hour_from/to = 0.0` or `NULL`) identically to interval full-day missions (`total_excuse_mins += 1440`, `overlap_mins += 0`), and skip zero-minute rounded entries (`mins == 0`) so audit details stay clean.
 2. In `_evaluate_attendance_penalties()`, credit unused morning excuse minutes back onto `effective_start_dt` (clamped at `base_start_dt`) and pass `overlap_consumed_mins` to `_evaluate_early_check_out()`:
 
 ```python
@@ -87,6 +88,7 @@ if overlap_consumed_mins > 0:
 - **Consume non-overlap morning excuses before midday overlap leaves:** Computing `overlap_consumed_mins = min(morning_overlap_mins, max(0, total_morning_used - non_overlap_morning_mins))` ensures a morning-only permission/excuse is used before touching a midday overlap leave's remaining afternoon minutes.
 - **Do not run month-wide `action_recalculate_attendance_policy()` during targeted live remediation:** `action_recalculate_attendance_policy()` re-evaluates *every* attendance in the employee's calendar month and can resurrect historical unapplied penalties that HR deliberately deleted during payroll reconciliation. For targeted remediation of specific attendances, invoke `att._evaluate_attendance_penalties(evaluate_late=True, evaluate_early=bool(att.check_out))` only on the affected `hr.attendance` IDs.
 - **Subtract `late_past_cutoff` before computing `unused_morning_excuse`:** Prevents post-cutoff arrivals (e.g., `09:20` with a `30m` excuse on `08:00–16:00 +60m`) from double-dipping the same `20m` once against `late_in` and again against the sliding shift start.
+- **Apply the `mins >= 420` Full-Day check in the non-interval fallback branch too:** Legacy or imported hourly leaves/missions with `request_hour_from = 0.0, request_hour_to = 0.0` (or `NULL`) and `number_of_hours >= 7.0` must grant `1440` mins (`overlap_mins = 0`), not raw `420`/`480` mins in `overlap_mins`; otherwise an employee stopping by the office briefly on a full-day hourly mission receives a false `0.50`-day penalty. Also guard `elif mins > 0:` so multi-day tiny-hour records rounding to `0` mins never append `(0 mins)` noise to `notes`.
 
 ## Verification
 
