@@ -326,6 +326,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 195 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
 | 196 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
 | 197 | [custody-location-stock-serial-enforcement.md](orm/custody-location-stock-serial-enforcement.md) | 🔴 Critical | 17, 18, 19 | `stock`, `stock.picking`, `stock.move.line`, `stock.quant`, `serial-number`, `custody-location` | Custody Location Enforcement: Preventing Cross-Warehouse Serial Selection & Negative Stock on Delivery/Repair Validation |
+| 198 | [default-blocks-compute-on-create-readonly-false.md](orm/default-blocks-compute-on-create-readonly-false.md) | 🟡 Medium | 15, 16, 17, 18, 19 (All) | `orm`, `compute`, `default`, `readonly`, `store`, `create` | Stored Writable Computed Field (`compute=... store=True readonly=False`) Skips Compute on Create When `default=` Is Set |
 
 ### Views, QWeb Reports & Actions
 
