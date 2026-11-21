@@ -325,6 +325,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 194 | [writable-related-field-on-line-model-triggers-parent-access-error.md](orm/writable-related-field-on-line-model-triggers-parent-access-error.md) | 🔴 Critical | 15, 16, 17, 18, 19 (All) | `orm`, `related`, `readonly`, `AccessError`, `sale.order.line` | Writable `related=` (`readonly=False`) on Transaction Lines Triggers Parent Master-Data `AccessError` |
 | 195 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
 | 196 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
+| 197 | [custody-location-stock-serial-enforcement.md](orm/custody-location-stock-serial-enforcement.md) | 🔴 Critical | 17, 18, 19 | `stock`, `stock.picking`, `stock.move.line`, `stock.quant`, `serial-number`, `custody-location` | Custody Location Enforcement: Preventing Cross-Warehouse Serial Selection & Negative Stock on Delivery/Repair Validation |
 
 ### Views, QWeb Reports & Actions
 
@@ -676,7 +677,7 @@ odoo-knowledge/
 ├── TEMPLATE.md             ← Standard entry template
 ├── setup/                  ← 48 entries
 ├── database/               ← 5 entries
-├── orm/                    ← 196 entries
+├── orm/                    ← 197 entries
 ├── views/                  ← 75 entries
 ├── frontend/               ← 10 entries
 ├── backend/                ← 22 entries
