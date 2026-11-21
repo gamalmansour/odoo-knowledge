@@ -409,6 +409,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 73 | [xml-load-order-manifest.md](views/xml-load-order-manifest.md) | 🔴 Critical | All | `manifest`, `xml`, `load order`, `parent menu`, `external id` | Manifest XML File Load Order Issues (External ID not found) |
 | 74 | [xml_syntax_error_javascript_ampersand.md](views/xml_syntax_error_javascript_ampersand.md) | 🔴 Critical | All | `qweb`, `xml`, `javascript`, `syntax error` | XML Syntax Error due to JavaScript && in QWeb |
 | 75 | [xpath-string-attribute-not-a-valid-inheritance-selector.md](views/xpath-string-attribute-not-a-valid-inheritance-selector.md) | 🟡 Medium | 16, 17, 18, 19 | `views`, `xpath`, `inheritance`, `string`, `selector` | `View inheritance may not use attribute 'string' as a selector` — xpath on `group[@string=...]` Aborts the Whole Module |
+| 76 | [report-action-returns-document-layout-wizard-without-config-false.md](views/report-action-returns-document-layout-wizard-without-config-false.md) | 🟡 Medium | All | `report_action`, `qweb-pdf`, `base.document.layout`, `config=False` | `ir.actions.report.report_action()` Returns Document Layout Wizard Instead of Printing Report |
 
 ### Frontend, OWL & POS UI
 
@@ -682,7 +683,7 @@ odoo-knowledge/
 ├── setup/                  ← 48 entries
 ├── database/               ← 5 entries
 ├── orm/                    ← 197 entries
-├── views/                  ← 75 entries
+├── views/                  ← 76 entries
 ├── frontend/               ← 10 entries
 ├── backend/                ← 22 entries
 ├── security/               ← 35 entries
