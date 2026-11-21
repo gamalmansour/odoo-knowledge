@@ -495,6 +495,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 32 | [stateless-staff-token-checks-exists-not-active-and-implied-groups.md](security/stateless-staff-token-checks-exists-not-active-and-implied-groups.md) | 🔴 Critical | All | `security`, `jwt`, `rest-api`, `res.users`, `active` | A Stateless Staff Token Outlives Offboarding: `exists()` Is Not `active`, and Groups Imply Each Other |
 | 33 | [stock-barcode-button-security-group.md](security/stock-barcode-button-security-group.md) | 🟢 Low | 17, 18, 19 | `security`, `owl`, `stock_barcode`, `access-rights` | Adding Security Group Access Rights to Stock Barcode OWL Buttons |
 | 34 | [webhook-fail-closed-without-channel-secret-disables-ecommerce.md](security/webhook-fail-closed-without-channel-secret-disables-ecommerce.md) | 🔴 Critical | All | `webhook`, `security`, `salla`, `ecommerce`, `hmac` | E-Commerce Webhook Fail-Closed Secret Enforcement Disables Live Store Subscriptions |
+| 35 | [purchase-team-visibility-buyer-hijack-and-double-validation.md](security/purchase-team-visibility-buyer-hijack-and-double-validation.md) | 🔴 Critical | 17, 18, 19 | `purchase`, `ir.rule`, `buyer_id`, `double_validation`, `ormcache` | Purchase Personal-Order Record Rule vs `partner.buyer_id` Hijack & Double-Validation Approval Bypass |
 
 ### Performance & Query Optimization
 
@@ -681,7 +682,7 @@ odoo-knowledge/
 ├── views/                  ← 75 entries
 ├── frontend/               ← 10 entries
 ├── backend/                ← 22 entries
-├── security/               ← 34 entries
+├── security/               ← 35 entries
 ├── performance/            ← 7 entries
 ├── upgrade/                ← 30 entries
 ├── data_migration/         ← 4 entries
