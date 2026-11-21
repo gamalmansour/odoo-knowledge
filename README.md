@@ -632,6 +632,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 20 | [translation-newlines-issue.md](misc/translation-newlines-issue.md) | 🟡 Medium | 15, 16, 17, 18, 19 | `translation`, `i18n`, `po`, `newlines`, `UserError` | Translation Fails When Python String Contains Newlines |
 | 21 | [translation-wiped-out-by-export.md](misc/translation-wiped-out-by-export.md) | 🔴 Critical | All | `translation`, `i18n`, `po`, `export`, `polib` | Odoo i18n Export Wipes Out Existing Translations |
 | 22 | [zatca-warning-br-ksa-f-08-crn-scheme.md](misc/zatca-warning-br-ksa-f-08-crn-scheme.md) | 🟡 Medium | 16, 17, 18, 19 | `zatca`, `l10n_sa_edi`, `e-invoicing`, `saudi-arabia`, `br-ksa-f-08` | ZATCA Warning [BR-KSA-F-08]: Incorrect Value for Scheme ID 'CRN' |
+| 23 | [po-translation-requires-model-references-odoo19.md](misc/po-translation-requires-model-references-odoo19.md) | 🔴 Critical | 16, 17, 18, 19 | `i18n`, `ar.po`, `translations`, `trans_export`, `polib`, `odoo19` | Odoo 16–19 `.po` Files Silently Ignored Without `#: model:...` Reference Comments (`trans_export` Signature in v19) |
 
 ---
 
