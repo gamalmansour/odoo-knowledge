@@ -601,6 +601,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 24 | [saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md](Best%20Practices/saudi-subcontractor-governance-gtpl-and-lcgpa-portal.md) | 🔴 Critical | 17, 18, 19 | `saudi-arabia`, `subcontractor`, `gtpl`, `articles-71-72`, `lcgpa` | Saudi Subcontractor Governance: GTPL Articles 71-72 (30% Cap), Statutory Clearances & LCGPA Portal |
 | 25 | [subcontractor-boq-scope-filtering-and-four-field-cascade.md](Best%20Practices/subcontractor-boq-scope-filtering-and-four-field-cascade.md) | 🔴 Critical | 16, 17, 18, 19 | `construction`, `subcontractor`, `boq`, `cost-code`, `cbs` | Subcontractor BOQ Scope Filtering, 4-Field Cascade (`boq_item_id`, `name`, `owner_boq_line_id`, `cost_code_id`), and Upstream C... |
 | 26 | [warehouse-vs-location-custodianship-principle.md](Best%20Practices/warehouse-vs-location-custodianship-principle.md) | 🔴 Critical Architectural Decision | 14, 15, 16, 17, 18, 19, All | `inventory`, `warehouse`, `location`, `operation_types`, `picking_type` | Warehouse vs. Location Architecture: The Storekeeper Custodianship & Operation Types Principle |
+| 27 | [saudi-sadad-pass-through-zatca-oos-odoo19.md](Best%20Practices/saudi-sadad-pass-through-zatca-oos-odoo19.md) | 🔴 Critical | 18, 19 | `saudi-arabia`, `zatca`, `sadad`, `pass-through`, `VATEX-SA-OOS` | Saudi SADAD Government Pass-Through Fees vs. ZATCA Phase 2 VAT (`VATEX-SA-OOS`) in Odoo 19 |
 
 ### Localization, Integrations & Misc
 
