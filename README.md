@@ -28,13 +28,13 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (489 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (490 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
 | **[Setup & Environment](#setup-environment)** | `setup/` | **48** | Installation, environment configuration, OS dependencies, multi-instance setups, and pre-sales seeding |
 | **[Database & PostgreSQL](#database-postgresql)** | `database/` | **5** | PostgreSQL administration, ownership (`datdba`), schema privileges, safe truncation, and DB lifecycle |
-| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **198** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
+| **[ORM, Models & Business Logic](#orm-models-business-logic)** | `orm/` | **199** | Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic |
 | **[Views, QWeb Reports & Actions](#views-qweb-reports-actions)** | `views/` | **76** | XML views (Form, List, Kanban, Search, Gantt), QWeb PDF layouts, window actions, and XPath |
 | **[Frontend, OWL & POS UI](#frontend-owl-pos-ui)** | `frontend/` | **10** | OWL 2/3 components, JavaScript widgets, POS screens, Portal JS, and WebGL/Canvas client actions |
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
@@ -125,7 +125,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### ORM, Models & Business Logic
 
-> **Folder:** `orm/` · **Entries:** 198 · Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic
+> **Folder:** `orm/` · **Entries:** 199 · Models, fields, `@api.depends`, `@api.constrains`, CRUD overrides, and accounting/stock/HR domain logic
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -305,28 +305,29 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 174 | [split-outgoing-picking-across-source-warehouses.md](orm/split-outgoing-picking-across-source-warehouses.md) | 🟡 Medium | 19 (pattern applies to 16+) | `stock.picking`, `multi-warehouse`, `split`, `wizard`, `sale_line_id` | Splitting Outgoing Deliveries or Incoming Receipts Across Multiple Warehouses (Wizard Pattern) |
 | 175 | [state-gated-action-button-must-be-idempotent-for-rerun.md](orm/state-gated-action-button-must-be-idempotent-for-rerun.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `views`, `state-machine`, `idempotency`, `stock` | State-gated workflow button that must be re-run — widen the states AND make the action idempotent |
 | 176 | [stock-availability-by-location-computed-summary.md](orm/stock-availability-by-location-computed-summary.md) | 🟢 Low | 17 | `#orm`, `#stock`, `#stock.quant`, `#compute`, `#inventory` | System-Wide Stock Availability by Location as a Computed Text Summary |
-| 177 | [stock-quantities-are-company-scoped-even-under-sudo.md](orm/stock-quantities-are-company-scoped-even-under-sudo.md) | 🟡 Medium | All | `stock`, `quantities`, `are`, `company`, `scoped` | Stock quantities are env.companies-scoped even under sudo() |
-| 178 | [stored-compute-incomplete-depends-silent-staleness.md](orm/stored-compute-incomplete-depends-silent-staleness.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `staleness` | Stored Compute With Incomplete `@api.depends` → Silent Staleness of Money/KPI Figures |
-| 179 | [stored-compute-on-top-of-a-non-stored-one-never-refreshes.md](orm/stored-compute-on-top-of-a-non-stored-one-never-refreshes.md) | 🔴 Critical | All | `compute`, `store`, `api.depends`, `silent-failure`, `payroll` | A Stored Compute Built on a Non-Stored One Freezes at Its First Value |
-| 180 | [stored-compute-parent-stale-sequential-child-create.md](orm/stored-compute-parent-stale-sequential-child-create.md) | 🔴 Critical | 17 (likely 16-19) | `#orm`, `#computed-fields`, `#store`, `#one2many`, `#import` | Stored Parent Compute Goes Stale When Children Are Created Row-by-Row (Import Flows) |
-| 181 | [stored-compute-related-field-attributeerror-preload.md](orm/stored-compute-related-field-attributeerror-preload.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `preload_registries` | Stored Compute `@api.depends` Traversing Non-Existent Related Field Aborts Preload Registries |
-| 182 | [stored-computed-currency-decouples-from-posted-invoice.md](orm/stored-computed-currency-decouples-from-posted-invoice.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `currency`, `multi-currency`, `invoice`, `account.move`, `computed-field` | A Stored Computed Currency Field Silently Decouples From Its Posted Invoice |
-| 183 | [subcontract-progress-invoice-unit-price-and-boq-actual-cost.md](orm/subcontract-progress-invoice-unit-price-and-boq-actual-cost.md) | 🔴 Critical | 18, 19 | `construction`, `contracts`, `subcontract`, `progress_invoice`, `actual_cost` | Subcontractor Progress Invoice Unit Price and BOQ Actual Cost Confirmation |
-| 184 | [testing-account-tax-create-needs-country-and-tax-group-odoo19.md](orm/testing-account-tax-create-needs-country-and-tax-group-odoo19.md) | 🟢 Low | 19 | `testing`, `account.tax`, `tax_group_id`, `country_id`, `not-null` | Creating an account.tax in tests on a bare DB needs country_id AND tax_group_id (Odoo 19) |
-| 185 | [testing_compute_fields.md](orm/testing_compute_fields.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `orm`, `compute_fields`, `dates`, `fast_forward` | Test Environment ORM Compute Quirks for Date Fields |
-| 186 | [tier-bracket-table-gap-silently-pays-zero.md](orm/tier-bracket-table-gap-silently-pays-zero.md) | 🔴 Critical | All | `commission`, `pricelist`, `tiers`, `brackets`, `policy-line` | Tier/Bracket Table With a Gap Silently Resolves to Zero Money |
-| 187 | [transient-m2m-orphaned-fk-violation-on-upgrade.md](orm/transient-m2m-orphaned-fk-violation-on-upgrade.md) | 🔴 Critical | 16, 17, 18, 19, All | `transientmodel`, `foreign-key`, `many2many`, `vacuum`, `crm.lead.lost` | Transient Model M2M Orphaned Rows Violate Foreign Key on Upgrade |
-| 188 | [translated_many2one_search.md](orm/translated_many2one_search.md) | 🟡 Medium | All | `translated`, `many2one`, `search` | Translated Name Searches and Database schema issues in `res.partner` |
-| 189 | [two-way-hr-employee-res-users-supervisor-sync-and-team-scoping.md](orm/two-way-hr-employee-res-users-supervisor-sync-and-team-scoping.md) | 🔴 Critical | 16, 17, 18, 19 | `hr.employee`, `res.users`, `supervisor`, `hierarchy`, `sync` | Two-Way HR Employee and Res Users Supervisor Sync with Cycle Prevention and Team Scoping |
-| 190 | [undecorated-create-override-breaks-ui-creation-only.md](orm/undecorated-create-override-breaks-ui-creation-only.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `orm`, `create`, `model_create_multi`, `api-decorator`, `call_kw` | Undecorated `create()` override breaks creation from the UI while server-side create keeps working |
-| 191 | [undefined-ir-sequence-silently-names-every-record-new.md](orm/undefined-ir-sequence-silently-names-every-record-new.md) | 🔴 Critical | All | `ir.sequence`, `next_by_code`, `data-quality`, `silent-failure`, `naming` | An Undefined ir.sequence Silently Names Every Record "New" |
-| 192 | [v18-analytic-distribution-search-limitation.md](orm/v18-analytic-distribution-search-limitation.md) | 🟡 Medium | 16, 17, 18, 19 | `analytic_distribution`, `account.move.line`, `search`, `orm`, `v18` | V18 Analytic Distribution Search Limitation on Account Moves |
-| 193 | [verify-total-preserved-when-redistributing-stored-cost.md](orm/verify-total-preserved-when-redistributing-stored-cost.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `rollup`, `money` | Redistributing a stored cost aggregate: verify the TOTAL is preserved (Σsources == Σsinks), not just that tests pass |
-| 194 | [wafi-escrow-disbursement-retention-gate.md](orm/wafi-escrow-disbursement-retention-gate.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `realestate`, `wafi`, `escrow`, `retention` | Wafi Escrow Account Integration: Statutory 5% Defect Retention Protection and Milestone Disbursement Controls |
-| 195 | [web-read-empty-recordset-cleanup-attributeerror-bool-origin.md](orm/web-read-empty-recordset-cleanup-attributeerror-bool-origin.md) | 🔴 Critical | 17, 18, 19 | `orm`, `web_read`, `cleanup`, `many2one`, `empty-recordset` | web_read() Override Returning Dummy Row with id=False Crashes UI with AttributeError: 'bool' object has no attribute 'origin' |
-| 196 | [writable-related-field-on-line-model-triggers-parent-access-error.md](orm/writable-related-field-on-line-model-triggers-parent-access-error.md) | 🔴 Critical | 15, 16, 17, 18, 19 (All) | `orm`, `related`, `readonly`, `AccessError`, `sale.order.line` | Writable `related=` (`readonly=False`) on Transaction Lines Triggers Parent Master-Data `AccessError` |
-| 197 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
-| 198 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
+| 177 | [stock-move-valuation-is-in-is-out-odoo19.md](orm/stock-move-valuation-is-in-is-out-odoo19.md) | 🔴 Critical | 19 | `stock_account`, `stock.move`, `valuation`, `is_in`, `is_out` | Odoo 19 Stock Valuation Report Must Use Native `is_in`/`is_out` and Signed `value` (Never `usage == 'internal'` or `abs(value)`) |
+| 178 | [stock-quantities-are-company-scoped-even-under-sudo.md](orm/stock-quantities-are-company-scoped-even-under-sudo.md) | 🟡 Medium | All | `stock`, `quantities`, `are`, `company`, `scoped` | Stock quantities are env.companies-scoped even under sudo() |
+| 179 | [stored-compute-incomplete-depends-silent-staleness.md](orm/stored-compute-incomplete-depends-silent-staleness.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `staleness` | Stored Compute With Incomplete `@api.depends` → Silent Staleness of Money/KPI Figures |
+| 180 | [stored-compute-on-top-of-a-non-stored-one-never-refreshes.md](orm/stored-compute-on-top-of-a-non-stored-one-never-refreshes.md) | 🔴 Critical | All | `compute`, `store`, `api.depends`, `silent-failure`, `payroll` | A Stored Compute Built on a Non-Stored One Freezes at Its First Value |
+| 181 | [stored-compute-parent-stale-sequential-child-create.md](orm/stored-compute-parent-stale-sequential-child-create.md) | 🔴 Critical | 17 (likely 16-19) | `#orm`, `#computed-fields`, `#store`, `#one2many`, `#import` | Stored Parent Compute Goes Stale When Children Are Created Row-by-Row (Import Flows) |
+| 182 | [stored-compute-related-field-attributeerror-preload.md](orm/stored-compute-related-field-attributeerror-preload.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `api.depends`, `preload_registries` | Stored Compute `@api.depends` Traversing Non-Existent Related Field Aborts Preload Registries |
+| 183 | [stored-computed-currency-decouples-from-posted-invoice.md](orm/stored-computed-currency-decouples-from-posted-invoice.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `currency`, `multi-currency`, `invoice`, `account.move`, `computed-field` | A Stored Computed Currency Field Silently Decouples From Its Posted Invoice |
+| 184 | [subcontract-progress-invoice-unit-price-and-boq-actual-cost.md](orm/subcontract-progress-invoice-unit-price-and-boq-actual-cost.md) | 🔴 Critical | 18, 19 | `construction`, `contracts`, `subcontract`, `progress_invoice`, `actual_cost` | Subcontractor Progress Invoice Unit Price and BOQ Actual Cost Confirmation |
+| 185 | [testing-account-tax-create-needs-country-and-tax-group-odoo19.md](orm/testing-account-tax-create-needs-country-and-tax-group-odoo19.md) | 🟢 Low | 19 | `testing`, `account.tax`, `tax_group_id`, `country_id`, `not-null` | Creating an account.tax in tests on a bare DB needs country_id AND tax_group_id (Odoo 19) |
+| 186 | [testing_compute_fields.md](orm/testing_compute_fields.md) | 🟡 Medium | 16, 17, 18, 19 | `testing`, `orm`, `compute_fields`, `dates`, `fast_forward` | Test Environment ORM Compute Quirks for Date Fields |
+| 187 | [tier-bracket-table-gap-silently-pays-zero.md](orm/tier-bracket-table-gap-silently-pays-zero.md) | 🔴 Critical | All | `commission`, `pricelist`, `tiers`, `brackets`, `policy-line` | Tier/Bracket Table With a Gap Silently Resolves to Zero Money |
+| 188 | [transient-m2m-orphaned-fk-violation-on-upgrade.md](orm/transient-m2m-orphaned-fk-violation-on-upgrade.md) | 🔴 Critical | 16, 17, 18, 19, All | `transientmodel`, `foreign-key`, `many2many`, `vacuum`, `crm.lead.lost` | Transient Model M2M Orphaned Rows Violate Foreign Key on Upgrade |
+| 189 | [translated_many2one_search.md](orm/translated_many2one_search.md) | 🟡 Medium | All | `translated`, `many2one`, `search` | Translated Name Searches and Database schema issues in `res.partner` |
+| 190 | [two-way-hr-employee-res-users-supervisor-sync-and-team-scoping.md](orm/two-way-hr-employee-res-users-supervisor-sync-and-team-scoping.md) | 🔴 Critical | 16, 17, 18, 19 | `hr.employee`, `res.users`, `supervisor`, `hierarchy`, `sync` | Two-Way HR Employee and Res Users Supervisor Sync with Cycle Prevention and Team Scoping |
+| 191 | [undecorated-create-override-breaks-ui-creation-only.md](orm/undecorated-create-override-breaks-ui-creation-only.md) | 🔴 Critical | 15, 16, 17, 18, 19 | `orm`, `create`, `model_create_multi`, `api-decorator`, `call_kw` | Undecorated `create()` override breaks creation from the UI while server-side create keeps working |
+| 192 | [undefined-ir-sequence-silently-names-every-record-new.md](orm/undefined-ir-sequence-silently-names-every-record-new.md) | 🔴 Critical | All | `ir.sequence`, `next_by_code`, `data-quality`, `silent-failure`, `naming` | An Undefined ir.sequence Silently Names Every Record "New" |
+| 193 | [v18-analytic-distribution-search-limitation.md](orm/v18-analytic-distribution-search-limitation.md) | 🟡 Medium | 16, 17, 18, 19 | `analytic_distribution`, `account.move.line`, `search`, `orm`, `v18` | V18 Analytic Distribution Search Limitation on Account Moves |
+| 194 | [verify-total-preserved-when-redistributing-stored-cost.md](orm/verify-total-preserved-when-redistributing-stored-cost.md) | 🔴 Critical | All | `orm`, `computed-fields`, `store`, `rollup`, `money` | Redistributing a stored cost aggregate: verify the TOTAL is preserved (Σsources == Σsinks), not just that tests pass |
+| 195 | [wafi-escrow-disbursement-retention-gate.md](orm/wafi-escrow-disbursement-retention-gate.md) | 🔴 Critical | 16, 17, 18, 19 | `orm`, `realestate`, `wafi`, `escrow`, `retention` | Wafi Escrow Account Integration: Statutory 5% Defect Retention Protection and Milestone Disbursement Controls |
+| 196 | [web-read-empty-recordset-cleanup-attributeerror-bool-origin.md](orm/web-read-empty-recordset-cleanup-attributeerror-bool-origin.md) | 🔴 Critical | 17, 18, 19 | `orm`, `web_read`, `cleanup`, `many2one`, `empty-recordset` | web_read() Override Returning Dummy Row with id=False Crashes UI with AttributeError: 'bool' object has no attribute 'origin' |
+| 197 | [writable-related-field-on-line-model-triggers-parent-access-error.md](orm/writable-related-field-on-line-model-triggers-parent-access-error.md) | 🔴 Critical | 15, 16, 17, 18, 19 (All) | `orm`, `related`, `readonly`, `AccessError`, `sale.order.line` | Writable `related=` (`readonly=False`) on Transaction Lines Triggers Parent Master-Data `AccessError` |
+| 198 | [write-override-atomicity-pattern.md](orm/write-override-atomicity-pattern.md) | 🔴 Critical | All (14, 15, 16, 17, 18, 19) | `write`, `override`, `atomicity`, `state-machine`, `transaction` | write() Override — State Changes Must Come AFTER super().write() |
+| 199 | [xmlid-substitution-fails-in-python-field-domain.md](orm/xmlid-substitution-fails-in-python-field-domain.md) | 🟡 Medium | All | `orm`, `domain`, `fields`, `xmlid`, `ref` | `%(module.xmlid)d` does not substitute inside a Python field `domain=` |
 
 ### Views, QWeb Reports & Actions
 
@@ -683,7 +684,7 @@ odoo-knowledge/
 ├── TEMPLATE.md             ← Standard entry template
 ├── setup/                  ← 48 entries
 ├── database/               ← 5 entries
-├── orm/                    ← 198 entries
+├── orm/                    ← 199 entries
 ├── views/                  ← 76 entries
 ├── frontend/               ← 10 entries
 ├── backend/                ← 22 entries
@@ -697,7 +698,7 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 509 (489 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 510 (490 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-22
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
