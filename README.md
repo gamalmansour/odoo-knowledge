@@ -28,7 +28,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ## 📂 Repository Architecture & Categories
 
-### Part I — Odoo ERP Core & Enterprise Architecture (491 Entries)
+### Part I — Odoo ERP Core & Enterprise Architecture (492 Entries)
 
 | Category | Folder | Entries | Scope |
 |---|---|---:|---|
@@ -40,7 +40,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | **[Backend, Controllers, APIs & Testing](#backend-controllers-apis-testing)** | `backend/` | **22** | HTTP/JSON-RPC controllers, REST auth, `TransactionCase`/`HttpCase` testing, server actions, and hardware bridges |
 | **[Security, ACLs & Multi-Company](#security-acls-multi-company)** | `security/` | **36** | Access rights (`ir.model.access.csv` / `ir.access.csv`), record rules (`ir.rule`), groups, and multi-company isolation |
 | **[Performance & Query Optimization](#performance-query-optimization)** | `performance/` | **7** | SQL profiling, N+1 prevention, batch engines, PostgreSQL window functions, and caching |
-| **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **31** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
+| **[Upgrades & Version Migrations](#upgrades-version-migrations)** | `upgrade/` | **32** | Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks |
 | **[Data Migration & ETL Imports](#data-migration-etl-imports)** | `data_migration/` | **4** | Complex Excel/CSV imports, header auto-mapping, relational resolution, and barcode/product ETL |
 | **[Deployment & Production DevOps](#deployment-production-devops)** | `deployment/` | **3** | Ubuntu production provisioning, Nginx, Systemd, SSL, and zero-downtime upgrade safety |
 | **[Enterprise Best Practices & Compliance](#enterprise-best-practices-compliance)** | `Best Practices/` | **27** | ERP architecture, Saudi (ZATCA, Etimad, GTPL, SBC, Wafi, Nitaqat) & Egyptian compliance, and audit protocols |
@@ -517,7 +517,7 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 
 ### Upgrades & Version Migrations
 
-> **Folder:** `upgrade/` · **Entries:** 31 · Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks
+> **Folder:** `upgrade/` · **Entries:** 32 · Version migrations (Odoo 15 → 20), breaking API changes, and code replacement cookbooks
 
 | # | File | Severity | Versions | Tags | Summary |
 |---:|---|---|---|---|---|
@@ -539,19 +539,20 @@ This repository includes a zero-dependency, sub-20ms **SQLite FTS5 BM25** query 
 | 16 | [odoo18-account-account-company-ids-cascade-demo-failure.md](upgrade/odoo18-account-account-company-ids-cascade-demo-failure.md) | 🔴 Critical | 18, 19 | `odoo18`, `account.account`, `company_ids`, `company_id`, `demo-data` | Odoo 18: account.account company_ids Field Change Causes Silent Cascading Demo Data Failure |
 | 17 | [odoo18-hr-departure-wizard-refactor.md](upgrade/odoo18-hr-departure-wizard-refactor.md) | 🔴 Critical | 18, 19 | `upgrade`, `migration`, `hr`, `hr.departure.wizard`, `departure_reason_id` | hr.departure.wizard Refactor & Mandatory departure_reason_id in Odoo 18 |
 | 18 | [odoo18-view-types-not-defined-tree-in-act-window.md](upgrade/odoo18-view-types-not-defined-tree-in-act-window.md) | 🔴 Critical | 18, 19 | `upgrade`, `odoo18`, `owl`, `act_window`, `views` | Odoo 18 "View types not defined tree found in act_window" |
-| 19 | [odoo19-breaking-removals-groups-users-ustr-contract-rules.md](upgrade/odoo19-breaking-removals-groups-users-ustr-contract-rules.md) | 🔴 Critical | 19 | `odoo19`, `upgrade`, `res.groups`, `all_user_ids`, `tools.ustr` | Odoo 19.0 Breaking Removals: `res.groups.users`, `tools.ustr()`, and `contract` in Salary Rules |
-| 20 | [odoo19-hr-version-payroll-contract-lifecycle.md](upgrade/odoo19-hr-version-payroll-contract-lifecycle.md) | 🔴 Critical | 19.0 | `odoo19`, `payroll`, `hr.version`, `hr.contract`, `payslip` | Odoo 19: hr.version Architecture, Contract Lifecycle & Payroll Integration |
-| 21 | [odoo19-leave-type-requires-allocation-boolean.md](upgrade/odoo19-leave-type-requires-allocation-boolean.md) | 🟡 Medium | 19 | `hr_holidays`, `hr.leave.type`, `requires_allocation`, `odoo19`, `tests` | Odoo 19 Reverts hr.leave.type.requires_allocation to Boolean |
-| 22 | [odoo19-same-version-etl-company-merge-playbook.md](upgrade/odoo19-same-version-etl-company-merge-playbook.md) | 🔴 Critical | 19 (several points apply... | `migration`, `etl`, `multi-company`, `account.move`, `stock` | Odoo 19 same-version ETL: merging a company's full history into another DB |
-| 23 | [odoo19-stock-move-name-field-removal.md](upgrade/odoo19-stock-move-name-field-removal.md) | 🔴 Critical | 19.0 | `odoo19`, `stock`, `stock.move`, `upgrade`, `migration` | Odoo 19: stock.move 'name' Field Removed |
-| 24 | [odoo19-to-odoo20-migration-cookbook-code-replacements.md](upgrade/odoo19-to-odoo20-migration-cookbook-code-replacements.md) | 🔴 Critical | 19, 20 | `odoo20`, `upgrade`, `migration`, `cookbook`, `code-replacements` | Odoo 19 to Odoo 20 Migration Cookbook: Code Replacements & Breaking Changes Reference |
-| 25 | [odoo19_python_signature_changes.md](upgrade/odoo19_python_signature_changes.md) | 🟡 Medium | 19.0 | `upgrade`, `python`, `odoo19`, `signatures`, `prepare_procurement_values` | Python Method Signature Changes in Odoo 19 |
-| 26 | [odoo19_stock_valuation.md](upgrade/odoo19_stock_valuation.md) | 🟡 Medium | 19 | `odoo19`, `stock`, `valuation` | Odoo 19 Upgrade: stock.valuation.layer to product.value |
-| 27 | [odoo19_xml_field_changes.md](upgrade/odoo19_xml_field_changes.md) | 🟡 Medium | 19 | `Odoo 19`, `Security`, `res.groups`, `ir.actions.server`, `category_id` | Odoo 19 Upgrade: res.groups and ir.actions.server xml field changes |
-| 28 | [openeducat-enterprise-to-community-and-owl-statinfo-many2one.md](upgrade/openeducat-enterprise-to-community-and-owl-statinfo-many2one.md) | 🔴 Critical | 16, 17, 18, 19 | `openeducat_core_enterprise`, `openeducat_core`, `op.category`, `op.course.category`, `statinfo` | Migrating Custom Modules off `openeducat_core_enterprise` (`op.course.category`) & Fixing OWL `statinfo` on `Many2one` |
-| 29 | [qweb-report-invoice-reconciled-payments-odoo18.md](upgrade/qweb-report-invoice-reconciled-payments-odoo18.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `account.move`, `qweb`, `report` | account.move _get_reconciled_info_JSON_values Migration to Odoo 18 |
-| 30 | [replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md](upgrade/replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md) | 🔴 Critical | 16, 17, 18, 19 | `pdfrw`, `PyPDF2`, `pypdf`, `odoo.tools.pdf`, `AcroForm` | Replace Legacy `pdfrw` AcroForm Filling with Native `odoo.tools.pdf` (`PyPDF2` / `pypdf`) |
-| 31 | [sale-order-line-tax-id-renamed-tax-ids-odoo19.md](upgrade/sale-order-line-tax-id-renamed-tax-ids-odoo19.md) | 🟡 Medium | 19 | `upgrade`, `sale.order.line`, `tax_id`, `tax_ids`, `breaking-change` | `sale.order.line.tax_id` Renamed to `tax_ids` in Odoo 19 |
+| 19 | [odoo19-backdate-apply-inventory-and-payment-states.md](upgrade/odoo19-backdate-apply-inventory-and-payment-states.md) | 🔴 Critical | 19 | `stock.quant`, `_apply_inventory`, `stock.move`, `account.payment`, `backdate` | Odoo 19 Breaking Changes in Third-Party Backdate Modules (`_apply_inventory(date=None)`, `stock.move.name`, `account.payment.st... |
+| 20 | [odoo19-breaking-removals-groups-users-ustr-contract-rules.md](upgrade/odoo19-breaking-removals-groups-users-ustr-contract-rules.md) | 🔴 Critical | 19 | `odoo19`, `upgrade`, `res.groups`, `all_user_ids`, `tools.ustr` | Odoo 19.0 Breaking Removals: `res.groups.users`, `tools.ustr()`, and `contract` in Salary Rules |
+| 21 | [odoo19-hr-version-payroll-contract-lifecycle.md](upgrade/odoo19-hr-version-payroll-contract-lifecycle.md) | 🔴 Critical | 19.0 | `odoo19`, `payroll`, `hr.version`, `hr.contract`, `payslip` | Odoo 19: hr.version Architecture, Contract Lifecycle & Payroll Integration |
+| 22 | [odoo19-leave-type-requires-allocation-boolean.md](upgrade/odoo19-leave-type-requires-allocation-boolean.md) | 🟡 Medium | 19 | `hr_holidays`, `hr.leave.type`, `requires_allocation`, `odoo19`, `tests` | Odoo 19 Reverts hr.leave.type.requires_allocation to Boolean |
+| 23 | [odoo19-same-version-etl-company-merge-playbook.md](upgrade/odoo19-same-version-etl-company-merge-playbook.md) | 🔴 Critical | 19 (several points apply... | `migration`, `etl`, `multi-company`, `account.move`, `stock` | Odoo 19 same-version ETL: merging a company's full history into another DB |
+| 24 | [odoo19-stock-move-name-field-removal.md](upgrade/odoo19-stock-move-name-field-removal.md) | 🔴 Critical | 19.0 | `odoo19`, `stock`, `stock.move`, `upgrade`, `migration` | Odoo 19: stock.move 'name' Field Removed |
+| 25 | [odoo19-to-odoo20-migration-cookbook-code-replacements.md](upgrade/odoo19-to-odoo20-migration-cookbook-code-replacements.md) | 🔴 Critical | 19, 20 | `odoo20`, `upgrade`, `migration`, `cookbook`, `code-replacements` | Odoo 19 to Odoo 20 Migration Cookbook: Code Replacements & Breaking Changes Reference |
+| 26 | [odoo19_python_signature_changes.md](upgrade/odoo19_python_signature_changes.md) | 🟡 Medium | 19.0 | `upgrade`, `python`, `odoo19`, `signatures`, `prepare_procurement_values` | Python Method Signature Changes in Odoo 19 |
+| 27 | [odoo19_stock_valuation.md](upgrade/odoo19_stock_valuation.md) | 🟡 Medium | 19 | `odoo19`, `stock`, `valuation` | Odoo 19 Upgrade: stock.valuation.layer to product.value |
+| 28 | [odoo19_xml_field_changes.md](upgrade/odoo19_xml_field_changes.md) | 🟡 Medium | 19 | `Odoo 19`, `Security`, `res.groups`, `ir.actions.server`, `category_id` | Odoo 19 Upgrade: res.groups and ir.actions.server xml field changes |
+| 29 | [openeducat-enterprise-to-community-and-owl-statinfo-many2one.md](upgrade/openeducat-enterprise-to-community-and-owl-statinfo-many2one.md) | 🔴 Critical | 16, 17, 18, 19 | `openeducat_core_enterprise`, `openeducat_core`, `op.category`, `op.course.category`, `statinfo` | Migrating Custom Modules off `openeducat_core_enterprise` (`op.course.category`) & Fixing OWL `statinfo` on `Many2one` |
+| 30 | [qweb-report-invoice-reconciled-payments-odoo18.md](upgrade/qweb-report-invoice-reconciled-payments-odoo18.md) | 🔴 Critical | 17, 18, 19 | `upgrade`, `migration`, `account.move`, `qweb`, `report` | account.move _get_reconciled_info_JSON_values Migration to Odoo 18 |
+| 31 | [replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md](upgrade/replace-legacy-pdfrw-with-odoo-tools-pdf-pypdf2.md) | 🔴 Critical | 16, 17, 18, 19 | `pdfrw`, `PyPDF2`, `pypdf`, `odoo.tools.pdf`, `AcroForm` | Replace Legacy `pdfrw` AcroForm Filling with Native `odoo.tools.pdf` (`PyPDF2` / `pypdf`) |
+| 32 | [sale-order-line-tax-id-renamed-tax-ids-odoo19.md](upgrade/sale-order-line-tax-id-renamed-tax-ids-odoo19.md) | 🟡 Medium | 19 | `upgrade`, `sale.order.line`, `tax_id`, `tax_ids`, `breaking-change` | `sale.order.line.tax_id` Renamed to `tax_ids` in Odoo 19 |
 
 ### Data Migration & ETL Imports
 
@@ -691,7 +692,7 @@ odoo-knowledge/
 ├── backend/                ← 22 entries
 ├── security/               ← 36 entries
 ├── performance/            ← 7 entries
-├── upgrade/                ← 31 entries
+├── upgrade/                ← 32 entries
 ├── data_migration/         ← 4 entries
 ├── deployment/             ← 3 entries
 ├── Best Practices/         ← 27 entries
@@ -699,7 +700,7 @@ odoo-knowledge/
 └── cross_platform/         ← 20 entries
 ```
 
-- **Total Indexed Entries:** 511 (491 Odoo ERP + 20 Cross-Platform R&D)
+- **Total Indexed Entries:** 512 (492 Odoo ERP + 20 Cross-Platform R&D)
 - **Last Synchronized:** 2026-11-22
 - **Lead Author & Maintainer:** ENG/Gamal Mansour
 - **Contributors:** ENG/Gamal Mansour, ENG/Mohamed Saber, ENG/Mohamed Hamdy
