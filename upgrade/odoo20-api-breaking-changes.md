@@ -21,8 +21,9 @@ When building or migrating custom modules to Odoo 20.0, several core models and 
 4. **Product Tracking:** Omit `tracking` (or leave `False`) for untracked products instead of `'none'`; valid tracked values remain `'lot'` / `'serial'`.
 5. **Down Payment Account:** Set `company.downpayment_account_id` directly on `res.company` (no legacy `sale.default_deposit_product_id` config param needed).
 6. **Inventory Valuation:** `product.category.property_valuation` uses `'periodic'` vs `'real_time'` (Perpetual at invoicing) with accrual accounts (`property_account_invoiced_not_delivered_id` → `Deferred Revenue`).
-7. **OWL 3 Reactive State:** `useState` is removed in Odoo 20 OWL 3 — import `proxy` and `useProps` from `@odoo/owl` (with `standardActionServiceProps` from `@web/webclient/actions/action_plugin`), and declare `this.state = proxy({...})`.
+7. **OWL 3 Reactive State & Templates:** `useState` is removed in Odoo 20 OWL 3 — import `proxy` and `useProps` from `@odoo/owl` (with `standardActionServiceProps` from `@web/webclient/actions/action_plugin`), declare `this.state = proxy({...})`, and **prefix ALL component properties, getters, and handlers in XML templates with `this.`** (e.g. `this.state.xxx`, `this.myMethod` — bare `state.xxx` throws `TypeError: Cannot read properties of undefined`).
 8. **Stock Move UoM:** `stock.move` no longer accepts `product_uom` in `create()` (defaults automatically from `product_id.uom_id`).
+9. **Bundled SCSS Assets:** Never put `@import url(...)` (e.g., Google Fonts) inside a `.scss` file loaded in `web.assets_backend` — CSS `@import` mid-bundle breaks the entire compiled backend stylesheet.
 
 ## ⚠️ Pitfalls
 - Always keep `addons/` (Community) and `enterprise-20.0/` synced to the same date; mismatched commits cause missing XML ID errors in `account_reports` (`account.account_tag_adj_depreciation_and_amortization`).
