@@ -5,7 +5,7 @@
 | Category      | models |
 | Odoo Versions | All |
 | Severity      | 🔴 Critical |
-| Last Verified | 2026-08-09 |
+| Last Verified | 2026-11-25 |
 | Author        | Gamal Mansour |
 
 **Tags:** `commission`, `pricelist`, `tiers`, `brackets`, `policy-line`, `constraints`, `data-integrity`, `silent-zero`, `crm`, `money-integrity`
@@ -121,7 +121,41 @@ if not policy:
 If raising is too aggressive for a batch job, log at ERROR level and skip the record —
 but never let it write a zero as though it were a computed result.
 
-**3. Audit existing data before trusting anything.**
+**3. Use a continuous lower-bound lookup when legacy integer-stepped bands exist (fixes decimal gaps like `40.5%` and `100.5%`).**
+
+Many real-world business tables are entered as integer ranges (`0–40`, `41–60`, `61–100`, `101–200`). Even without typos, a decimal achievement such as `40.5%` or `100.5%` falls strictly between `40` and `41` (or `100` and `101`), so `from_percentage <= x <= to_percentage` returns an empty recordset and silently pays **0.00**.
+
+Instead of a strict closed-interval domain, resolve the highest tier whose lower threshold `from_percentage` has been reached:
+
+```python
+def _match_policy_line(self, matrix, achievement: float):
+    """Continuous gap-free tier lookup for integer-stepped brackets (e.g., 0-40, 41-60).
+
+    An achievement of 40.5% has passed 0% but not 41%, so it resolves to the 0-40 tier
+    instead of falling into the decimal gap and returning 0 commission.
+    Over-achievers above the top bracket's to_percentage also stay in the highest tier.
+    """
+    Policy = self.env['commission.policy.line']
+    line = Policy.search(
+        [
+            ('matrix_id', '=', matrix.id),
+            ('from_percentage', '<=', achievement),
+        ],
+        order='from_percentage desc',
+        limit=1,
+    )
+    if not line and achievement >= 0:
+        line = Policy.search(
+            [('matrix_id', '=', matrix.id)],
+            order='from_percentage asc',
+            limit=1,
+        )
+    return line
+```
+
+Also audit background crons (especially legacy temporary crons running every minute!) to ensure no cron still uses the old `from <= x <= to` lookup and overwrites corrected commission lines with zero.
+
+**4. Audit existing data before trusting anything.**
 
 ```python
 for matrix in env["commission.job.position.matrix"].search([]):
